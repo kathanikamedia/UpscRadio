@@ -41,3 +41,14 @@ test("failed Moodle fulfilment preserves paid state for retry",async()=>{
  assert.equal(result.rows[0].fulfilled,0);
 });
 test.after(()=>db.close());
+
+test("concurrent callbacks cannot both claim the same order with different payment IDs", async () => {
+  const receipt = randomUUID();
+  await execute({
+    sql: "INSERT INTO payments(id,clerk_id,course_id,amount,order_id,status) VALUES (?,'user-race',2,50000,'order_race','Pending')",
+    args: [receipt],
+  });
+  const payment = { id: "pay_race_one", order_id: "order_race", amount: 50000, currency: "INR", status: "captured" };
+  const results = await Promise.all([capture(payment), capture({ ...payment, id: "pay_race_two" })]);
+  assert.equal(results.filter(Boolean).length, 1);
+});

@@ -11,3 +11,14 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Moodle has yet to be installed. Live course delivery, quizzes, progress, SSO and load testing remain dependent on that setup.
 - Production Clerk domain configuration, production Google OAuth credentials and a real Razorpay sandbox purchase remain launch checks.
 - The original Django source is retained for migration reference. The original database, private files and local application data are excluded from Git.
+
+## Latest audit
+
+- Corrected hero CTA contrast and tightened mobile hero spacing.
+- Prevented conflicting payment callbacks from both reporting a successful capture. Added a concurrent callback regression test.
+- Added retry recovery for database initialization, direct indexed content lookup, live sitemap generation and whole-number pagination.
+- Corrected learning-access error handling so service failures produce a controlled response and missing course access retains its expected handling.
+- Browser-tested enquiry submission and confirmed database persistence, then removed the temporary QA record.
+- Verified responsive homepage and Clerk sign-in rendering. The production build, TypeScript checks and all nine automated tests passed.
+- Updated the hero CTA to Mock Test at /test-series/.
+- Moodle installation, live learning/SSO verification and production Clerk/payment configuration remain external setup requirements.

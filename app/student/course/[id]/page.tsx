@@ -12,7 +12,7 @@ export default async function Course({params}:{params:Promise<{id:string}>}) {
   let courses:{id:number;fullname:string}[];
   try {
     courses=await moodle("core_enrol_get_users_courses",{userid:mid});
-    if(!courses.some(c=>c.id===Number(id)))notFound();
+
 
   } catch { return <section className="wrap section"><h1>Course unavailable</h1><p>Please try again shortly.</p></section>; }
   const course=courses.find(c=>c.id===Number(id));if(!course)notFound();

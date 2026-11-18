@@ -11,7 +11,7 @@
     "migrate": "tsx scripts/migrate.ts"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.0.0",
+    "@clerk/nextjs": "^7.10.2",
     "@libsql/client": "^0.15.0",
     "@tailwindcss/postcss": "^4.1.18",
     "framer-motion": "^14.14.0",

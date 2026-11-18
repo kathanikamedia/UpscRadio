@@ -1,5 +1,6 @@
 import type {MetadataRoute} from "next";
 import {contents} from "@/lib/db";
+export const dynamic = "force-dynamic";
 export default async function sitemap():Promise<MetadataRoute.Sitemap>{
  const base=process.env.SITE_URL;if(!base)return [];
  const paths=["/","/courses/","/test-series/","/resources/","/books/","/admissions/","/explore/about/","/explore/videos/"];

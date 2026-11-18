@@ -15,8 +15,8 @@ export async function capture(payment:GatewayPayment) {
  const row=(await execute({sql:"SELECT * FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0];
  if(!row||payment.currency!=="INR"||payment.status!=="captured"||Number(row.amount)!==payment.amount)return false;
  if(row.status==="Paid"&&row.payment_id!==payment.id)return false;
- await execute({sql:"UPDATE payments SET status='Paid',payment_id=?,captured=COALESCE(captured,CURRENT_TIMESTAMP) WHERE id=? AND (payment_id IS NULL OR payment_id=?)",args:[payment.id,String(row.id),payment.id]});
- return true;
+ const result = await execute({sql:"UPDATE payments SET status='Paid',payment_id=?,captured=COALESCE(captured,CURRENT_TIMESTAMP) WHERE id=? AND (payment_id IS NULL OR payment_id=?)",args:[payment.id,String(row.id),payment.id]});
+ return result.rowsAffected === 1;
 }
 export async function fulfill(id:string) {
  const row=(await execute({sql:"SELECT p.*,c.extra,i.moodle_id FROM payments p JOIN content c ON c.id=p.course_id LEFT JOIN identities i ON i.clerk_id=p.clerk_id WHERE p.id=? AND status='Paid'",args:[id]})).rows[0];

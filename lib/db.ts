@@ -1,6 +1,8 @@
 import { createClient, type InStatement } from "@libsql/client";
 import { mkdirSync } from "node:fs";
-mkdirSync("data", { recursive: true });
+if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith("file:")) {
+  mkdirSync("data", { recursive: true });
+}
 export const db = createClient({
   url: process.env.DATABASE_URL || "file:data/radio.db",
   authToken: process.env.DATABASE_AUTH_TOKEN,
@@ -17,7 +19,10 @@ export function initialize() {
     "CREATE TABLE IF NOT EXISTS legacy (model TEXT NOT NULL, id INTEGER NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(model,id))",
     "CREATE TABLE IF NOT EXISTS saved (clerk_id TEXT NOT NULL, content_id INTEGER NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(clerk_id,content_id))",
     "CREATE TABLE IF NOT EXISTS audit (id INTEGER PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
-  ], "write").then(() => undefined);
+  ], "write").then(() => undefined).catch(error => {
+    ready = undefined;
+    throw error;
+  });
   return ready;
 }
 export async function execute(statement: InStatement) {
@@ -30,7 +35,12 @@ export async function contents(kind: string, published = true): Promise<Content[
   return result.rows.map(row => ({ ...row, extra: JSON.parse(String(row.extra)) }) as unknown as Content);
 }
 export async function content(kind: string, slug: string) {
-  return (await contents(kind)).find(item => item.slug === slug);
+  const result = await execute({
+    sql: "SELECT * FROM content WHERE kind=? AND slug=? AND published=1 LIMIT 1",
+    args: [kind, slug],
+  });
+  const row = result.rows[0];
+  return row ? { ...row, extra: JSON.parse(String(row.extra)) } as unknown as Content : undefined;
 }
 export async function rateLimit(key: string, maximum = 8) {
   const now = Date.now();

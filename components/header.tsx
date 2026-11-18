@@ -10,6 +10,6 @@ export function Header({configured}:{configured:boolean}) {
     <Link className="brand" href="/"><span className="wordmark">UPSC <span>Radio</span></span></Link>
     <button className="menu" aria-controls="nav" aria-expanded={open} onClick={() => setOpen(!open)}>Menu</button>
     <nav id="nav" aria-label="Main navigation">{[["/courses/","Courses"],["/test-series/","Mock Test"],["/resources/","Study Materials"],["/explore/videos/","Watch"],["/explore/about/","About"]].map(([href,label]) => <Link key={href} href={href} aria-current={path === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}</Link>)}</nav>
-    <div className="account"><AuthControls configured={configured}/><Link className="button small" href="/admissions/">Free counselling ↗</Link></div>
+    <div className="account"><AuthControls configured={configured}/></div>
   </div></header>;
 }
