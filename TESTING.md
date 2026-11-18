@@ -84,3 +84,10 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Browser checks at desktop (1440px) and the default mobile viewport verified the hero and FAQ. Opening a second FAQ closes the first, without additional client JavaScript.
 - Turso connectivity and schema initialization were verified with private credentials. The catalogue copy verified all 22 source entries on the destination, including drafts and site settings, while preserving existing destination entries. A follow-up connection check returned 22 catalogue entries.
 - Database schema remained unchanged. R2 is optional and remains inactive. Private local documents and student/payment records were not copied by the catalogue import.
+
+## Latest homepage revisions
+
+- Removed both the learning-rhythm cards and subject-discovery tiles, plus the later ten-minute statistic card and hero preparation-link strip requested for removal.
+- Hero now uses UPSC-supportive copy with mock-test/course buttons. The two audience cards use the owner's reported figures, labelled as snapshots with profile links rather than live API totals or enrolled-student counts.
+- All 29 regression tests, TypeScript validation and the final production build passed. Compiled server output was checked for all four removed blocks.
+- Refreshed localhost and browser-checked the final desktop layout and mobile hero. Fixed a mobile overlap by placing the podcast card below the mock card in normal document flow.

@@ -13,7 +13,9 @@ Latest update: reference-led light homepage and responsive FAQ verified locally.
 
 - Home page with mock tests, study materials, official previous papers and latest UPSC news.
 - Official news and the first two papers refresh every ten minutes, retaining the last successful result on source failure.
-- Featured subject links and organisation section.
+- The requested learning-rhythm and subject-discovery sections have been removed. The organisation section remains.
+- UPSC-focused hero with aspirant-supportive copy and mock-test/course entry points. The extra hero preparation-link strip has been removed.
+- Community statistic cards show owner-supplied snapshots (78.7K YouTube subscribers and 36.9K Instagram followers), explicitly labelled as reported figures with profile links. They are not live API counts or enrolled-student totals. The ten-minute refresh statistic card has been removed; the official feeds still refresh on their configured schedule.
 - Responsive branded footer, official YouTube, Instagram and Facebook links. External links open a new tab.
 - Course catalogue, filters, detail pages and two clearly labelled demo courses.
 - Add to cart on home course previews, course listings/details and paid mock listings; login required, cart isolated per account in the same browser, removal and server-sourced product details/prices. Checkout is per course, not a combined multi-item payment. The cart does not sync between devices.
@@ -41,7 +43,7 @@ Latest update: reference-led light homepage and responsive FAQ verified locally.
 
 ## Verification
 
-- TypeScript check and all eighteen automated tests pass after these updates.
+- TypeScript validation and the 29-test regression suite are used for current verification; see TESTING.md for the latest checks.
 - Browser checked: signed-out cart prompt and protected cart redirect, desktop/mobile Shop menu and submenus, improved study-library empty state, Watch links/layout and Facebook footer link. Previous cart add/remove checks were before login became required.
 - The new authenticated cart layout and wishlist mutations still need a signed-in account check.
 - Authenticated Moodle learning, production authentication and live payment fulfilment still require end-to-end verification with configured services.
