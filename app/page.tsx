@@ -6,6 +6,7 @@ import { socials } from "@/lib/socials";
 import { ClipboardCheck, LibraryBig, Files, ChevronDown, ArrowUpRight, Check, Headphones, Target } from "lucide-react";
 import { ConversionBanner } from "@/components/conversion-banner";
 import { HomeDiscover } from "@/components/home-discover";
+import { HomeWatch } from "@/components/home-watch";
 export const dynamic = "force-dynamic";
 export default function Home() {
   return <div className="home-redesign">
@@ -26,11 +27,6 @@ export default function Home() {
         </div>
         <div className="learning-hero-footnote"><span aria-hidden="true"/> For the days you feel ready. And the days you keep going anyway.</div>
       </div>
-    </section>
-    <div className="wrap learning-section-heading"><div><p className="eyebrow">YOUR PREPARATION, CONNECTED</p><h2>Less searching. More learning.</h2></div><p>The essentials for your next step,<br/>together in one place.</p></div>
-    <div className="wrap home-feature-grid">
-      {[["Mock Test","Browse UPSC practice tests and registration availability.","/test-series/","Browse mock tests"],["Study Materials","Find textbooks and published preparation resources.","/resources/","Browse study materials"],["Previous Year Papers","Official UPSC Prelims and Mains papers by year.","https://www.upsc.gov.in/examinations/previous-question-papers","Open UPSC archive"]].map(([title,text,href,label]) => <section className="card home-feature" id={title==="Previous Year Papers"?"previous-year-papers":undefined} key={title}><span className="feature-icon">{title==="Mock Test"?<ClipboardCheck/>:title==="Study Materials"?<LibraryBig/>:<Files/>}</span><h2>{title}</h2>{title==="Previous Year Papers"?<Suspense fallback={<p className="feed-loading" role="status">Loading official papers…</p>}><HomePapers/></Suspense>:<p>{text}</p>}<Link className="button" href={href} target={href.startsWith("https://") ? "_blank" : undefined} rel={href.startsWith("https://") ? "noopener noreferrer" : undefined}>{label} ↗</Link></section>)}
-    </div>
     <section className="wrap community-stats" aria-labelledby="community-stats-title">
       <div className="community-stats-heading"><p className="eyebrow">THE CONVERSATION KEEPS GROWING</p><h2 id="community-stats-title">A community with<br/>a shared ambition.</h2><p>Learning, listening and showing up for the journey.</p></div>
       <div className="community-stats-grid">
@@ -38,8 +34,13 @@ export default function Home() {
         <a className="community-stat community-stat-youtube" href={socials.youtube.url} target="_blank" rel="noopener noreferrer"><span className="community-platform"><Image src="/brands/youtube.png" width={20} height={20} alt=""/> YouTube <ArrowUpRight size={15} aria-hidden="true"/></span><strong>78.7K</strong><span>Reported subscribers</span><div className="community-audio-art" aria-hidden="true">{[18,30,45,27,39,56,35,46,25,39,18].map((height,index)=><i key={index} style={{height}}/>)}</div></a>
         <a className="community-stat community-stat-instagram" href={socials.instagram.url} target="_blank" rel="noopener noreferrer"><span className="community-platform"><Image src="/brands/instagram.png" width={20} height={20} alt=""/> Instagram <ArrowUpRight size={15} aria-hidden="true"/></span><strong>36.9K</strong><span>Reported followers</span><div className="community-word-art" aria-hidden="true"><b>Learn</b><b>Listen</b><b>Keep going</b></div></a>
       </div>
-      <p className="community-stats-note">Audience figures provided by UPSC Radio. Open each profile for its current count. Social audiences may overlap.</p>
     </section>
+    </section>
+    <HomeWatch />
+    <div className="wrap learning-section-heading"><div><p className="eyebrow">YOUR PREPARATION, CONNECTED</p><h2>Less searching. More learning.</h2></div><p>The essentials for your next step,<br/>together in one place.</p></div>
+    <div className="wrap home-feature-grid">
+      {[["Mock Test","Browse UPSC practice tests and registration availability.","/test-series/","Browse mock tests"],["Study Materials","Find textbooks and published preparation resources.","/resources/","Browse study materials"],["Previous Year Papers","Official UPSC Prelims and Mains papers by year.","https://www.upsc.gov.in/examinations/previous-question-papers","Open UPSC archive"]].map(([title,text,href,label]) => <section className="card home-feature" id={title==="Previous Year Papers"?"previous-year-papers":undefined} key={title}><span className="feature-icon">{title==="Mock Test"?<ClipboardCheck/>:title==="Study Materials"?<LibraryBig/>:<Files/>}</span><h2>{title}</h2>{title==="Previous Year Papers"?<Suspense fallback={<p className="feed-loading" role="status">Loading official papers…</p>}><HomePapers/></Suspense>:<p>{text}</p>}<Link className="button" href={href} target={href.startsWith("https://") ? "_blank" : undefined} rel={href.startsWith("https://") ? "noopener noreferrer" : undefined}>{label} ↗</Link></section>)}
+    </div>
     <HomeResources />
     <Suspense fallback={null}><HomeStories/></Suspense>
     <HomeDiscover />

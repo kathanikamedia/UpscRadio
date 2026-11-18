@@ -10,6 +10,8 @@ Latest update: reference-led light homepage and responsive FAQ verified locally.
 - Redesigned Watch page with six live latest uploads, six public playlists, official channel/topic links, ten-minute refresh and last-good cache fallback.
 - About us page and study library with search, exam filtering, pagination and useful empty states.
 - Homepage server streaming, smaller transparent hero asset, indexed preview queries, in-memory feed caching and visibility-aware refresh.
+- Combined hero/audience introduction, tighter page spacing and lighter card borders. The audience footnote and visible Pause button have been removed as requested.
+- Compact homepage preview rows for six channel uploads and six playlists, using the existing ten-minute channel cache. Previews pause on hover/focus; touch and reduced-motion users get scrollable static rows. External videos open in new tabs.
 
 - Home page with mock tests, study materials, official previous papers and latest UPSC news.
 - Official news and the first two papers refresh every ten minutes, retaining the last successful result on source failure.

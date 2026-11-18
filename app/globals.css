@@ -1,4 +1,63 @@
 @import "tailwindcss";
+/* Compact spacing and lighter outlines across the main learning surfaces. */
+:root:root{--line:#e3d6e0}
+.wrap.wrap{width:min(1240px,calc(100% - 80px))}
+.section.section{padding-block:30px}
+.section.section+.section{padding-top:20px}
+.page-head.page-head{padding-block:28px}
+.card.card{padding:20px;border-color:#e6dce5}
+.home-redesign .learning-hero{padding-top:34px;padding-bottom:8px}
+.home-redesign .learning-hero .community-stats{margin-top:20px;padding-block:20px 4px}
+.home-redesign .learning-hero .community-stat{padding:16px 20px;border-color:#e6dce5}
+.home-redesign .home-feature.card,.home-redesign .home-reference.card{padding:22px;border-radius:14px;border-color:#e6dce5}
+.home-redesign .home-feature-grid{gap:16px;padding-top:18px}
+.home-redesign .home-resources{gap:16px;padding-block:20px 24px}
+.home-redesign .home-watch-band{padding-block:20px 18px}
+.home-redesign .home-watch-heading{margin-bottom:14px}
+.home-redesign .home-watch-controls{justify-content:flex-end}
+.home-redesign .faq-section{padding-block:32px}
+.home-redesign .social-section{padding-block:18px 22px}
+.footer-grid.footer-grid{padding-block:26px}
+@media(max-width:900px){.wrap.wrap{width:calc(100% - 48px)}}
+@media(max-width:700px){.wrap.wrap{width:calc(100% - 32px)}.section.section{padding-block:24px}.page-head.page-head{padding-block:24px}.card.card{padding:18px}.home-redesign .learning-hero{padding-top:26px}.home-redesign .learning-hero .community-stats{padding-block:18px 4px;margin-top:16px}.home-redesign .learning-hero .community-stat{padding:14px}.home-redesign .home-feature.card,.home-redesign .home-reference.card{padding:20px}.home-redesign .home-watch-band{padding-block:18px 16px}.home-redesign .faq-section{padding-block:24px}.footer-grid.footer-grid{padding-block:24px}}
+.home-redesign .learning-hero{padding-bottom:12px}
+.learning-hero .community-stats{border-top:1px solid #eadfe8;margin-top:28px;padding-block:24px 8px;gap:16px 30px}
+.learning-hero .community-stats-heading h2{font-size:clamp(1.5rem,2.3vw,2rem)}
+.learning-hero .community-stat{background:#ffffffb3;box-shadow:4px 4px 0 #f5edf4;padding:18px 22px}
+.learning-hero .community-stat>strong{font-size:clamp(2.5rem,3.6vw,3.1rem)}
+.learning-hero .community-platform{margin-bottom:8px}
+.home-watch-band{padding:25px 0 22px;border-block:1px solid #eee4ec;background:#fcf9fc}
+.home-watch-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.home-watch-heading .eyebrow{font-size:.51rem;letter-spacing:.1em;margin-bottom:7px;color:#9b436b}
+.home-watch-heading h2{display:flex;gap:10px;align-items:center;font-size:clamp(1.2rem,2vw,1.6rem);line-height:1.35;font-weight:750;letter-spacing:-.04em;margin:0}
+.home-watch-heading h2>svg{color:#a03563;flex-shrink:0}
+.home-watch-controls{display:flex;align-items:center;gap:18px;flex-shrink:0}
+
+
+.home-watch-controls>a{display:inline-flex;gap:6px;align-items:center;font-size:.7rem;font-weight:700;text-decoration:none;min-height:36px}
+.home-watch-controls>a:hover{text-decoration:underline}
+.home-watch-row{display:grid;grid-template-columns:110px minmax(0,1fr);align-items:center;gap:15px;margin-top:12px}
+.home-watch-label{display:flex;gap:8px;align-items:center;font-size:.66rem;font-weight:700;color:var(--muted)}
+.home-watch-label>svg{flex-shrink:0;color:#a03563}
+.home-watch-window{overflow:hidden;min-width:0;padding:4px 0;mask-image:linear-gradient(to right,transparent,#000 15px,#000 calc(100% - 15px),transparent)}
+.home-watch-track{display:flex;width:max-content;animation:home-watch-drift 45s linear infinite}
+.home-watch-row-playlists .home-watch-track{animation-direction:reverse;animation-duration:53s}
+.home-watch-group{display:flex;gap:12px;padding-right:12px}
+.home-watch-tile{position:relative;display:block;flex:0 0 158px;width:158px;text-decoration:none;color:var(--ink);border-radius:9px;overflow:hidden;border:1px solid #e8dce6;background:white}
+.home-watch-tile>img{width:100%;height:89px;object-fit:cover}
+.home-watch-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;margin:7px 9px;font-size:.6rem;font-weight:650;line-height:1.6}
+.home-watch-title[lang="te"]{font-family:system-ui,sans-serif}
+.home-watch-play{position:absolute;top:57px;right:7px;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#3d1053e6;color:white}
+.home-watch-tile:hover{border-color:#c88aaf;box-shadow:0 2px 8px #3d105312}
+.home-watch-window:hover .home-watch-track,.home-watch-window:focus-within .home-watch-track{animation-play-state:paused}
+.home-watch-window:has(a:focus-visible){overflow-x:auto;mask-image:none;scrollbar-width:thin}
+.home-watch-window:has(a:focus-visible) .home-watch-track{animation:none;transform:none}
+.home-watch-empty{display:flex;align-items:center;gap:8px;padding:22px 15px;border:1px dashed #dfcddd;border-radius:10px;font-size:.75rem;min-height:100px}
+.home-watch-cache{margin:10px 0 0;font-size:.59rem;color:var(--muted)}
+.home-watch-pending{min-height:320px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted)}
+@keyframes home-watch-drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:700px){.learning-hero .community-stats{margin-top:20px;padding-top:20px;gap:15px}.learning-hero .community-stat{padding:16px}.learning-hero .community-stat>strong{font-size:2.5rem}.learning-hero .community-stats-heading h2>br{display:none}.home-watch-band{padding-block:22px 18px}.home-watch-heading{align-items:flex-start;gap:14px;flex-wrap:wrap}.home-watch-heading .eyebrow{font-size:.45rem}.home-watch-heading h2{font-size:1.25rem}.home-watch-controls{width:100%;justify-content:space-between}.home-watch-row{grid-template-columns:1fr;gap:6px;margin-top:15px}.home-watch-label{font-size:.63rem}.home-watch-tile{width:150px;flex-basis:150px}.home-watch-tile>img{height:84px}.home-watch-play{top:53px}.home-watch-window{mask-image:none}.home-watch-pending{min-height:370px}}
+@media(prefers-reduced-motion:reduce),(pointer:coarse){.home-watch-track{animation:none!important;transform:none!important}.home-watch-duplicate{display:none}.home-watch-window{overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;padding:4px 3px 10px;mask-image:none}.home-watch-tile{scroll-snap-align:start}}
 @media(max-width:700px){.home-redesign .learning-note-podcast{position:relative;left:auto;bottom:auto;transform:none;justify-self:center;margin-top:12px;max-width:100%}.home-redesign .learning-hero-scene{padding-bottom:16px}.home-redesign .learning-hero-footnote{margin-top:0}}
 
 

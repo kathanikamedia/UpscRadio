@@ -91,3 +91,11 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Hero now uses UPSC-supportive copy with mock-test/course buttons. The two audience cards use the owner's reported figures, labelled as snapshots with profile links rather than live API totals or enrolled-student counts.
 - All 29 regression tests, TypeScript validation and the final production build passed. Compiled server output was checked for all four removed blocks.
 - Refreshed localhost and browser-checked the final desktop layout and mobile hero. Fixed a mobile overlap by placing the podcast card below the mock card in normal document flow.
+
+## Combined introduction and channel preview rows
+
+- Combined the hero and audience cards into one introduction and added two compact, streamed preview rows underneath. Browser verification found six uploads and six playlists from the configured UPSC Radio channel.
+- Removed the audience footnote and visible Pause control as requested. Hover/focus pauses the previews; keyboard focus switches the row to a static scrollable layout. Touch/reduced-motion styles disable automatic movement and duplicate visual items.
+- Tightened global page/section/card spacing and softened border colours. Mobile browser checks found no horizontal page overflow. External preview links use a new tab.
+- All 29 regression tests and TypeScript validation passed, followed by a successful production build. Localhost was restarted with the final version and checked for zero Pause buttons and no audience note.
+- No database schema changes or content migration were needed for these UI changes.
