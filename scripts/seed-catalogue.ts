@@ -1,4 +1,4 @@
-import { db, execute } from "../lib/db";
+import { closeDatabase, execute } from "../lib/db";
 const courses = [
   { slug: "demo-gs-foundation", title: "GS Foundation", category: "GS Foundation", summary: "Build your base across polity, history, geography and economy.", duration: "Programme duration to be confirmed" },
   { slug: "demo-prelims-practice", title: "Prelims Practice Programme", category: "Prelims", summary: "Revise core topics and develop a consistent question-practice routine.", duration: "Schedule to be confirmed" },
@@ -14,4 +14,4 @@ await execute({
   args: [JSON.stringify({ free_mock: true, price_paise: 0, question_count: 10, minutes: 15 })],
 });
 console.log("Created two labelled demo courses and one free mock-test listing.");
-db.close();
+closeDatabase();

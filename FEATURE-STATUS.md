@@ -43,3 +43,8 @@ Updated 18 November 2026. This is an implementation status, not a claim that the
 - Browser checked: signed-out cart prompt and protected cart redirect, desktop/mobile Shop menu and submenus, improved study-library empty state, Watch links/layout and Facebook footer link. Previous cart add/remove checks were before login became required.
 - The new authenticated cart layout and wishlist mutations still need a signed-in account check.
 - Authenticated Moodle learning, production authentication and live payment fulfilment still require end-to-end verification with configured services.
+
+## Vercel deployment preparation
+
+- Serverless database fallback and import-time directory creation fixed. Build configuration/preflight and hosted database check/catalogue copy commands added.
+- A hosted libSQL URL and token are still required; the code does not substitute temporary storage or an in-memory database for real persistence.

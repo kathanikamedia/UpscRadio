@@ -44,6 +44,8 @@ Configure the three Razorpay variables and enable automatic capture. Course chec
 
 ## Production
 
+For Vercel deployment, follow [DEPLOYMENT.md](DEPLOYMENT.md). The build checks hosted database settings before compiling; local SQLite remains available for local development only.
+
 Use npm run build then npm start on a supported Node host. Configure HTTPS and SITE_URL. Set Clerk, database, Moodle and Razorpay secrets through the hosting secret manager. Persist uploaded media in Moodle and use backups for both databases. Use Moodle caching, scheduled tasks and workers appropriate to quiz load, then load-test 500 concurrent examination users before committing to capacity targets.
 
 ## Verification

@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 process.env.DATABASE_URL="file::memory:";
-const {execute,db,homePreviews}=await import("../lib/db");
+const {execute,closeDatabase,homePreviews}=await import("../lib/db");
 const {cachedSource}=await import("../lib/source-cache");
-test.after(()=>db.close());
+test.after(()=>closeDatabase());
 test("homepage previews limit results and exclude full article bodies",async()=>{
  for(const [slug,category] of [["course-one","Prelims"],["course-two","GS"],["course-three","GS"],["hidden-test","Test Series"]])await execute({sql:"INSERT INTO content(kind,slug,title,body,category,published) VALUES ('course',?,?, 'large article body',?,1)",args:[slug,slug,category]});
  const previews=await homePreviews("course",2);

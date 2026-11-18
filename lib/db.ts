@@ -1,15 +1,27 @@
-import { createClient, type InStatement } from "@libsql/client";
+import { createClient, type Client, type InStatement } from "@libsql/client";
 import { mkdirSync } from "node:fs";
-if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith("file:")) {
-  mkdirSync("data", { recursive: true });
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { databaseConfig } from "./database-config.mjs";
+let client: Client | undefined;
+// Importing a page must not create directories or open a database connection.
+export function getDatabase(): Client {
+  if (client) return client;
+  const config = databaseConfig();
+  if (config.url.startsWith("file:")) {
+    const file = config.url.slice(5).split("?")[0];
+    if (file && file !== ":memory:") {
+      const target = file.startsWith("//") ? fileURLToPath(config.url) : resolve(decodeURIComponent(file));
+      mkdirSync(dirname(target), { recursive: true });
+    }
+  }
+  client = createClient(config);
+  return client;
 }
-export const db = createClient({
-  url: process.env.DATABASE_URL || "file:data/radio.db",
-  authToken: process.env.DATABASE_AUTH_TOKEN,
-});
 let ready: Promise<void> | undefined;
+export function closeDatabase() { client?.close(); client = undefined; ready = undefined; }
 export function initialize() {
-  ready ??= db.batch([
+  ready ??= getDatabase().batch([
     "CREATE TABLE IF NOT EXISTS content (id INTEGER PRIMARY KEY, kind TEXT NOT NULL, slug TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', body TEXT NOT NULL DEFAULT '', category TEXT NOT NULL DEFAULT '', published INTEGER NOT NULL DEFAULT 0, extra TEXT NOT NULL DEFAULT '{}', UNIQUE(kind,slug))",
     "CREATE TABLE IF NOT EXISTS enquiries (id INTEGER PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL, purpose TEXT NOT NULL, course TEXT NOT NULL DEFAULT '', mode TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'New', notes TEXT NOT NULL DEFAULT '', follow_up TEXT NOT NULL DEFAULT '', created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS identities (clerk_id TEXT PRIMARY KEY, moodle_id INTEGER UNIQUE NOT NULL)",
@@ -29,7 +41,7 @@ export function initialize() {
 }
 export async function execute(statement: InStatement) {
   await initialize();
-  return db.execute(statement);
+  return getDatabase().execute(statement);
 }
 export type Content = { id: number; kind: string; slug: string; title: string; summary: string; body: string; category: string; published: number; extra: Record<string, unknown> };
 export async function contents(kind: string, published = true): Promise<Content[]> {

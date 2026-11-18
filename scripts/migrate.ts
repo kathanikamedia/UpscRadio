@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
-import { db, initialize } from "../lib/db";
+import { getDatabase, closeDatabase, initialize } from "../lib/db";
 await initialize();
 const records = JSON.parse(readFileSync("data/legacy.json","utf8")) as { model:string; id:number; fields:Record<string,unknown> }[];
 const types:Record<string,string> = {academy_course:"course",academy_resource:"resource",academy_profile:"profile",academy_branch:"branch",academy_notice:"notice",academy_sitesettings:"settings"};
-const tx = await db.transaction("write");
+const tx = await getDatabase().transaction("write");
 try {
   for(const row of records) {
     // The original database remains the authority for unmigrated learning history.
@@ -22,4 +22,4 @@ try {
   await tx.commit();
   console.log("Imported content, enquiries and archival history. Legacy passwords stay in the original database.");
 } catch(error) { await tx.rollback(); throw error; }
-db.close();
+closeDatabase();

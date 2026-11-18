@@ -62,3 +62,12 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Topic views include official external starting points; Current Affairs also streams cached official UPSC notices. Unpublished UPSC Radio materials remain honestly labelled.
 - Topic selection and official-source validation have automated coverage (20 tests total).
 - Clerk production instance created for upscradio.com. DNS, Google OAuth and deployment configuration remain to be completed; local credentials are preserved.
+
+
+## Vercel deployment fix
+
+- Database connections and local directories are initialized only when requested, not while page modules are imported.
+- Vercel rejects missing/file-based database settings before touching local storage; standard DATABASE_* and Turso integration variable names are supported.
+- Production preflight checks the live HTTPS site origin and production Clerk key types. vercel.json fixes the build command to npm run build.
+- Database smoke-check and allowlisted public-catalogue copy commands are available. Copying excludes users, enquiries, payments, identities, local documents and unknown metadata fields.
+- 26 tests cover these changes, including an isolated process test that forbids filesystem writes while importing an unconfigured database module. Hosted connectivity and migration still require actual database credentials.

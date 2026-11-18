@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHmac, randomUUID } from "node:crypto";
 process.env.DATABASE_URL="file::memory:";
-const {execute,db,rateLimit}=await import("../lib/db");
+const {execute,closeDatabase,rateLimit}=await import("../lib/db");
 const {capture,fulfill}=await import("../lib/payments");
 const {validSignature}=await import("../lib/signature");
 test("webhook signatures reject altered bodies and malformed signatures",()=>{
@@ -40,7 +40,7 @@ test("failed Moodle fulfilment preserves paid state for retry",async()=>{
  assert.equal(result.rows[0].status,"Paid");
  assert.equal(result.rows[0].fulfilled,0);
 });
-test.after(()=>db.close());
+test.after(()=>closeDatabase());
 
 test("concurrent callbacks cannot both claim the same order with different payment IDs", async () => {
   const receipt = randomUUID();
