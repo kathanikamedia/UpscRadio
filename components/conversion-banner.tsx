@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function ConversionBanner({title="Turn today’s learning into tomorrow’s confidence.",text="Take the next step in your preparation."}:{title?:string;text?:string}){return <section className="conversion-banner"><div><p className="eyebrow">YOUR NEXT STEP</p><h2>{title}</h2><p>{text}</p></div><div className="actions"><Link className="button" href="/test-series/">Explore mock tests ↗</Link><Link className="button secondary" href="/courses/">Browse courses ↗</Link></div></section>;}

@@ -10,5 +10,5 @@ export async function toggleSaved(data:FormData) {
  const saved=await execute({sql:"SELECT 1 FROM saved WHERE clerk_id=? AND content_id=?",args:[user,id]});
  if(saved.rows.length)await execute({sql:"DELETE FROM saved WHERE clerk_id=? AND content_id=?",args:[user,id]});
  else await execute({sql:"INSERT OR IGNORE INTO saved(clerk_id,content_id) VALUES (?,?)",args:[user,id]});
- revalidatePath("/student/saved");revalidatePath("/courses");revalidatePath("/resources");
+ revalidatePath("/student/saved");revalidatePath("/student");revalidatePath("/courses");revalidatePath("/resources");revalidatePath("/[...path]","page");
 }

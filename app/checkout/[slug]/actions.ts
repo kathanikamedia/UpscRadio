@@ -8,7 +8,7 @@ import { moodleConfigured } from "@/lib/moodle";
 import { redirect } from "next/navigation";
 export async function beginCheckout(_state:string,data:FormData) {
  const id=await requireUser(),slug=String(data.get("slug")),course=await content("course",slug);
- if(!course||!paymentsConfigured||!moodleConfigured||!Number(course.extra.moodle_course_id))return "This course is awaiting checkout activation.";
+ if(!course||course.extra.demo||!paymentsConfigured||!moodleConfigured||!Number(course.extra.moodle_course_id))return "This course is awaiting checkout activation.";
  try {
   await rateLimit("checkout:"+id,8);
   await moodleIdentity(id,true);

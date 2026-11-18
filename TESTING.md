@@ -31,3 +31,16 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Added two source parser tests for official news. All eleven automated tests and TypeScript checks passed.
 - Browser-verified the homepage's three latest official news items and both demo courses.
 - The free mock still requires Moodle installation/import before students can attempt it. Paid-test prices remain pending.
+
+
+## 18 November 2026 update
+
+- 15 automated tests pass, including ten-minute feed-cache expiry, concurrent-request deduplication and limited homepage queries.
+- Hero source: 1,881,987-byte PNG replaced by 226,652-byte transparent WebP (about 88% smaller). Responsive Next.js image delivery remains enabled.
+- Homepage shell streams without waiting for official feeds or database previews. Feed and course boundaries reserve space without entrance animations.
+- Official feeds retain the database fallback, use a warm process cache, skip hidden-tab polls and refresh at ten-minute intervals.
+- Study materials filter/search/pagination run in SQL, with a nine-item page limit.
+- Browser verified desktop/mobile Shop menus, signed-out cart prompt, protected cart redirect, study-library empty state, Watch page and social navigation.
+- Authenticated cart, wishlist and live payment/Moodle flows still require signed-in end-to-end verification. No production speed score is claimed.
+
+- Security pass: bounded payment request bodies (including forged Content-Length checks), same-order gateway verification, verification rate limit, safe post-login destinations and private-page no-store headers. Baseline CSP and permission restrictions preserve external sign-in popups. This is a targeted code review, not a penetration-test certification.

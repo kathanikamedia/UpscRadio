@@ -1,8 +1,11 @@
 import {validSignature} from "@/lib/signature";
 import {capture,fulfill} from "@/lib/payments";
 import {execute} from "@/lib/db";
+import {BodyTooLarge,readLimitedBody} from "@/lib/request-body";
 export async function POST(request:Request) {
- const body=await request.text(),secret=process.env.RAZORPAY_WEBHOOK_SECRET;
+ let body:string;
+ try{body=await readLimitedBody(request,65536);}catch(error){return new Response("Invalid request",{status:error instanceof BodyTooLarge?413:400});}
+ const secret=process.env.RAZORPAY_WEBHOOK_SECRET;
  if(!secret||!validSignature(secret,body,request.headers.get("x-razorpay-signature")||""))return new Response("Invalid signature",{status:403});
  try {
   const event=JSON.parse(body);

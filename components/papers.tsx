@@ -1,28 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useLiveListing } from "./use-live-listing";
 import type { PaperListing } from "@/lib/upsc-parser";
 export function Papers({ initial }: { initial: PaperListing | null }) {
-  const [listing, setListing] = useState(initial);
-  useEffect(() => {
-    const controller = new AbortController();
-    async function update() {
-      try {
-        const response = await fetch("/api/papers/", { cache: "no-store", signal: controller.signal });
-        if (response.ok) {
-          const result = await response.json() as PaperListing | null;
-          if (result) setListing(result);
-        }
-      } catch { /* Retain the last successful listing during a network interruption. */ }
-    }
-    const interval = setInterval(update, 10 * 60 * 1000);
-    const visible = () => { if (document.visibilityState === "visible") void update(); };
-    document.addEventListener("visibilitychange", visible);
-    return () => {
-      clearInterval(interval);
-      controller.abort();
-      document.removeEventListener("visibilitychange", visible);
-    };
-  }, []);
+  const listing = useLiveListing<PaperListing>("/api/papers/", initial);
   if (!listing) return <p>View the latest papers in UPSC’s official archive.</p>;
   return <div className="pyq-list">
     <p className="pyq-exam">{listing.examination}</p>

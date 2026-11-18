@@ -19,6 +19,8 @@ export function initialize() {
     "CREATE TABLE IF NOT EXISTS legacy (model TEXT NOT NULL, id INTEGER NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(model,id))",
     "CREATE TABLE IF NOT EXISTS saved (clerk_id TEXT NOT NULL, content_id INTEGER NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(clerk_id,content_id))",
     "CREATE TABLE IF NOT EXISTS audit (id INTEGER PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+    "CREATE TABLE IF NOT EXISTS source_cache (key TEXT PRIMARY KEY, payload TEXT NOT NULL, checked INTEGER NOT NULL, retry_after INTEGER NOT NULL DEFAULT 0)",
+    "CREATE INDEX IF NOT EXISTS content_listing ON content(kind,published,id DESC)",
   ], "write").then(() => undefined).catch(error => {
     ready = undefined;
     throw error;
@@ -41,6 +43,15 @@ export async function content(kind: string, slug: string) {
   });
   const row = result.rows[0];
   return row ? { ...row, extra: JSON.parse(String(row.extra)) } as unknown as Content : undefined;
+}
+// Homepage previews need neither full article bodies nor the entire catalogue.
+export async function homePreviews(kind: "course" | "profile", limit: number): Promise<Content[]> {
+  const category = kind === "course" ? "category != 'Test Series'" : "category IN ('Testimonial','Result')";
+  const result = await execute({
+    sql: `SELECT id,kind,slug,title,summary,category,published,extra FROM content WHERE kind=? AND published=1 AND ${category} ORDER BY id DESC LIMIT ?`,
+    args: [kind, limit],
+  });
+  return result.rows.map(row => ({ ...row, body: "", extra: JSON.parse(String(row.extra)) }) as unknown as Content);
 }
 export async function rateLimit(key: string, maximum = 8) {
   const now = Date.now();

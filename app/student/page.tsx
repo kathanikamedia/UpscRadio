@@ -27,7 +27,7 @@ export default async function Student(){
   <header className="student-welcome"><div><p className="eyebrow">YOUR STUDY SPACE</p><h1>Welcome, {user?.firstName||"student"}.</h1><p>Small steps, taken consistently, bring your goal closer.</p></div><UserButton/></header>
   <div className="student-stats">
    <article><BookOpen aria-hidden="true"/><strong>{courses.length}</strong><span>Enrolled programmes</span></article>
-   <article><Bookmark aria-hidden="true"/><strong>{Number(saved.rows[0].count)}</strong><span>Saved for later</span></article>
+   <article><Bookmark aria-hidden="true"/><strong>{Number(saved.rows[0].count)}</strong><span>Wishlist items</span></article>
    <article><ClipboardCheck aria-hidden="true"/><strong>1</strong><span>Free introductory mock</span></article>
   </div>
   <section className="student-next"><div><span className="access-label free">Free mock test</span><h2>Find your starting point.</h2><p>Try 10 polity questions and make your next revision session more focused.</p></div><Link className="button" href="/student/free-test/">Open free mock <ArrowRight size={16} aria-hidden="true"/></Link></section>

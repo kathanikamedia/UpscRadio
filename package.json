@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start --hostname localhost --port 3000",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts",
+    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts tests/performance.test.ts tests/security.test.ts",
     "migrate": "tsx scripts/migrate.ts",
     "seed:catalogue": "tsx scripts/seed-catalogue.ts"
   },

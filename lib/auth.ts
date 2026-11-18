@@ -6,9 +6,9 @@ export async function identity() {
   const session = await auth();
   return session.userId;
 }
-export async function requireUser() {
+export async function requireUser(returnTo = "/student/") {
   const userId = await identity();
-  if (!userId) redirect("/account/login/");
+  if (!userId) redirect("/account/login/?returnTo="+encodeURIComponent(returnTo));
   return userId;
 }
 export async function requireStaff() {
