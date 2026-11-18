@@ -38,7 +38,7 @@ node --env-file=.env.vercel.production.local --import tsx scripts/check-database
 node --env-file=.env.vercel.production.local --import tsx scripts/copy-catalogue.ts
 ```
 
-The connection check creates the schema idempotently. The catalogue copy imports published catalogue items and CMS settings from `data/radio.db`, preserves existing remote entries, and never copies users, payments, enquiries or local identity mappings. It allowlists public metadata and excludes local document paths and unknown secret/config fields. Review the local CMS settings before copying them to the live site. To create just the demo catalogue instead, use:
+The connection check creates the schema idempotently. The catalogue copy imports published and draft catalogue items and CMS settings from `data/radio.db`, preserves existing remote entries, verifies every source entry exists at the destination, and never copies users, payments, enquiries or local identity mappings. It allowlists public metadata and excludes local document paths and unknown secret/config fields. Review the local CMS settings before copying them to the live site. To create just the demo catalogue instead, use:
 
 ```sh
 node --env-file=.env.vercel.production.local --import tsx scripts/seed-catalogue.ts

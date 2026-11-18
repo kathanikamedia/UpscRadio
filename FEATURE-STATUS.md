@@ -2,6 +2,8 @@
 
 Updated 18 November 2026. This is an implementation status, not a claim that the site is ready for live sales.
 
+Latest update: reference-led light homepage and responsive FAQ verified locally. All 22 existing catalogue/settings entries, including drafts, have been copied and verified on Turso. No schema change was made. R2 setup has been deferred at the user's request. See SCHEMA-STABILITY.md for the database compatibility policy.
+
 ## Available locally
 
 - Shop dropdown with expandable exam/subject submenus.
@@ -47,7 +49,7 @@ Updated 18 November 2026. This is an implementation status, not a claim that the
 ## Vercel deployment preparation
 
 - Serverless database fallback and import-time directory creation fixed. Build configuration/preflight and hosted database check/catalogue copy commands added.
-- A hosted libSQL URL and token are still required; the code does not substitute temporary storage or an in-memory database for real persistence.
+- Turso connection and the 22-entry catalogue transfer are verified. Vercel must retain the same hosted URL and token in its Production environment; the code does not substitute temporary storage or an in-memory database for real persistence.
 # R2 storage preparation
 
-Private R2 study-PDF downloads, admin object-key verification and a connection-check script are implemented. Uploads are managed in Cloudflare's dashboard. Turso and Cloudflare accounts, live credentials, bucket creation and a real upload/download verification are still required; no hosted service has been provisioned by this change.
+Private R2 study-PDF downloads, admin object-key verification and a connection-check script are implemented. Uploads are managed in Cloudflare's dashboard. R2 activation, bucket creation and a real upload/download verification are deferred; the R2 variables may remain unset. Turso database setup and catalogue transfer are complete.

@@ -70,10 +70,17 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Vercel rejects missing/file-based database settings before touching local storage; standard DATABASE_* and Turso integration variable names are supported.
 - Production preflight checks the live HTTPS site origin and production Clerk key types. vercel.json fixes the build command to npm run build.
 - Database smoke-check and allowlisted public-catalogue copy commands are available. Copying excludes users, enquiries, payments, identities, local documents and unknown metadata fields.
-- 26 tests cover these changes, including an isolated process test that forbids filesystem writes while importing an unconfigured database module. Hosted connectivity and migration still require actual database credentials.
+- 26 tests initially covered these changes, including an isolated process test that forbids filesystem writes while importing an unconfigured database module. Hosted connectivity and catalogue transfer have since been verified; see the latest results below.
 
 ## R2 study-material downloads
 
 - 29 tests now pass, including missing-storage configuration, object-key traversal rejection and offline signing tests for 60-second attachment links without exposing the secret key.
 - TypeScript and the optimized production build are checked after the R2 integration.
-- No live Turso or R2 credentials are available yet. Real database migration, bucket access, uploaded-file verification and a browser download remain to be checked after account setup.
+- R2 bucket access, uploaded-file verification and a real storage download remain unchecked because R2 activation is deferred. Turso connectivity and transfer results are recorded below.
+
+## Homepage refresh and Turso catalogue transfer
+
+- Production build and TypeScript validation passed for the light centred hero, resource panels, learning links and native FAQ accordion.
+- Browser checks at desktop (1440px) and the default mobile viewport verified the hero and FAQ. Opening a second FAQ closes the first, without additional client JavaScript.
+- Turso connectivity and schema initialization were verified with private credentials. The catalogue copy verified all 22 source entries on the destination, including drafts and site settings, while preserving existing destination entries. A follow-up connection check returned 22 catalogue entries.
+- Database schema remained unchanged. R2 is optional and remains inactive. Private local documents and student/payment records were not copied by the catalogue import.
