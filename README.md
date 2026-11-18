@@ -53,3 +53,11 @@ Run npm run typecheck, npm test and npm run build. Local service-independent che
 ## Automatic previous papers
 
 The homepage fetches the first two PDF links from the latest Civil Services Mains table in UPSC's official archive. A shared database cache refreshes every 10 minutes. Open homepages also poll every 10 minutes and when returning to the tab. Source outages retain the last successful listing with an update notice.
+
+## Catalogue and free mock
+
+Run npm run seed:catalogue to create the two labelled preview courses and the single free introductory mock listing. Existing entries are preserved on subsequent runs. Paid test prices are awaiting institute input. Staff publishing validates that additional mock tests have a positive price.
+
+The student dashboard has dedicated links to the free mock, all tests, saved items and account settings. The free test has 10 original introductory polity questions prepared in moodle/free-polity-starter.gift. Follow moodle/README.md to import and connect it. Actual attempts remain unavailable until Moodle is configured.
+
+The homepage now shows the latest three official UPSC notices with red Read more links opening their official destinations in a new tab. News and PYQ feeds share a persistent ten-minute source cache.

@@ -1,0 +1,73 @@
+// UPSC Radio original introductory polity practice.
+// Configure the Moodle quiz with 10 questions, 15 minutes, one mark each,
+// deferred feedback, no negative marking and review only after submission.
+
+::UR-POL-01::Which part of the Constitution of India contains Fundamental Rights? {
+=Part III #Fundamental Rights are contained in Part III.
+~Part II
+~Part IV
+~Part IX
+}
+
+::UR-POL-02::Which Article guarantees equality before the law and equal protection of the laws? {
+=Article 14 #Article 14 provides these guarantees.
+~Article 19
+~Article 21
+~Article 32
+}
+
+::UR-POL-03::Who is the ex officio Chairman of the Rajya Sabha? {
+=The Vice-President of India #Article 89 provides for the Vice-President as ex officio Chairman.
+~The President of India
+~The Prime Minister
+~The Speaker of the Lok Sabha
+}
+
+::UR-POL-04::What is the minimum age prescribed for membership of the Lok Sabha? {
+=25 years #Article 84 prescribes a minimum age of 25 years for Lok Sabha membership.
+~18 years
+~21 years
+~30 years
+}
+
+::UR-POL-05::The Directive Principles of State Policy are contained in which part of the Constitution? {
+=Part IV #The Directive Principles are contained in Part IV.
+~Part I
+~Part III
+~Part V
+}
+
+::UR-POL-06::Which body conducts elections to Parliament and the state legislatures? {
+=The Election Commission of India #Article 324 vests the relevant superintendence, direction and control in the Election Commission.
+~The Finance Commission
+~The Union Public Service Commission
+~The Comptroller and Auditor General
+}
+
+::UR-POL-07::Which Article provides the right to move the Supreme Court for enforcement of Fundamental Rights? {
+=Article 32 #Article 32 guarantees the right to move the Supreme Court for this purpose.
+~Article 40
+~Article 51
+~Article 110
+}
+
+::UR-POL-08::The 73rd Constitutional Amendment primarily concerns which institutions? {
+=Panchayats #The 73rd Amendment inserted Part IX dealing with Panchayats.
+~High Courts
+~Municipalities
+~Inter-State Councils
+}
+
+::UR-POL-09::Which constitutional body recommends the distribution of tax proceeds between the Union and the states? {
+=The Finance Commission #Article 280 sets out the Finance Commission and its functions.
+~The Election Commission
+~The National Human Rights Commission
+~The Union Public Service Commission
+}
+
+::UR-POL-10::Which provision lists the Fundamental Duties of citizens? {
+=Article 51A #Fundamental Duties are listed in Article 51A in Part IVA.
+~Article 21A
+~Article 44
+~Article 72
+}

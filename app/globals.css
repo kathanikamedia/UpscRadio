@@ -238,3 +238,38 @@ progress{width:100%;height:9px;accent-color:var(--radio-purple)}
 .home-feature-grid>.home-feature{min-width:0}
 .auth-layout>div{min-width:0}
 @media(max-width:760px){.aspirant-hero{min-height:470px;padding-bottom:210px}}
+
+.news-entry,.course-preview{padding:17px 0;border-top:1px solid var(--line)}
+.news-entry h3{font-size:.98rem;line-height:1.5;letter-spacing:-.01em;margin-bottom:7px}
+.read-more{color:#be123c;font-size:.87rem;font-weight:700;text-decoration:none}
+.read-more:hover{color:#9f1239;text-decoration:underline}
+.news-all{display:inline-block;margin-top:12px}
+.course-preview h3{font-size:1.15rem;margin:7px 0}
+.course-preview p{font-size:.9rem;color:var(--muted);margin-bottom:8px}
+.demo-label,.access-label{display:inline-flex;padding:3px 9px;border-radius:5px;background:var(--tint);color:var(--ink);font-size:.72rem;font-weight:700}
+.access-label.free{background:#e5f3e9;color:#245134}
+
+.student-welcome{display:flex;justify-content:space-between;gap:20px;border:0;background:transparent;padding:0 0 28px}
+.student-welcome h1{font-size:clamp(2rem,3.5vw,3rem)}
+.student-welcome p:last-child{color:var(--muted);margin:0}
+.student-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.student-stats article{display:grid;grid-template-columns:auto 1fr;gap:5px 15px;padding:20px;border:1px solid var(--line);border-radius:12px}
+.student-stats svg{grid-row:span 2;color:var(--radio-purple);align-self:center}
+.student-stats strong{font-size:1.65rem;line-height:1.2}
+.student-stats span{font-size:.8rem;color:var(--muted)}
+.student-next{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:28px;background:var(--tint);border:1px solid var(--line);border-radius:14px}
+.student-next h2{font-size:1.7rem;margin-top:10px}.student-next p{max-width:46ch;margin:0}.student-next .button{flex-shrink:0}
+.dashboard-section{margin-top:35px}.dashboard-section h2{font-size:1.6rem}
+.dashboard-empty{padding:28px;border:1px dashed var(--line);border-radius:12px;background:var(--white);margin-top:18px}
+.dashboard-empty svg{margin-bottom:10px}
+.payment-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding-block:16px;border-bottom:1px solid var(--line)}
+.payment-row small{display:block;color:var(--muted)}
+.mock-card{display:flex;align-items:flex-start;flex-direction:column;gap:14px;padding:28px}
+.mock-card h2{font-size:1.6rem}.mock-card p{margin:0}
+.mock-card .button{margin-top:auto}.free-mock{border-top:4px solid var(--radio-pink)}
+.mock-icon{width:32px;height:32px;color:var(--ink)}
+.test-meta{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.87rem}
+.test-price{font-size:2rem;font-weight:700}.test-note{margin-top:20px}
+.test-instructions{padding-left:22px;margin-block:18px}.test-instructions li{margin-bottom:8px}
+.setup-notice{padding:16px;background:var(--tint);border-radius:8px}
+@media(max-width:900px){.student-next{align-items:flex-start;flex-direction:column}.student-stats{grid-template-columns:1fr}}

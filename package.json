@@ -7,8 +7,9 @@
     "build": "next build --webpack",
     "start": "next start --hostname localhost --port 3000",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts",
-    "migrate": "tsx scripts/migrate.ts"
+    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts",
+    "migrate": "tsx scripts/migrate.ts",
+    "seed:catalogue": "tsx scripts/seed-catalogue.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.10.2",

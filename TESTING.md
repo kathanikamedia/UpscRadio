@@ -22,3 +22,12 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Verified responsive homepage and Clerk sign-in rendering. The production build, TypeScript checks and all nine automated tests passed.
 - Updated the hero CTA to Mock Test at /test-series/.
 - Moodle installation, live learning/SSO verification and production Clerk/payment configuration remain external setup requirements.
+
+## Catalogue and dashboard update
+
+- Added two explicitly labelled demo course previews with working detail links.
+- Added the free mock listing, protected enrolment flow, Moodle import questions and paid-test publishing validation.
+- Refined the separate student dashboard with real enrolment, saved-item and payment data.
+- Added two source parser tests for official news. All eleven automated tests and TypeScript checks passed.
+- Browser-verified the homepage's three latest official news items and both demo courses.
+- The free mock still requires Moodle installation/import before students can attempt it. Paid-test prices remain pending.
