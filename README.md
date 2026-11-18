@@ -61,3 +61,8 @@ Run npm run seed:catalogue to create the two labelled preview courses and the si
 The student dashboard has dedicated links to the free mock, all tests, saved items and account settings. The free test has 10 original introductory polity questions prepared in moodle/free-polity-starter.gift. Follow moodle/README.md to import and connect it. Actual attempts remain unavailable until Moodle is configured.
 
 The homepage now shows the latest three official UPSC notices with red Read more links opening their official destinations in a new tab. News and PYQ feeds share a persistent ten-minute source cache.
+
+
+### Fast local preview
+
+Use `npm run build`, then `npm start` to review the site at http://localhost:3000. This runs optimized production assets and enables route prefetching. `npm run dev` is for editing: it compiles routes on demand and its first navigation can take several seconds. After source changes, rebuild and restart the production server. Clerk development credentials are separate from the Next.js server mode.

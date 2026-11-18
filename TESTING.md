@@ -44,3 +44,21 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Authenticated cart, wishlist and live payment/Moodle flows still require signed-in end-to-end verification. No production speed score is claimed.
 
 - Security pass: bounded payment request bodies (including forged Content-Length checks), same-order gateway verification, verification rate limit, safe post-login destinations and private-page no-store headers. Baseline CSP and permission restrictions preserve external sign-in popups. This is a targeted code review, not a penetration-test certification.
+
+
+## Navigation and Watch update
+
+- 18 automated tests pass, including YouTube feed ordering, channel identity checks and exclusion of unrelated playlist recommendations.
+- Local development first-load measurements: Watch 9,347 ms, About us 5,579 ms; production responses for Courses, Study Materials, Watch and About us were 16–78 ms across two local request rounds. These are local HTTP response timings, not full browser rendering or production-hosting benchmarks.
+- Main navigation prefetches complete routes in production. Shared auth checks are request-scoped, catalogue queries run alongside auth, and Moodle sections stream independently.
+- Watch renders six live uploads followed by six public playlists, refreshed every ten minutes with last-good cache fallback. Uploads use the public YouTube RSS feed; playlists use the selected channel tab in the public YouTube page, which can change its format.
+- Local WOFF2 fonts add approximately 47 KB total; only the main font is globally preloaded. No runtime Google Fonts request is required.
+- Compact spacing, course-card hover feedback and the student sidebar remain responsive, with reduced-motion support.
+
+
+## Topic navigation fix
+
+- Homepage subject cards now use stable topic filters instead of unstructured keyword searches. Old topic keyword URLs still resolve to the matching topic.
+- Topic views include official external starting points; Current Affairs also streams cached official UPSC notices. Unpublished UPSC Radio materials remain honestly labelled.
+- Topic selection and official-source validation have automated coverage (20 tests total).
+- Clerk production instance created for upscradio.com. DNS, Google OAuth and deployment configuration remain to be completed; local credentials are preserved.

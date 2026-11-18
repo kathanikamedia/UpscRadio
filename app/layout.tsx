@@ -5,6 +5,9 @@ import { clerkConfigured } from "@/lib/auth";
 import { Footer } from "@/components/footer";
 import { AccountState } from "@/components/account-state";
 import "./globals.css";
+import localFont from "next/font/local";
+const manrope=localFont({src:"./fonts/manrope-latin-variable.woff2",weight:"200 800",display:"swap",variable:"--font-manrope"});
+const editorial=localFont({src:"./fonts/instrument-serif-italic.woff2",weight:"400",style:"italic",display:"swap",variable:"--font-editorial",preload:false});
 
 export const metadata: Metadata = {
   title: { default: "UPSC RADIO", template: "%s | UPSC RADIO" },
@@ -20,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <Footer />
   </>;
 
-  return <html lang="en-IN"><body>
+  return <html lang="en-IN" className={`${manrope.variable} ${editorial.variable}`}><body>
     {clerkConfigured
       ? <ClerkProvider appearance={{ variables: { colorPrimary: "#3d1053", borderRadius: "0.75rem" } }}><AccountState configured>{content}</AccountState></ClerkProvider>
       : <AccountState configured={false}>{content}</AccountState>}

@@ -5,7 +5,7 @@ Updated 18 November 2026. This is an implementation status, not a claim that the
 ## Available locally
 
 - Shop dropdown with expandable exam/subject submenus.
-- Redesigned Watch page with official channel, playlist and topic-search links; no invented video or playlist IDs.
+- Redesigned Watch page with six live latest uploads, six public playlists, official channel/topic links, ten-minute refresh and last-good cache fallback.
 - About us page and study library with search, exam filtering, pagination and useful empty states.
 - Homepage server streaming, smaller transparent hero asset, indexed preview queries, in-memory feed caching and visibility-aware refresh.
 
@@ -39,7 +39,7 @@ Updated 18 November 2026. This is an implementation status, not a claim that the
 
 ## Verification
 
-- TypeScript check and all fifteen automated tests pass after these updates.
+- TypeScript check and all eighteen automated tests pass after these updates.
 - Browser checked: signed-out cart prompt and protected cart redirect, desktop/mobile Shop menu and submenus, improved study-library empty state, Watch links/layout and Facebook footer link. Previous cart add/remove checks were before login became required.
 - The new authenticated cart layout and wishlist mutations still need a signed-in account check.
 - Authenticated Moodle learning, production authentication and live payment fulfilment still require end-to-end verification with configured services.

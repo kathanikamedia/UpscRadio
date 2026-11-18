@@ -1,0 +1,2 @@
+import { latestYouTubeVideos,latestYouTubePlaylists } from "@/lib/youtube";
+export async function GET(_request:Request,{params}:{params:Promise<{kind:string}>}){const {kind}=await params;if(kind!=="videos"&&kind!=="playlists")return new Response("Not found",{status:404});return Response.json(await(kind==="videos"?latestYouTubeVideos():latestYouTubePlaylists()),{headers:{"Cache-Control":"no-store"}});}

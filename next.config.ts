@@ -3,6 +3,7 @@ const config: NextConfig = {
   devIndicators: false,
   trailingSlash: true,
   poweredByHeader: false,
+  images: { remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" }] },
   async headers() {
     return [{ source: "/:path*", headers: [
       { key: "X-Content-Type-Options", value: "nosniff" },

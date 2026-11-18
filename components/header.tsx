@@ -11,7 +11,7 @@ export function Header({configured}:{configured:boolean}) {
   return <header><div className={"wrap header " + (open ? "open" : "")}>
     <Link className="brand" href="/"><span className="wordmark">UPSC <span>Radio</span></span></Link>
     <button className="menu" aria-controls="nav" aria-expanded={open} onClick={() => setOpen(!open)}>Menu</button>
-    <nav id="nav" aria-label="Main navigation"><ShopMenu onNavigate={()=>setOpen(false)}/>{[["/courses/","Courses"],["/test-series/","Mock Test"],["/resources/","Study Materials"],["/explore/videos/","Watch"],["/explore/about/","About us"]].map(([href,label]) => <Link key={href} href={href} aria-current={path === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}</Link>)}</nav>
+    <nav id="nav" aria-label="Main navigation"><ShopMenu onNavigate={()=>setOpen(false)}/>{[["/courses/","Courses"],["/test-series/","Mock Test"],["/resources/","Study Materials"],["/explore/videos/","Watch"],["/explore/about/","About us"]].map(([href,label]) => <Link key={href} href={href} prefetch={true} aria-current={path === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}</Link>)}</nav>
     <div className="account"><CartLink/><AuthControls configured={configured}/></div>
   </div></header>;
 }

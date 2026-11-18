@@ -38,9 +38,9 @@ export default async function PublicPage({params,searchParams}:Props) {
       {kind==="resource" && typeof item.extra.url==="string" && /^https?:\/\//.test(item.extra.url)?<a target="_blank" rel="noopener noreferrer" className="button" href={item.extra.url}>Open resource ↗</a>:null}
     </article>{kind==="course"?<aside className="card"><h2>Programme details</h2><p>{item.slug===FREE_MOCK_SLUG?"Free introductory test":price?"₹"+(price/100).toLocaleString("en-IN"):"Price to be announced"}</p>{["mode","duration","language"].map(k=>item.extra[k]?<p key={k}>{String(item.extra[k])}</p>:null)}<Link className="button" href="/admissions/">Enquire about this course</Link>{item.slug===FREE_MOCK_SLUG?<Link className="button secondary" href="/student/free-test/">Open free mock</Link>:<AddToCart slug={item.slug}/>}<div className="detail-wishlist"><WishlistButton id={item.id} added={wished}/></div></aside>:null}</div></>;
   }
-  const userId=await identity();
+  const [userId,catalogue]=await Promise.all([identity(),contents(kind)]);
   const saved=userId?new Set((await execute({sql:"SELECT content_id FROM saved WHERE clerk_id=?",args:[userId]})).rows.map(r=>Number(r.content_id))):new Set<number>();
-  let items=await contents(kind);
+  let items=catalogue;
   if(root==="test-series")items=items.filter(i=>i.category==="Test Series");
   if(root==="books")items=items.filter(i=>i.category==="Books");
   const categories=[...new Set(items.map(i=>i.category))].sort();

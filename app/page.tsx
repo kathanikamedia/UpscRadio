@@ -13,9 +13,10 @@ export default function Home() {
       <Image className="hero-students-background" src="/group-study.webp" alt="" fill sizes="(max-width: 760px) 100vw, 75vw" preload />
       <div className="wrap aspirant-hero">
         <div className="aspirant-copy">
+          <p className="hero-kicker"><span aria-hidden="true"/> FOR THE DREAM YOU KEEP SHOWING UP FOR</p>
           <h1 className="hero-wordmark">UPSC <span>Radio</span></h1>
           <p className="hero-emotion">Every hour you put in brings your dream closer.</p>
-          <Link className="button hero-course-link" href="/test-series/">Mock Test ↗</Link>
+          <div className="hero-actions"><Link className="button hero-course-link" href="/test-series/" prefetch={true}>Mock Test ↗</Link><Link className="hero-secondary" href="/courses/" prefetch={true}>Explore courses <span aria-hidden="true">↗</span></Link></div>
         </div>
       </div>
     </section>

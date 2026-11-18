@@ -1,11 +1,12 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 export const clerkConfigured = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY);
-export async function identity() {
+export const identity = cache(async function identity() {
   if (!clerkConfigured) return null;
   const session = await auth();
   return session.userId;
-}
+});
 export async function requireUser(returnTo = "/student/") {
   const userId = await identity();
   if (!userId) redirect("/account/login/?returnTo="+encodeURIComponent(returnTo));
