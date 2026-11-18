@@ -71,3 +71,9 @@ The active app uses Next.js, React, Clerk and a server-only Moodle integration.
 - Production preflight checks the live HTTPS site origin and production Clerk key types. vercel.json fixes the build command to npm run build.
 - Database smoke-check and allowlisted public-catalogue copy commands are available. Copying excludes users, enquiries, payments, identities, local documents and unknown metadata fields.
 - 26 tests cover these changes, including an isolated process test that forbids filesystem writes while importing an unconfigured database module. Hosted connectivity and migration still require actual database credentials.
+
+## R2 study-material downloads
+
+- 29 tests now pass, including missing-storage configuration, object-key traversal rejection and offline signing tests for 60-second attachment links without exposing the secret key.
+- TypeScript and the optimized production build are checked after the R2 integration.
+- No live Turso or R2 credentials are available yet. Real database migration, bucket access, uploaded-file verification and a browser download remain to be checked after account setup.

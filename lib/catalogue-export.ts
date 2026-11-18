@@ -1,6 +1,6 @@
 const fields:Record<string,readonly string[]>={
  course:["url","mode","duration","language","syllabus","inclusions","price_paise","moodle_course_id","demo","free_mock","question_count","minutes","exam"],
- resource:["url","exam","type"],
+ resource:["url","exam","type","storage_key"],
  profile:["url","role","subject","position","result","year","rank","video_url"],
  notice:["url"],
  branch:["url","address","phone","email","map_url"],

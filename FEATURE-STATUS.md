@@ -48,3 +48,6 @@ Updated 18 November 2026. This is an implementation status, not a claim that the
 
 - Serverless database fallback and import-time directory creation fixed. Build configuration/preflight and hosted database check/catalogue copy commands added.
 - A hosted libSQL URL and token are still required; the code does not substitute temporary storage or an in-memory database for real persistence.
+# R2 storage preparation
+
+Private R2 study-PDF downloads, admin object-key verification and a connection-check script are implemented. Uploads are managed in Cloudflare's dashboard. Turso and Cloudflare accounts, live credentials, bucket creation and a real upload/download verification are still required; no hosted service has been provisioned by this change.

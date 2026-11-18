@@ -8,13 +8,16 @@
     "build": "next build --webpack",
     "start": "next start --hostname localhost --port 3000",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts tests/performance.test.ts tests/security.test.ts tests/youtube.test.ts tests/resource-topics.test.ts tests/deployment.test.ts",
+    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts tests/performance.test.ts tests/security.test.ts tests/youtube.test.ts tests/resource-topics.test.ts tests/deployment.test.ts tests/storage.test.ts",
     "check:database": "tsx scripts/check-database.ts",
     "copy:catalogue": "tsx scripts/copy-catalogue.ts",
     "migrate": "tsx scripts/migrate.ts",
-    "seed:catalogue": "tsx scripts/seed-catalogue.ts"
+    "seed:catalogue": "tsx scripts/seed-catalogue.ts",
+    "check:storage": "tsx scripts/check-storage.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1171.0",
+    "@aws-sdk/s3-request-presigner": "^3.1171.0",
     "@clerk/nextjs": "^7.10.2",
     "@libsql/client": "^0.15.0",
     "@tailwindcss/postcss": "^4.1.18",
