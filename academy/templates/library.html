@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><h1>{{ title }}</h1><p>{% if courses %}Find a programme by exam stage or topic.{% else %}Browse materials for your Civil Services preparation.{% endif %}</p></div></div>
+<section class="wrap section">
+<form class="filters filter-panel" method="get"><label>Search<input type="search" name="q" value="{{ query }}" placeholder="Search by title or topic"></label>
+<label>Category<select name="category"><option value="">All categories</option>{% for choice in categories %}<option {% if choice == category %}selected{% endif %}>{{ choice }}</option>{% endfor %}</select></label>
+<label>Sort by<select name="sort"><option value="">Default order</option><option value="new" {% if sort == 'new' %}selected{% endif %}>Newest</option><option value="title" {% if sort == 'title' %}selected{% endif %}>Title A–Z</option></select></label><button class="button">Apply filters</button></form>
+<div class="catalogue-summary"><p>{{ page.paginator.count }} result{{ page.paginator.count|pluralize }}</p>{% if query or category or sort %}<a href="{{ request.path }}">Clear filters</a>{% endif %}</div>
+<div class="grid">{% for item in page %}{% include "card.html" %}{% empty %}<div class="card empty">
+  {% if query or category %}<p>No entries match your filters.</p>
+  {% elif kind == "tests" %}<p>Mock test registrations are currently closed.</p><a href="{% url 'admissions' %}">Ask about upcoming mock tests</a>
+  {% elif kind == "courses" %}<p>Course registrations are currently closed.</p><a href="{% url 'admissions' %}">Ask about upcoming courses</a>
+  {% else %}<p>No resources have been published in this section.</p>{% endif %}
+</div>{% endfor %}</div>
+{% if page.paginator.num_pages > 1 %}<nav class="pagination" aria-label="Pagination">
+{% if page.has_previous %}<a href="?q={{ query|urlencode }}&category={{ category|urlencode }}&sort={{ sort|urlencode }}&page={{ page.previous_page_number }}">← Previous</a>{% endif %}
+<span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+{% if page.has_next %}<a href="?q={{ query|urlencode }}&category={{ category|urlencode }}&sort={{ sort|urlencode }}&page={{ page.next_page_number }}">Next →</a>{% endif %}</nav>{% endif %}
+</section>{% endblock %}

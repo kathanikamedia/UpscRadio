@@ -1,0 +1,24 @@
+html[data-theme] {
+  --primary: var(--radio-purple);
+  --secondary: var(--radio-purple);
+  --accent: var(--radio-pink);
+  --header-color: #fff;
+  --header-branding-color: var(--radio-pink);
+  --button-hover-bg: var(--radio-purple-hover);
+  --default-button-bg: var(--radio-purple);
+  --default-button-hover-bg: var(--radio-purple-hover);
+}
+html[data-theme="light"], html[data-theme="auto"] {
+  --link-fg: var(--radio-purple);
+  --link-hover-color: var(--radio-purple-hover);
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --link-fg: var(--radio-pink);
+    --link-hover-color: var(--radio-pink-light);
+  }
+}
+html[data-theme="dark"] {
+  --link-fg: var(--radio-pink);
+  --link-hover-color: var(--radio-pink-light);
+}

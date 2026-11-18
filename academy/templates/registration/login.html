@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<section class="wrap section narrow"><div class="card form-card"><h1>Student login</h1>
+<form method="post" data-busy>{% csrf_token %}{{ form.as_p }}<input type="hidden" name="next" value="{{ next }}"><button class="button">Sign in</button></form>
+<div class="actions"><a href="{% url 'register' %}">Create account</a><a href="{% url 'password_reset' %}">Forgot password?</a></div></div></section>
+{% endblock %}

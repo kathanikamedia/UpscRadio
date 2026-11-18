@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><a href="{% url 'student' %}">← My learning</a><h1>{{ title }}</h1>{% if attempt.submitted %}<p>Score {{ attempt.score }} · Submitted {{ attempt.submitted|date:"j M Y, g:i a" }}</p>{% else %}<p>{{ item.minutes }} minutes · Closes {{ item.closes|date:"j M Y, g:i a" }}</p>{% endif %}</div></div>
+<section class="wrap section exam">
+{% if attempt %}
+{% if not attempt.submitted %}<p class="timer" data-deadline="{{ attempt.deadline|date:'c' }}">Time remaining</p>{% endif %}
+<nav class="questions" aria-label="Question navigation">{% for q in questions %}<a href="#q-{{ q.id }}" aria-label="Question {{ forloop.counter }}">{{ forloop.counter }}</a>{% endfor %}</nav>
+<form method="post" id="assessment">{% csrf_token %}
+{% for q in questions %}<fieldset class="card" id="q-{{ q.id }}"><legend>{{ forloop.counter }}{% if q.section %} · {{ q.section }}{% endif %}</legend>
+<p>{{ q.prompt }}</p>
+{% for key,option in q.options %}<label class="choice"><input type="radio" name="q{{ q.id }}" value="{{ key }}" {% if key == q.selected %}checked{% endif %} {% if attempt.submitted %}disabled{% endif %}> {{ key }}. {{ option }}</label>{% endfor %}
+{% if attempt.submitted %}<p><strong>Correct option {{ q.correct }}.</strong> {{ q.explanation }}</p>{% else %}<label class="choice"><input type="radio" name="q{{ q.id }}" value=""> Clear answer</label><label class="choice"><input type="checkbox" name="r{{ q.id }}" {% if q.review %}checked{% endif %}> Mark for review</label>{% endif %}</fieldset>{% endfor %}
+{% if not attempt.submitted %}<div class="actions"><button class="button secondary" name="action" value="save">Save progress</button><button class="button" name="action" value="submit">Submit test</button></div>{% endif %}</form>
+{% elif open %}<p>Once started, your attempt ends at the time limit or published closing time, whichever comes first.</p><form method="post">{% csrf_token %}<button class="button" name="action" value="start">Start test</button></form>
+{% else %}<p>This test is currently closed.</p>{% endif %}
+</section>{% endblock %}

@@ -1,0 +1,27 @@
+{% load static %}<!doctype html>
+<html lang="en-IN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% if title %}{{ title }} | {% endif %}UPSC RADIO</title>
+<meta name="description" content="{{ description|default:'Courses, practice and study resources for the UPSC Civil Services Examination.' }}">
+<meta property="og:title" content="{{ title|default:'Prepare for the Civil Services Examination' }} | UPSC RADIO">
+<meta property="og:description" content="{{ description|default:'Courses, practice and study resources for UPSC CSE.' }}">
+{% if site_url %}<link rel="canonical" href="{{ canonical }}"><meta property="og:url" content="{{ canonical }}">{% endif %}
+{% if request.user.is_authenticated or '/account/' in request.path %}<meta name="robots" content="noindex">{% endif %}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'radio-palette.css' %}"><link rel="stylesheet" href="{% static 'radio.css' %}"><script defer src="{% static 'radio.js' %}"></script>
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap header">
+<a class="brand" href="{% url 'home' %}"><img class="brand-logo" src="{% static 'upscradio-artwork.png' %}" alt="UPSC RADIO home" width="635" height="397"></a>
+<button class="menu" aria-controls="nav" aria-expanded="false" type="button">Menu</button>
+<nav id="nav" aria-label="Main navigation"><a href="{% url 'courses' %}"{% if request.resolver_match.url_name == 'courses' %} aria-current="page"{% endif %}>Courses</a><a href="{% url 'tests' %}"{% if request.resolver_match.url_name == 'tests' %} aria-current="page"{% endif %}>Mock Test</a><a href="{% url 'resources' %}"{% if request.resolver_match.url_name == 'resources' %} aria-current="page"{% endif %}>Study Materials</a><a href="{% url 'section' 'videos' %}">Watch</a><a href="{% url 'section' 'about' %}">About</a></nav>
+<div class="account">{% if request.user.is_authenticated %}<a href="{% url 'student' %}">My learning</a>{% else %}<a href="{% url 'login' %}">Student login</a>{% endif %}<a class="button small" href="{% url 'admissions' %}">Free counselling ↗</a></div>
+</div></header>
+<main id="main">{% if messages %}<div class="wrap messages" aria-live="polite">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
+{% block footer %}<footer><div class="wrap foot"><div><a class="brand" href="/"><img class="brand-logo" src="{% static 'upscradio-artwork.png' %}" alt="UPSC RADIO home" width="635" height="397"></a><p>Study resources, practice and guidance for UPSC CSE.</p></div>
+<div><b>Explore</b><a href="{% url 'courses' %}">Programmes</a><a href="{% url 'books' %}">Books & study materials</a><a href="{% url 'section' 'faculty' %}">Faculty</a><a href="{% url 'section' 'results' %}">Results</a></div>
+<div><b>Connect</b><a href="{% url 'admissions' %}">Admissions & contact</a><a href="{% url 'section' 'media' %}">Media & recognition</a><a href="https://www.youtube.com/@UPSCRadio">YouTube</a><a href="https://www.instagram.com/upscradio/">Instagram</a></div>
+<div><b>Account</b><a href="{% url 'student' %}">Student portal</a><a href="{% url 'admin:index' %}">Staff access</a><a href="{% url 'section' 'privacy' %}">Privacy</a></div></div>
+<div class="wrap copyright">© {% now "Y" %} UPSC RADIO</div></footer>{% endblock %}
+</body></html>

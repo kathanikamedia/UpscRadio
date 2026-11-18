@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><p class="eyebrow">{% if kind == "profile" %}{{ item.kind }}{% else %}{{ item.category }}{% endif %}</p><h1>{{ title }}</h1><p>{{ item.summary }}</p></div></div>
+<div class="wrap section columns"><article class="prose">
+{% if item.cover or item.image %}<img class="profile-image" src="{% if item.cover %}{{ item.cover }}{% else %}{{ item.image }}{% endif %}" alt="" loading="lazy">{% endif %}
+{{ item.body|linebreaks }}
+{% if kind == "resource" %}{% if item.url %}<p><a class="button" href="{{ item.url }}">Open resource ↗</a></p>{% endif %}{% if item.document %}<p><a class="button secondary" href="{% url 'resource_file' item.pk %}">Download PDF</a></p>{% endif %}{% endif %}
+{% if kind == "course" %}
+{% if item.syllabus %}<h2>Syllabus</h2>{{ item.syllabus|linebreaks }}{% endif %}
+{% if item.inclusions %}<h2>What’s included</h2>{{ item.inclusions|linebreaks }}{% endif %}
+{% if faculty %}<h2>Faculty</h2><ul>{% for person in faculty %}<li><a href="{% url 'profile' person.slug %}">{{ person }}</a></li>{% endfor %}</ul>{% endif %}
+<h2>Upcoming batches</h2>{% for batch in batches %}<p><strong>{{ batch.name }}</strong> · {{ batch.starts|date:"j M Y" }}{% if batch.schedule %} · {{ batch.schedule }}{% endif %}{% if batch.branch.published %} · {{ batch.branch }}{% endif %}</p>{% empty %}<p>Ask admissions about the next available batch.</p>{% endfor %}
+<h2>Questions about admissions</h2>{% include "faq.html" %}{% endif %}
+</article>
+{% if kind == "course" %}<aside class="card sidebar"><h3>Programme details</h3><dl><dt>Fee</dt><dd>{% if item.fee %}₹{{ item.fee }}{% else %}Ask admissions{% endif %}</dd>{% if item.mode %}<dt>Mode</dt><dd>{{ item.mode }}</dd>{% endif %}{% if item.duration %}<dt>Duration</dt><dd>{{ item.duration }}</dd>{% endif %}{% if item.language %}<dt>Language</dt><dd>{{ item.language }}</dd>{% endif %}</dl>
+<a class="button" href="{% url 'admissions' %}?course={{ item.slug }}">Enquire about this course</a>
+{% if checkout %}{% if request.user.is_authenticated %}<form method="post" action="{% url 'checkout' item.slug %}">{% csrf_token %}<button class="button secondary">Start checkout</button></form>{% else %}<a class="button secondary" href="{% url 'login' %}?next={{ request.path|urlencode }}">Sign in to enrol</a>{% endif %}{% endif %}</aside>{% endif %}
+</div>{% endblock %}

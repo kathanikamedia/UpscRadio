@@ -1,0 +1,8 @@
+<article class="card">
+{% if item.cover %}<img class="cover" src="{{ item.cover }}" alt="" loading="lazy">{% endif %}
+<p class="eyebrow">{{ item.category }}</p>
+<h3><a href="{% if courses %}{% url 'course' item.slug %}{% else %}{% url 'resource' item.slug %}{% endif %}">{{ item.title }}</a></h3>
+<p>{{ item.summary }}</p>
+{% if courses and item.mode %}<p class="muted">{{ item.mode }}{% if item.duration %} · {{ item.duration }}{% endif %}</p>{% endif %}
+<a class="text-link" href="{% if courses %}{% url 'course' item.slug %}{% else %}{% url 'resource' item.slug %}{% endif %}">View details ↗</a>
+</article>

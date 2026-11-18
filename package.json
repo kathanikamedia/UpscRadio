@@ -1,0 +1,33 @@
+{
+  "name": "upsc-radio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack --hostname localhost --port 3000",
+    "build": "next build --webpack",
+    "start": "next start --hostname localhost --port 3000",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts",
+    "migrate": "tsx scripts/migrate.ts"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.0.0",
+    "@libsql/client": "^0.15.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "framer-motion": "^14.14.0",
+    "lucide-react": "^1.75.0",
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.18",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "type": "module"
+}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><a href="{% url 'student' %}">← My learning</a><h1>{{ title }}</h1><p>Due {{ item.due|date:"j M Y, g:i a" }}</p></div></div>
+<section class="wrap section prose">{{ item.prompt|linebreaks }}
+{% if submitted %}<h2>Your submission</h2>{{ submitted.answer|linebreaks }}{% if submitted.pdf %}<a href="{% url 'private_file' 'answer' submitted.pk %}">Download your answer PDF</a>{% endif %}
+{% if submitted.marks is not None %}<p>Marks {{ submitted.marks }}</p>{% endif %}{% if submitted.feedback %}<h3>Faculty feedback</h3>{{ submitted.feedback|linebreaks }}{% elif submitted.marks is None %}<p>Awaiting evaluation.</p>{% endif %}
+{% elif closed %}<p>Submissions are closed.</p>{% else %}<form method="post" enctype="multipart/form-data" data-busy>{% csrf_token %}{{ form.as_p }}<button class="button">Submit answer</button></form>{% endif %}</section>
+{% endblock %}

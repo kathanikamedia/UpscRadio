@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block content %}
+<section class="wrap section narrow"><h1>Payment receipt</h1><div class="card"><h3>UPSC RADIO</h3><p>{{ payment.course }}</p><p>Received ₹{{ payment.rupees }} on {{ payment.captured|date:"j M Y, g:i a" }}.</p><p>Receipt {{ payment.receipt }}</p><p>Transaction {{ payment.payment_id }}</p><button type="button" class="button" data-print>Print or save as PDF</button></div></section>
+{% endblock %}

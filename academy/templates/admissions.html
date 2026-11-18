@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><h1>{{ title }}</h1><p>Ask about a programme, request a demo class or book free counselling.</p></div></div>
+<div class="wrap section columns"><section class="card form-card"><h2>Send a request</h2><form method="post" data-busy>{% csrf_token %}{{ form.as_p }}<p class="muted"><a href="{% url 'section' 'privacy' %}">Privacy information</a></p><button class="button">Send request ↗</button></form></section>
+<aside><h2>Contact</h2>{% if site.contact_email %}<p><a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>{% endif %}{% if site.contact_phone %}<p><a href="tel:{{ site.contact_phone }}">{{ site.contact_phone }}</a></p>{% endif %}{% if site.whatsapp_number %}<p><a href="https://wa.me/{{ site.whatsapp_number }}">Chat on WhatsApp ↗</a></p>{% endif %}
+{% for branch in branches %}<article class="card"><h3>{{ branch.title }}</h3>{{ branch.address|linebreaks }}{% if branch.map_url %}<a href="{{ branch.map_url }}">Open directions ↗</a>{% endif %}</article>{% endfor %}
+{% include "faq.html" %}</aside></div>{% endblock %}

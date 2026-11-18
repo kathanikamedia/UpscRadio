@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><h1>{{ title }}</h1></div></div>
+<div class="wrap section">
+{% if section == "about" %}<article class="prose">{% if site.about %}{{ site.about|linebreaks }}{% else %}<p>UPSC RADIO brings together conversations, study resources and preparation pathways for the Civil Services Examination.</p>{% endif %}<a class="button" href="{% url 'admissions' %}">Talk to admissions ↗</a></article>
+{% elif section == "privacy" %}<article class="prose">{% if site.privacy %}{{ site.privacy|linebreaks }}{% else %}<p>The website stores information you submit to handle enquiries, provide account access and deliver enrolled courses. Payment details are processed by the checkout provider when checkout is enabled.</p>{% endif %}{% if site.contact_email %}<a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>{% endif %}</article>
+{% elif section == "videos" %}<div class="actions"><a class="button" href="https://www.youtube.com/@UPSCRadio/videos">Latest uploads ↗</a><a class="button secondary" href="https://www.youtube.com/@UPSCRadio/videos?view=0&sort=p">Popular videos ↗</a><a class="button secondary" href="https://www.youtube.com/@UPSCRadio/playlists">Channel playlists ↗</a></div>
+{% if site.trending_playlist %}<iframe class="video" src="https://www.youtube-nocookie.com/embed/videoseries?list={{ site.trending_playlist|urlencode }}" title="Selected UPSC RADIO videos" loading="lazy" allowfullscreen></iframe>{% endif %}
+{% if videos %}<div class="grid video-grid">{% for item in videos %}{% include 'card.html' %}{% endfor %}</div>{% endif %}
+{% else %}
+{% if section == "results" %}<form class="filters"><label>Search<input type="search" name="q" value="{{ query }}"></label><label>Year<select name="year"><option value="">All years</option>{% for value in years %}<option {% if value|stringformat:"s" == year %}selected{% endif %}>{{ value }}</option>{% endfor %}</select></label><button class="button">Apply filters</button></form>{% endif %}
+<div class="grid">{% for item in items %}<article class="card">{% if item.image %}<img class="cover" src="{{ item.image }}" alt="" loading="lazy">{% endif %}{% if item.year %}<p class="eyebrow">{{ item.year }}</p>{% endif %}<h3><a href="{% url 'profile' item.slug %}">{{ item.title }}</a></h3><p>{{ item.summary }}</p></article>{% empty %}<p class="empty">No entries have been published for this view.</p>{% endfor %}</div>
+{% endif %}</div>{% endblock %}

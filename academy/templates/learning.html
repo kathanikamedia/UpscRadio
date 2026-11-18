@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><a href="{% url 'student' %}">← My learning</a><h1>{{ title }}</h1><p>{{ completed|length }} of {{ lessons|length }} lessons completed</p></div></div>
+<div class="wrap section columns"><section><h2>Course lessons</h2>{% regroup lessons by module as modules %}{% for group in modules %}<article class="card"><h3>{{ group.grouper.subject }}</h3><ul>{% for item in group.list %}<li><a href="{% url 'lesson' item.pk %}">{{ item.title }}</a>{% if item.pk in completed %} · Completed{% endif %}</li>{% endfor %}</ul></article>{% empty %}<p>No lessons available yet.</p>{% endfor %}</section>
+<section class="card"><h2>Academic support</h2>{% if enrolment.mentor %}<p>Mentor {{ enrolment.mentor.get_full_name|default:enrolment.mentor.username }}</p>{% endif %}
+<form method="post" data-busy>{% csrf_token %}{{ form.as_p }}<button class="button">Send question</button></form>
+{% for item in doubts %}<details><summary>{{ item.title }} · {% if item.closed %}Closed{% else %}Open{% endif %}</summary><p>{{ item.question }}</p>{% if item.reply %}<p>{{ item.reply }}</p>{% endif %}</details>{% endfor %}</section></div>
+{% endblock %}

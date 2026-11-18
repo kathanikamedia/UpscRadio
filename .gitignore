@@ -1,0 +1,14 @@
+.deps/
+.venv/
+__pycache__/
+db.sqlite3
+private/
+.env
+collected/
+
+node_modules/
+.next/
+.env*
+!.env.example
+data/
+*.tsbuildinfo

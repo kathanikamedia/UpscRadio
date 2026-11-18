@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<div class="page-head"><div class="wrap"><a href="{% url 'learning' item.module.course_id %}">← Course lessons</a><h1>{{ title }}</h1><p>{{ item.module.subject }}</p></div></div>
+<section class="wrap section prose">{{ item.notes|linebreaks }}<div class="actions">{% if item.video_url %}<a class="button" rel="noreferrer" href="{{ item.video_url }}">Open recording ↗</a>{% endif %}{% if item.document %}<a class="button secondary" href="{% url 'private_file' 'lesson' item.pk %}">Download notes</a>{% endif %}</div>
+<form method="post">{% csrf_token %}<button class="button">Mark complete</button></form></section>
+{% endblock %}
