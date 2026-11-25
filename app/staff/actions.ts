@@ -22,6 +22,7 @@ export async function saveContent(_state:string,data:FormData) {
    if(v.slug===FREE_MOCK_SLUG && v.price!==0)return "The introductory mock must remain free.";
    if(v.slug!==FREE_MOCK_SLUG && v.price<100)return "Set a paid mock-test price before publishing.";
  }
+ if(v.kind==="resource" && v.published && v.price>0)return "Paid materials stay private until the payment and purchase-access flow is activated.";
  await execute({sql:"INSERT INTO content(kind,slug,title,summary,body,category,published,extra) VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(kind,slug) DO UPDATE SET title=excluded.title,summary=excluded.summary,body=excluded.body,category=excluded.category,published=excluded.published,extra=json_patch(content.extra,excluded.extra)",
  args:[v.kind,v.slug,v.title,v.summary,v.body,v.category,v.published?1:0,JSON.stringify({url:v.url,price_paise:v.price,moodle_course_id:v.moodle,...(v.kind==="resource"?{storage_key:storageKey}:{}),...(v.kind==="course"&&v.slug===FREE_MOCK_SLUG?{free_mock:true}:{}),...(v.kind==="settings"?{contact_email:v.contact_email||"",contact_phone:v.contact_phone||"",about:v.about||"",privacy:v.privacy||""}:{})})]});
  const staff=await requireAdmin();

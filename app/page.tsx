@@ -16,7 +16,6 @@ export default function Home() {
     <section className="learning-hero" aria-labelledby="learning-hero-title">
       <div className="wrap">
         <div className="learning-hero-copy">
-          <p className="learning-badge"><span aria-hidden="true"/> UPSC RADIO · FOR THE ASPIRANT IN YOU</p>
           <h1 id="learning-hero-title">A dream to serve.<br/><span>A plan to prepare.</span></h1>
           <p>Your UPSC journey deserves more than motivation.<br className="desktop-break"/> Build your basics, practise questions and stay close to official updates.</p>
           <div className="learning-hero-actions"><Link className="button" href="/test-series/">Explore mock tests <ArrowUpRight size={17} aria-hidden="true"/></Link><Link className="button secondary" href="/courses/">Find your course <ArrowUpRight size={17} aria-hidden="true"/></Link></div>
