@@ -35,6 +35,9 @@ export function initialize() {
     "CREATE INDEX IF NOT EXISTS content_listing ON content(kind,published,id DESC)",
     "CREATE TABLE IF NOT EXISTS course_enrolments (clerk_id TEXT NOT NULL, course_slug TEXT NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(clerk_id,course_slug))",
     "CREATE TABLE IF NOT EXISTS lesson_completions (clerk_id TEXT NOT NULL, course_slug TEXT NOT NULL, lesson_slug TEXT NOT NULL, completed TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(clerk_id,course_slug,lesson_slug), FOREIGN KEY(clerk_id,course_slug) REFERENCES course_enrolments(clerk_id,course_slug))",
+    "CREATE TABLE IF NOT EXISTS practice_attempts (id INTEGER PRIMARY KEY, clerk_id TEXT NOT NULL, practice_slug TEXT NOT NULL, score INTEGER NOT NULL, total INTEGER NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+    "CREATE INDEX IF NOT EXISTS practice_attempt_owner ON practice_attempts(clerk_id,practice_slug,id DESC)",
+    "CREATE TABLE IF NOT EXISTS question_drafts (book_slug TEXT NOT NULL, question_number INTEGER NOT NULL, question TEXT NOT NULL, options TEXT NOT NULL, answer TEXT NOT NULL, reviewed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(book_slug,question_number))",
   ], "write").then(() => undefined).catch(error => {
     ready = undefined;
     throw error;

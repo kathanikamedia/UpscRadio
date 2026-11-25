@@ -10,16 +10,13 @@ import { ClipboardCheck, LibraryBig, Files, ChevronDown, ArrowUpRight, Check, He
 import { ConversionBanner } from "@/components/conversion-banner";
 import { HomeDiscover } from "@/components/home-discover";
 import { HomeWatch } from "@/components/home-watch";
+import { HomeLanguageIntro } from "@/components/home-language-intro";
 export const dynamic = "force-dynamic";
 export default function Home() {
   return <div className="home-redesign">
     <section className="learning-hero" aria-labelledby="learning-hero-title">
       <div className="wrap">
-        <div className="learning-hero-copy">
-          <h1 id="learning-hero-title">A dream to serve.<br/><span>A plan to prepare.</span></h1>
-          <p>Your UPSC journey deserves more than motivation.<br className="desktop-break"/> Build your basics, practise questions and stay close to official updates.</p>
-          <div className="learning-hero-actions"><Link className="button" href="/test-series/">Explore mock tests <ArrowUpRight size={17} aria-hidden="true"/></Link><Link className="button secondary" href="/courses/">Find your course <ArrowUpRight size={17} aria-hidden="true"/></Link></div>
-        </div>
+        <HomeLanguageIntro/>
         <div className="learning-hero-scene">
           <div className="learning-scene-halo" aria-hidden="true"/>
           <Image className="learning-students" src="/group-study.webp" alt="A group of aspirants studying together with books and notes" width={1774} height={887} sizes="(max-width: 700px) 100vw, 800px" preload/>

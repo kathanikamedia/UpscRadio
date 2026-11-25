@@ -17,6 +17,22 @@ export const currentAffairsDrafts = [
   },
 ] as const;
 
+const practiceBooks = [
+  ["economy-part-1", "Indian Economy Part 1: Macroeconomy and Growth", "Economy", 174, 41, "Economy/Economy_Part1_174_MCQs_APPSCExamEdge.pdf"],
+  ["economy-part-2", "Indian Economy Part 2: Money, Banking and Markets", "Economy", 160, 39, "Economy/Economy_Part2_160_MCQs_APPSCExamEdge.pdf"],
+  ["economy-part-3", "Indian Economy Part 3: Public Finance and External Sector", "Economy", 160, 39, "Economy/Economy_Part3_160_MCQs_APPSCExamEdge.pdf"],
+  ["economy-part-4", "Indian Economy Part 4: Sectors, Development and AP Economy", "Economy", 159, 38, "Economy/Economy_Part4_159_MCQs_APPSCExamEdge.pdf"],
+  ["environment-part-1", "Environment Part 1: Ecology and Biodiversity", "Environment", 178, 44, "environmental/1 (1).pdf"],
+  ["environment-part-2", "Environment Part 2: Conservation, Laws and Institutions", "Environment", 175, 43, "environmental/2.pdf"],
+  ["environment-part-3", "Environment Part 3: Climate Change, Pollution and Global Governance", "Environment", 177, 43, "environmental/3.pdf"],
+] as const;
+export const additionalMaterialDrafts = practiceBooks.map(([slug,title,category,question_count,pages,path]) => ({
+  slug, title, category,
+  summary: `${question_count} practice MCQs with answer key and explanations for UPSC and APPSC preparation.`,
+  body: `${title}. This APPSC Exam Edge practice booklet contains ${question_count} questions, an answer key and explanations.`,
+  extra: {exam:"APPSC",language:"English",type:"Practice question bank",question_count,pages,publisher:"APPSCExamEdge",price_paise:9900,temporary_price:true,access:"paid",purchase_enabled:false,storage_key:`study-materials/appsc/${path}`},
+}));
+
 export function requiresPurchase(extra:Record<string,unknown>){
   return extra.access==="paid" || Number(extra.price_paise)>0;
 }

@@ -17,7 +17,7 @@ export function storageConfig(env: Record<string, string | undefined> = process.
 // Only public, published study PDFs are served by this integration.
 // Paid course assets belong behind Moodle's enrolment checks.
 export function validStudyMaterialKey(key: string) {
-  return key.length <= 512 && /^study-materials\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.pdf$/.test(key);
+  return key.length <= 512 && /^study-materials\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_() -]+\.pdf$/.test(key);
 }
 
 function connection() {
