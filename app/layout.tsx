@@ -4,6 +4,7 @@ import { Header } from "@/components/header";
 import { clerkConfigured } from "@/lib/auth";
 import { Footer } from "@/components/footer";
 import { AccountState } from "@/components/account-state";
+import { SiteLanguage } from "@/components/site-language";
 import "./globals.css";
 import localFont from "next/font/local";
 const manrope=localFont({src:"./fonts/manrope-latin-variable.woff2",weight:"200 800",display:"swap",variable:"--font-manrope"});
@@ -16,12 +17,12 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const content = <>
+  const content = <SiteLanguage>
     <a className="skip" href="#main">Skip to content</a>
     <Header configured={clerkConfigured} />
     <main id="main">{children}</main>
     <Footer />
-  </>;
+  </SiteLanguage>;
 
   return <html lang="en-IN" className={`${manrope.variable} ${editorial.variable}`}><body>
     {clerkConfigured

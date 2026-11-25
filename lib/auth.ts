@@ -12,15 +12,15 @@ export async function requireUser(returnTo = "/student/") {
   if (!userId) redirect("/account/login/?returnTo="+encodeURIComponent(returnTo));
   return userId;
 }
-export async function requireStaff() {
+export const requireStaff = cache(async function requireStaff() {
   const id = await requireUser();
   const user = await currentUser();
   const role = user?.publicMetadata.role;
   if (!["admin", "counsellor", "faculty"].includes(String(role))) redirect("/student/");
   return { id, role: String(role) };
-}
-export async function requireAdmin() {
+});
+export const requireAdmin = cache(async function requireAdmin() {
   const staff = await requireStaff();
   if (staff.role !== "admin") throw new Error("Administrator access required.");
   return staff;
-}
+});

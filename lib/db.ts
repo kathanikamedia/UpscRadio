@@ -21,7 +21,16 @@ export function getDatabase(): Client {
 let ready: Promise<void> | undefined;
 export function closeDatabase() { client?.close(); client = undefined; ready = undefined; }
 export function initialize() {
-  ready ??= getDatabase().batch([
+  ready ??= ensureSchema();
+  return ready;
+}
+async function ensureSchema(){
+ try{
+  const required=["content","enquiries","identities","payments","rate_limits","legacy","saved","audit","source_cache","course_enrolments","lesson_completions","practice_attempts","question_drafts","one_active_payment","content_listing","practice_attempt_owner"];
+  const existing=await getDatabase().execute("SELECT name FROM sqlite_master WHERE type IN ('table','index')");
+  const names=new Set(existing.rows.map(row=>String(row.name)));
+  if(required.every(name=>names.has(name)))return;
+  await getDatabase().batch([
     "CREATE TABLE IF NOT EXISTS content (id INTEGER PRIMARY KEY, kind TEXT NOT NULL, slug TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', body TEXT NOT NULL DEFAULT '', category TEXT NOT NULL DEFAULT '', published INTEGER NOT NULL DEFAULT 0, extra TEXT NOT NULL DEFAULT '{}', UNIQUE(kind,slug))",
     "CREATE TABLE IF NOT EXISTS enquiries (id INTEGER PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL, purpose TEXT NOT NULL, course TEXT NOT NULL DEFAULT '', mode TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'New', notes TEXT NOT NULL DEFAULT '', follow_up TEXT NOT NULL DEFAULT '', created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS identities (clerk_id TEXT PRIMARY KEY, moodle_id INTEGER UNIQUE NOT NULL)",
@@ -38,11 +47,11 @@ export function initialize() {
     "CREATE TABLE IF NOT EXISTS practice_attempts (id INTEGER PRIMARY KEY, clerk_id TEXT NOT NULL, practice_slug TEXT NOT NULL, score INTEGER NOT NULL, total INTEGER NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE INDEX IF NOT EXISTS practice_attempt_owner ON practice_attempts(clerk_id,practice_slug,id DESC)",
     "CREATE TABLE IF NOT EXISTS question_drafts (book_slug TEXT NOT NULL, question_number INTEGER NOT NULL, question TEXT NOT NULL, options TEXT NOT NULL, answer TEXT NOT NULL, reviewed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(book_slug,question_number))",
-  ], "write").then(() => undefined).catch(error => {
+  ], "write");
+ }catch(error){
     ready = undefined;
     throw error;
-  });
-  return ready;
+ }
 }
 export async function execute(statement: InStatement) {
   await initialize();
