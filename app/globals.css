@@ -188,7 +188,7 @@ img {display:block;max-width:100%;height:auto}
 .skip:focus {top:1rem}
 header {background:var(--white);border-bottom:1px solid var(--line)}
 .header {min-height:80px;display:flex;justify-content:space-between;align-items:center;gap:26px}
-.header .home-language-switch{margin:0;align-self:center;flex-shrink:0}
+.header .home-language-switch{margin:0;align-self:center;flex-shrink:0;position:relative;top:2px}
 .brand {display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:inherit;font-weight:700;letter-spacing:.05em;line-height:1.2;font-size:1.17rem;white-space:nowrap}
 .brand b {color:var(--primary)}
 nav,.account {display:flex;align-items:center;gap:clamp(15px,2vw,33px)}
