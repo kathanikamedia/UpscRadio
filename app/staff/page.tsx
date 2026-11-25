@@ -15,7 +15,7 @@ export default async function Staff({searchParams}:{searchParams:Promise<{kind?:
   execute("SELECT COUNT(*) AS count FROM content WHERE kind='resource'"),
   execute("SELECT COUNT(*) AS count FROM content WHERE published=0"),
  ]):[null,null,null];
- const payments=staff.role==="admin"?await execute("SELECT p.*,c.title FROM payments p JOIN content c ON c.id=p.course_id ORDER BY rowid DESC LIMIT 100"):null;
+ const payments=staff.role==="admin"?await execute("SELECT p.*,c.title FROM payments p JOIN content c ON c.id=p.course_id ORDER BY p.rowid DESC LIMIT 100"):null;
  const edit=records.find(r=>r.slug===query.edit);
  const leads=staff.role!=="faculty"?await execute({sql:"SELECT * FROM enquiries WHERE name LIKE ? OR email LIKE ? ORDER BY id DESC LIMIT 100",args:["%"+(query.q||"")+"%","%"+(query.q||"")+"%"]}):null;
  return <><section className="staff-page staff-overview"><header className="staff-page-header"><div><p className="eyebrow">CONTROL CENTRE</p><h1>Welcome back.</h1><p>Manage your catalogue, learners and enquiries with a clear view of what is ready to publish.</p></div><span className="staff-role-badge">{staff.role}</span></header>
