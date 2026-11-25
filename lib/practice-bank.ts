@@ -1,6 +1,6 @@
 import {execute} from "./db";
 import {currentUser} from "@clerk/nextjs/server";
-export const practiceBooks=["economy-1","economy-2","economy-3","economy-4","environment-1","environment-2","environment-3"];
+export const practiceBooks=["economy-1","economy-2","economy-3","economy-4","environment-1","environment-2","environment-3","current-affairs-english"];
 export async function canPractise(userId:string,book:string){
  if(!practiceBooks.includes(book))return false;
  const user=await currentUser();if(user?.id===userId&&user.publicMetadata.role==="admin")return true;
