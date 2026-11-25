@@ -6,7 +6,8 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { identity } from "@/lib/auth";
 import { execute } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { content, contents } from "@/lib/db";
+import { contents } from "@/lib/db";
+import { publishedContent } from "@/lib/public-catalogue";
 import { FreeCourseCard } from "@/components/free-course-card";
 import { CourseMaterials } from "@/components/course-materials";
 import { CourseDetail } from "@/components/course-detail";
@@ -35,9 +36,9 @@ export default async function PublicPage({params,searchParams}:Props) {
   }
   if(!kind || path.length>2) notFound();
   if(path[1]) {
-    const item=await content(kind,path[1]);if(!item) notFound();
+    const [item,viewer]=await Promise.all([publishedContent(kind,path[1]),identity()]);if(!item) notFound();
     const price=Number(item.extra.price_paise || 0);
-    const viewer=await identity();
+
     const wished=viewer?Boolean((await execute({sql:"SELECT 1 FROM saved WHERE clerk_id=? AND content_id=?",args:[viewer,item.id]})).rows.length):false;
     if(kind==="course"&&item.category==="Test Series"&&item.extra.question_bank)return <section className="wrap section"><Link href="/test-series/">← Mock Tests</Link><p className="eyebrow">{String(item.extra.exam||"APPSC")} · {String(item.extra.language||"English")}</p><h1>{item.title}</h1>{typeof item.extra.source_material_slug==="string"?<MaterialCover slug={item.extra.source_material_slug} title={item.title}/>:null}<p>{item.summary}</p><div className="card"><h2>Test details</h2><p>{Number(item.extra.question_count)} questions · ₹{price/100} provisional price</p><p>Online test access is being prepared. Purchases are not open yet.</p><p>The source PDF is linked to this test for revision. Telugu Current Affairs is PDF-only.</p>{viewer?<Link className="button secondary" href={"/student/practice/"+String(item.extra.question_bank)+"/"}>Check practice availability ↗</Link>:<Link className="button" href="/account/login/">Sign in</Link>}</div></section>;
     if(kind==="resource"&&requiresPurchase(item.extra))return <StudyMaterialDetail item={item} actions={<WishlistButton id={item.id} added={wished}/>}/>;
