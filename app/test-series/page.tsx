@@ -1,7 +1,7 @@
 import { AddToCart } from "@/components/cart";
 import Link from "next/link";
 import { ClipboardCheck, Timer, ArrowRight } from "lucide-react";
-import { contents } from "@/lib/db";
+import { publishedCatalogue as contents } from "@/lib/public-catalogue";
 import { FREE_MOCK_SLUG } from "@/lib/mock-tests";
 export const dynamic="force-dynamic";
 export const metadata={title:"Mock tests"};

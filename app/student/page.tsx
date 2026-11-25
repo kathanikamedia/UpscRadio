@@ -24,7 +24,7 @@ export default async function Student(){
    <article><ClipboardCheck aria-hidden="true"/><strong>1</strong><span>Free introductory mock</span></article>
   </div>
   <section className="student-next"><div><span className="access-label free">Free mock test</span><h2>Find your starting point.</h2><p>Try 10 polity questions and make your next revision session more focused.</p></div><Link className="button" href="/student/free-test/">Open free mock <ArrowRight size={16} aria-hidden="true"/></Link></section>
-  <section className="dashboard-section"><div className="section-head"><h2>Continue learning</h2><Link href="/courses/">Explore courses ↗</Link></div><Suspense fallback={<p className="learning-pending" role="status">Loading your programmes…</p>}><LearningCourses userId={id}/></Suspense></section>
+  <section className="dashboard-section"><div className="section-head"><h2>Your learning library</h2><Link href="/courses/">Explore courses ↗</Link></div><Suspense fallback={<p className="learning-pending" role="status">Loading your programmes…</p>}><LearningCourses userId={id}/></Suspense></section>
   <section className="dashboard-section"><h2>Payment history</h2>{payments.rows.length?payments.rows.map(payment=><article className="payment-row" key={String(payment.id)}><div><strong>{String(payment.title)}</strong><small>{String(payment.status)}{payment.status==="Paid"&&!payment.fulfilled?" · Course activation pending":""}</small></div><span>₹{(Number(payment.amount)/100).toLocaleString("en-IN")}</span>{payment.status==="Paid"?<Link href={"/student/receipt/"+payment.id}>Receipt ↗</Link>:null}</article>):<p className="muted">Your payment receipts will appear here after enrolment.</p>}</section>
  </div>;
 }

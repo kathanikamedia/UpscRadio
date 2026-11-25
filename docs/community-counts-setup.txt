@@ -1,0 +1,22 @@
+UPSC Radio audience-count integration
+
+Status: implemented but live API access must be configured. The old user-supplied YouTube/Instagram figures remain explicitly Reported until then; Facebook has no invented numeric fallback.
+
+Server-only environment variables (never NEXT_PUBLIC):
+YOUTUBE_DATA_API_KEY — Google API key restricted to YouTube Data API v3. This is separate from the OAuth client ID/secret used by Clerk sign-in.
+META_GRAPH_API_VERSION — supported version selected for the Meta app, e.g. the vXX.X value shown in its dashboard. Use an actual supported version, not that placeholder.
+META_PAGE_ACCESS_TOKEN — authorised Page access token with appropriate permission to read the owned Page and linked professional Instagram account.
+FACEBOOK_PAGE_ID — numeric UPSC Radio Page ID.
+INSTAGRAM_BUSINESS_ACCOUNT_ID — numeric linked Instagram professional account ID.
+
+Confirm whether @upscradio is a Business/Creator account linked to the UPSC Radio Page before configuring Meta. No account conversion or new permissions have been performed by this code. Meta permissions/app review depend on the selected setup; obtain only the access needed to read the owned account’s count. Tokens must be kept private and renewed when they expire.
+
+Counts are obtained server-side and cached for ten minutes; the visible page polls every ten minutes while active. This is request-driven refresh, not a scheduled background job when there is no traffic. Expired snapshots are served while a background refresh runs; failures retain last available data with its actual timestamp. Subscriber counts follow YouTube’s three-significant-figure reporting. Facebook uses followers_count, not fan_count/likes.
+
+Public API /api/community/ returns only platform, count, status and timestamps. No access tokens, API keys, provider URLs containing credentials or raw account payloads are returned. Do not use public-page scraping as a substitute for required account access.
+
+Official references:
+https://developers.google.com/youtube/data/docs/channels/list
+https://developers.google.com/youtube/data/docs/channels
+https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-user/
+https://developers.facebook.com/docs/graph-api/reference/page/

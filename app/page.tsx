@@ -3,6 +3,9 @@ import { HomePapers, HomeResources, HomeStories } from "@/components/home-conten
 import Link from "next/link";
 import Image from "next/image";
 import { socials } from "@/lib/socials";
+import { HomeCommunity } from "@/components/home-community";
+import { CommunityStats } from "@/components/community-stats";
+import { reportedCommunity } from "@/lib/community-counts";
 import { ClipboardCheck, LibraryBig, Files, ChevronDown, ArrowUpRight, Check, Headphones, Target } from "lucide-react";
 import { ConversionBanner } from "@/components/conversion-banner";
 import { HomeDiscover } from "@/components/home-discover";
@@ -16,7 +19,7 @@ export default function Home() {
           <p className="learning-badge"><span aria-hidden="true"/> UPSC RADIO · FOR THE ASPIRANT IN YOU</p>
           <h1 id="learning-hero-title">A dream to serve.<br/><span>A plan to prepare.</span></h1>
           <p>Your UPSC journey deserves more than motivation.<br className="desktop-break"/> Build your basics, practise questions and stay close to official updates.</p>
-          <div className="learning-hero-actions"><Link className="button" href="/test-series/" prefetch={true}>Explore mock tests <ArrowUpRight size={17} aria-hidden="true"/></Link><Link className="button secondary" href="/courses/" prefetch={true}>Find your course <ArrowUpRight size={17} aria-hidden="true"/></Link></div>
+          <div className="learning-hero-actions"><Link className="button" href="/test-series/">Explore mock tests <ArrowUpRight size={17} aria-hidden="true"/></Link><Link className="button secondary" href="/courses/">Find your course <ArrowUpRight size={17} aria-hidden="true"/></Link></div>
         </div>
         <div className="learning-hero-scene">
           <div className="learning-scene-halo" aria-hidden="true"/>
@@ -27,14 +30,8 @@ export default function Home() {
         </div>
         <div className="learning-hero-footnote"><span aria-hidden="true"/> For the days you feel ready. And the days you keep going anyway.</div>
       </div>
-    <section className="wrap community-stats" aria-labelledby="community-stats-title">
-      <div className="community-stats-heading"><p className="eyebrow">THE CONVERSATION KEEPS GROWING</p><h2 id="community-stats-title">A community with<br/>a shared ambition.</h2><p>Learning, listening and showing up for the journey.</p></div>
-      <div className="community-stats-grid">
-        {/* Audience figures supplied by UPSC Radio; these are reported snapshots, not live API counts or student totals. */}
-        <a className="community-stat community-stat-youtube" href={socials.youtube.url} target="_blank" rel="noopener noreferrer"><span className="community-platform"><Image src="/brands/youtube.png" width={20} height={20} alt=""/> YouTube <ArrowUpRight size={15} aria-hidden="true"/></span><strong>78.7K</strong><span>Reported subscribers</span><div className="community-audio-art" aria-hidden="true">{[18,30,45,27,39,56,35,46,25,39,18].map((height,index)=><i key={index} style={{height}}/>)}</div></a>
-        <a className="community-stat community-stat-instagram" href={socials.instagram.url} target="_blank" rel="noopener noreferrer"><span className="community-platform"><Image src="/brands/instagram.png" width={20} height={20} alt=""/> Instagram <ArrowUpRight size={15} aria-hidden="true"/></span><strong>36.9K</strong><span>Reported followers</span><div className="community-word-art" aria-hidden="true"><b>Learn</b><b>Listen</b><b>Keep going</b></div></a>
-      </div>
-    </section>
+    <Suspense fallback={<CommunityStats initial={reportedCommunity}/>}><HomeCommunity/></Suspense>
+
     </section>
     <HomeWatch />
     <div className="wrap learning-section-heading"><div><p className="eyebrow">YOUR PREPARATION, CONNECTED</p><h2>Less searching. More learning.</h2></div><p>The essentials for your next step,<br/>together in one place.</p></div>

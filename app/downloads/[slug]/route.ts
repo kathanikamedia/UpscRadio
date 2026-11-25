@@ -2,9 +2,13 @@ import { content } from "@/lib/db";
 import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { studyMaterialDownload } from "@/lib/r2";
+import { requiresPurchase } from "@/lib/study-material-drafts";
 export const runtime = "nodejs";
 export async function GET(_request:Request,{params}:{params:Promise<{slug:string}>}) {
  const {slug}=await params,item=await content("resource",slug);
+ // Paid PDFs must never pass through the public/free download path.
+ // A verified purchase-entitlement flow will replace this explicit block before sales open.
+ if(item&&requiresPurchase(item.extra))return new Response("Purchase access is not available yet.",{status:403,headers:{"Cache-Control":"private, no-store"}});
  if(item && typeof item.extra.storage_key === "string" && item.extra.storage_key) {
   try {
    return new Response(null,{status:307,headers:{Location:await studyMaterialDownload(item.extra.storage_key),"Cache-Control":"private, no-store","Referrer-Policy":"no-referrer"}});

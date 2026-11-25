@@ -1,0 +1,27 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+process.env.DATABASE_URL="file::memory:";
+const {closeDatabase}=await import("../lib/db");
+const {enrolStarter,starterProgress,completeStarterLesson,starterActivity}=await import("../lib/course-progress");
+const {starterLessons}=await import("../lib/free-course");
+test("free course requires enrolment and isolates account progress",async()=>{
+  const lesson=starterLessons[0].slug;
+  assert.equal(await completeStarterLesson("visitor",lesson),false);
+  await enrolStarter("student-one");
+  await enrolStarter("student-one");
+  assert.equal((await starterProgress("student-one")).enrolled,true);
+  assert.equal(await completeStarterLesson("student-one",lesson),true);
+  assert.equal(await completeStarterLesson("student-one",lesson),false);
+  assert.deepEqual([...(await starterProgress("student-one")).completed],[lesson]);
+  assert.equal((await starterProgress("student-two")).completed.size,0);
+  assert.equal((await starterProgress("student-two")).enrolled,false);
+  await assert.rejects(completeStarterLesson("student-one","tampered-lesson"),/Unknown lesson/);
+  for(const item of starterLessons)await completeStarterLesson("student-one",item.slug);
+  assert.equal((await starterProgress("student-one")).completed.size,starterLessons.length);
+  const activity=await starterActivity("student-one");
+  assert.equal(activity.length,starterLessons.length+1);
+  assert.equal(activity.filter(event=>event.type==="enrolment").length,1);
+  assert.ok(activity.every(event=>Number.isFinite(Date.parse(event.date))));
+  assert.deepEqual(await starterActivity("student-two"),[]);
+});
+test.after(()=>closeDatabase());

@@ -33,6 +33,8 @@ export function initialize() {
     "CREATE TABLE IF NOT EXISTS audit (id INTEGER PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS source_cache (key TEXT PRIMARY KEY, payload TEXT NOT NULL, checked INTEGER NOT NULL, retry_after INTEGER NOT NULL DEFAULT 0)",
     "CREATE INDEX IF NOT EXISTS content_listing ON content(kind,published,id DESC)",
+    "CREATE TABLE IF NOT EXISTS course_enrolments (clerk_id TEXT NOT NULL, course_slug TEXT NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(clerk_id,course_slug))",
+    "CREATE TABLE IF NOT EXISTS lesson_completions (clerk_id TEXT NOT NULL, course_slug TEXT NOT NULL, lesson_slug TEXT NOT NULL, completed TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(clerk_id,course_slug,lesson_slug), FOREIGN KEY(clerk_id,course_slug) REFERENCES course_enrolments(clerk_id,course_slug))",
   ], "write").then(() => undefined).catch(error => {
     ready = undefined;
     throw error;
@@ -55,6 +57,10 @@ export async function content(kind: string, slug: string) {
   });
   const row = result.rows[0];
   return row ? { ...row, extra: JSON.parse(String(row.extra)) } as unknown as Content : undefined;
+}
+export async function catalogueListing(kind:string):Promise<Content[]>{
+  const result=await execute({sql:"SELECT id,kind,slug,title,summary,category,published,extra FROM content WHERE kind=? AND published=1 ORDER BY id DESC",args:[kind]});
+  return result.rows.map(row=>({...row,body:"",extra:JSON.parse(String(row.extra))}) as unknown as Content);
 }
 // Homepage previews need neither full article bodies nor the entire catalogue.
 export async function homePreviews(kind: "course" | "profile", limit: number): Promise<Content[]> {

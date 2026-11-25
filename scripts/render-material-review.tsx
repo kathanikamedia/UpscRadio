@@ -1,0 +1,11 @@
+import { readFileSync,writeFileSync,mkdirSync,copyFileSync } from "node:fs";
+import { currentAffairsDrafts } from "../lib/study-material-drafts";
+const out="output/material-review";mkdirSync(out+"/assets",{recursive:true});
+const escape=(value:unknown)=>String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!));
+const sections=currentAffairsDrafts.map(item=>{
+ const e=item.extra,name=e.cover.split("/").at(-1)!;copyFileSync("public"+e.cover,out+"/assets/"+name);
+ return `<section class="wrap section material-detail"><p class="material-draft-banner">UNPUBLISHED DRAFT · Preview only · Purchases and downloads disabled</p><div class="material-detail-layout"><div class="material-book-cover"><img src="assets/${name}" alt="${escape(item.title)} cover"></div><div class="material-detail-copy"><p class="eyebrow">APPSC · Current Affairs</p><h1>${escape(item.title)}</h1><p class="material-summary">${escape(item.summary)}</p><div class="material-facts"><span>674 MCQs</span><span>${e.language}</span><span>${e.pages} pages · PDF</span><span>${escape(e.coverage)}</span></div><div class="material-purchase"><div><strong>₹99</strong><span>Temporary price</span></div><button class="button" disabled>Draft · Not available for purchase</button><p class="muted">Review the listing before publication. The complete PDF stays private.</p></div><div class="material-attribution">Published by APPSCExamEdge · Distributed by UPSC Radio</div></div></div><section class="material-description"><h2>About this material</h2><p class="preserve">${escape(item.body)}</p></section></section>`;
+}).join("");
+const css=readFileSync("app/globals.css","utf8").replace('@import "tailwindcss";',"");
+writeFileSync(out+"/index.html",`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UPSC Radio material drafts</title><style>${css}body,h1,h2,h3{font-family:Arial,sans-serif}.material-detail{margin-bottom:24px}</style></head><body><div class="wrap section"><p class="eyebrow">UPSC RADIO · OWNER REVIEW</p><h1>Two study-material drafts</h1><p>These are unpublished listings. All purchase and download controls are disabled.</p></div>${sections}</body></html>`);
+console.log("Created offline review with local cover images. No private URLs or credentials included.");

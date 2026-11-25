@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { cachedSource } from "./source-cache";
 export const UPSC_NEWS_URL = "https://www.upsc.gov.in/whats-new";
 export type NewsItem = { title: string; url: string };
@@ -20,5 +21,5 @@ export function parseNews(html: string): Omit<NewsListing, "checkedAt"> {
   return { items };
 }
 export function latestNews() {
-  return cachedSource<NewsListing>("upsc-news", UPSC_NEWS_URL, parseNews);
+  return cachedSource<NewsListing>("upsc-news", UPSC_NEWS_URL, parseNews, after);
 }

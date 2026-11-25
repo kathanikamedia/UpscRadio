@@ -1,5 +1,6 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { PUBLIC_CATALOGUE_TAG } from "@/lib/public-catalogue";
 import { requireAdmin, requireStaff } from "@/lib/auth";
 import { execute } from "@/lib/db";
 import { z } from "zod";
@@ -25,7 +26,7 @@ export async function saveContent(_state:string,data:FormData) {
  args:[v.kind,v.slug,v.title,v.summary,v.body,v.category,v.published?1:0,JSON.stringify({url:v.url,price_paise:v.price,moodle_course_id:v.moodle,...(v.kind==="resource"?{storage_key:storageKey}:{}),...(v.kind==="course"&&v.slug===FREE_MOCK_SLUG?{free_mock:true}:{}),...(v.kind==="settings"?{contact_email:v.contact_email||"",contact_phone:v.contact_phone||"",about:v.about||"",privacy:v.privacy||""}:{})})]});
  const staff=await requireAdmin();
  await execute({sql:"INSERT INTO audit(actor,action) VALUES (?,?)",args:[staff.id,"Published content edit: "+v.kind+"/"+v.slug]});
- revalidatePath("/");revalidatePath("/staff");return "Content saved.";
+ updateTag(PUBLIC_CATALOGUE_TAG);revalidatePath("/");revalidatePath("/staff");return "Content saved.";
 }
 export async function updateLead(_state:string,data:FormData) {
  const staff=await requireStaff();if(!["admin","counsellor"].includes(staff.role))throw new Error("Access denied.");

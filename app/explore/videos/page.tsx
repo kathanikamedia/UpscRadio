@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Play, ListVideo, Headphones, ArrowUpRight } from "lucide-react";
 import { socials } from "@/lib/socials";
-import { contents } from "@/lib/db";
+import { publishedCatalogue as contents } from "@/lib/public-catalogue";
 import { ConversionBanner } from "@/components/conversion-banner";
 import { YouTubeSections } from "@/components/youtube-sections";
 export const dynamic="force-dynamic";

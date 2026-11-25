@@ -7,6 +7,7 @@ const groups=[
  {label:"Your learning",items:[
   {href:"/student/",label:"Overview",Icon:LayoutDashboard},
   {href:"/student/free-test/",label:"Free mock test",Icon:ClipboardCheck},
+  {href:"/student/free-course/",label:"Free starter course",Icon:GraduationCap},
   {href:"/student/saved/",label:"Wishlist",Icon:Heart},
   {href:"/student/profile/",label:"Profile and account",Icon:UserRound},
  ]},
@@ -18,6 +19,6 @@ const groups=[
 export function StudentSidebar(){
  const pathname=usePathname().replace(/\/$/,"");
  return <aside className="student-sidebar" aria-label="Student workspace"><div className="workspace-heading"><span className="workspace-symbol"><GraduationCap size={25} strokeWidth={1.6} aria-hidden="true"/></span><div><span className="workspace-kicker">UPSC RADIO</span><h2>My workspace</h2></div></div>
- <nav className="workspace-navigation" aria-label="Student navigation">{groups.map(group=><div className="workspace-group" key={group.label}><p>{group.label}</p><ul>{group.items.map(({href,label,Icon})=>{const base=href.replace(/\/$/,""),active=base==="/student"?pathname===base||pathname.startsWith("/student/course/")||pathname.startsWith("/student/receipt/"):pathname===base||pathname.startsWith(base+"/");return <li key={href}><Link href={href} prefetch={true} aria-current={active?"page":undefined}><Icon size={19} strokeWidth={1.7} aria-hidden="true"/><span>{label}</span>{group.label==="Explore"?<ArrowUpRight className="workspace-arrow" size={14} aria-hidden="true"/>:null}</Link></li>;})}</ul></div>)}</nav>
+ <nav className="workspace-navigation" aria-label="Student navigation">{groups.map(group=><div className="workspace-group" key={group.label}><p>{group.label}</p><ul>{group.items.map(({href,label,Icon})=>{const base=href.replace(/\/$/,""),active=base==="/student"?pathname===base||pathname.startsWith("/student/course/")||pathname.startsWith("/student/receipt/"):pathname===base||pathname.startsWith(base+"/");return <li key={href}><Link href={href} aria-current={active?"page":undefined}><Icon size={19} strokeWidth={1.7} aria-hidden="true"/><span>{label}</span>{group.label==="Explore"?<ArrowUpRight className="workspace-arrow" size={14} aria-hidden="true"/>:null}</Link></li>;})}</ul></div>)}</nav>
  <Link className="workspace-help" href="/admissions/"><CircleHelp size={18} aria-hidden="true"/><span>Need a hand?<small>Get in touch with us</small></span><ArrowUpRight size={14} aria-hidden="true"/></Link></aside>;
 }

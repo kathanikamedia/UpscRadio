@@ -1,0 +1,5 @@
+Built-in image_gen edit of the user-provided UPSC (1).png.
+Final project asset: public/branding/upsc-radio-favicon.png
+Derived app icons: app/icon.png, app/apple-icon.png, app/favicon.ico.
+Prompt:
+Edit the supplied UPSC RADIO logo for use as a square website favicon. Remove the entire white line Dinesh Dintakurthi cleanly; there must be no person’s name and no replacement text. Preserve the wording UPSC and RADIO, the original bold letterforms, and pink #e16589 / deep purple #3d1053 two-block colour scheme. Make the two-line mark large and centred in the square with modest even outer margins so it is legible at small favicon sizes. The horizontal pink/purple split should remain between the two lines. Flat crisp 2D logo, clean edges, no shadows, no mockup, no gradient, no added graphics. Opaque background. Deliver only the square logo.
