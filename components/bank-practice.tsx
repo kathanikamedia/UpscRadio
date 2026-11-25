@@ -1,0 +1,9 @@
+"use client";
+import {useState} from "react";
+import {submitBank} from "@/app/student/practice/[book]/actions";
+type Question={number:number;question:string;options:string[]};
+export function BankPractice({book,page,questions}:{book:string;page:number;questions:Question[]}){
+ const [answers,setAnswers]=useState<Record<string,number>>({}),[pending,setPending]=useState(false),[error,setError]=useState("");
+ const [result,setResult]=useState<Awaited<ReturnType<typeof submitBank>>|null>(null);
+ return <section><p className="eyebrow">REVIEWED PRACTICE</p><h1>{book.replace("-"," · Part ")}</h1><p>Choose one answer per question. Submit to save your score and review the correct answers.</p>{result?<div className="card" role="status"><h2>{result.score} / {result.total} correct</h2><p>Saved to your account.</p></div>:null}{questions.map(q=><fieldset className="card" key={q.number} style={{margin:"1rem 0"}}><legend>Question {q.number}</legend><p style={{whiteSpace:"pre-line"}}>{q.question}</p>{q.options.map((option,index)=><label key={index} style={{display:"flex",gap:10,padding:8}}><input type="radio" name={`q-${q.number}`} checked={answers[q.number]===index} disabled={pending||Boolean(result)} onChange={()=>setAnswers({...answers,[q.number]:index})}/><span>{String.fromCharCode(65+index)}. {option}</span></label>)}{result?<p><strong>Correct answer: {String.fromCharCode(65+result.review.find(r=>r.number===q.number)!.answer)}</strong></p>:null}</fieldset>)}<button className="button" disabled={pending||Boolean(result)} onClick={async()=>{setPending(true);setError("");try{setResult(await submitBank(book,page,answers));}catch{setError("Could not save this attempt. Please try again.");}finally{setPending(false);}}}>{pending?"Saving…":result?"Attempt saved":"Submit answers"}</button>{result?<button className="button secondary" onClick={()=>{setAnswers({});setResult(null);}}>Try again</button>:null}{error?<p role="alert">{error}</p>:null}</section>;
+}
