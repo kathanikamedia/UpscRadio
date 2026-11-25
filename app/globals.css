@@ -458,8 +458,9 @@ progress{width:100%;height:9px;accent-color:var(--radio-purple)}
 .dashboard-empty svg{margin-bottom:10px}
 .payment-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding-block:16px;border-bottom:1px solid var(--line)}
 .payment-row small{display:block;color:var(--muted)}
-.mock-card{display:flex;align-items:flex-start;flex-direction:column;gap:14px;padding:28px}
-.mock-card h2{font-size:1.6rem}.mock-card p{margin:0}
+.mock-card{display:flex;align-items:flex-start;flex-direction:column;gap:10px;padding:18px}
+.mock-card h2{font-size:1.15rem;line-height:1.4;margin:0}.mock-card p{margin:0}
+.mock-card .mock-card-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:.82rem;line-height:1.6;min-height:2.6em}.mock-card>img{height:170px!important;width:100%;object-fit:contain}.mock-card .test-price{font-size:1.45rem}.mock-card .button{padding:10px 15px;min-height:40px;font-size:.78rem}
 .mock-card .button{margin-top:auto}.free-mock{border-top:4px solid var(--radio-pink)}
 .mock-icon{width:32px;height:32px;color:var(--ink)}
 .test-meta{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.87rem}
