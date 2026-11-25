@@ -1,8 +1,9 @@
 "use client";
 
-import { Show, UserButton } from "@clerk/nextjs";
+import { Show, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { SiteText } from "./site-language";
+function AdminLink(){const {user}=useUser();return user?.publicMetadata.role==="admin"?<Link href="/staff/">Admin</Link>:null;}
 
 export function AuthControls({ configured }: { configured: boolean }) {
   if (!configured) {
@@ -15,6 +16,7 @@ export function AuthControls({ configured }: { configured: boolean }) {
 
     </Show>
     <Show when="signed-in">
+      <AdminLink/>
       <Link href="/student/"><SiteText>My learning</SiteText></Link>
       <UserButton />
     </Show>

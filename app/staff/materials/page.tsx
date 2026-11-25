@@ -9,6 +9,6 @@ export const metadata={title:"Material draft previews",robots:{index:false,follo
 export default async function MaterialDrafts(){
  await requireAdmin();
  const slugs=new Set<string>([...currentAffairsDrafts,...additionalMaterialDrafts].map(item=>item.slug));
- const drafts=(await contents("resource",false)).filter(item=>slugs.has(item.slug)&&!item.published);
+ const drafts=(await contents("resource",false)).filter(item=>slugs.has(item.slug));
  return <section className="staff-materials-page"><div className="staff-page staff-materials-header"><header className="staff-page-header"><div><p className="eyebrow">PRIVATE CATALOGUE</p><h1>Study material drafts</h1><p>Review every title, cover and access rule before a material reaches learners.</p></div><Link className="button secondary" href="/staff/?kind=resource">Catalogue editor ↗</Link></header><div className="staff-guidance"><FileLock2 size={18}/><p><strong>Protected by design.</strong> These PDFs are private in R2 and cannot be downloaded or sold until payment access is activated.</p></div></div>{drafts.map(item=><StudyMaterialDetail key={item.id} item={item} preview/>)}{!drafts.length?<div className="staff-page staff-empty">No matching unpublished drafts found.</div>:null}</section>;
 }
