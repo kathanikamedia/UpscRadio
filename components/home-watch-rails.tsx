@@ -14,7 +14,7 @@ function VideoRow({listing,kind}:{listing:YouTubeListing|null;kind:"videos"|"pla
     {listing?.items.length?<div className="home-watch-window" role="group" aria-label={title}>
       <div className="home-watch-track">{[false,true].map(duplicate=><div className={`home-watch-group${duplicate?" home-watch-duplicate":""}`} aria-hidden={duplicate||undefined} key={String(duplicate)}>
         {listing.items.map(item=><a className="home-watch-tile" href={item.url} target="_blank" rel="noopener noreferrer" tabIndex={duplicate?-1:undefined} key={item.id} aria-label={`${kind==="videos"?"Watch":"Open playlist:"} ${item.title} (opens in a new tab)`}>
-          <Image src={item.thumbnail} width={240} height={135} sizes="160px" alt="" loading="lazy"/>
+          <Image unoptimized src={item.thumbnail.replace("/hqdefault.jpg","/mqdefault.jpg")} width={240} height={135} sizes="160px" alt="" loading="lazy"/>
           <span className="home-watch-play" aria-hidden="true">{kind==="videos"?<Play size={12} fill="currentColor"/>:<ListVideo size={14}/>}</span>
           <span className="home-watch-title" lang={/[\u0c00-\u0c7f]/.test(item.title)?"te":undefined}>{item.title}</span>
         </a>)}

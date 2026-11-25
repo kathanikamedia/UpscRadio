@@ -1,4 +1,7 @@
 import { Suspense } from "react";
+import heroSmall from "@/public/hero-study-640.webp";
+import heroMedium from "@/public/hero-study-1200.webp";
+import heroLarge from "@/public/hero-study-1600.webp";
 import { HomePapers, HomeResources, HomeStories } from "@/components/home-content";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,7 +22,7 @@ export default function Home() {
         <HomeLanguageIntro/>
         <div className="learning-hero-scene">
           <div className="learning-scene-halo" aria-hidden="true"/>
-          <Image className="learning-students" src="/group-study.webp" alt="A group of aspirants studying together with books and notes" width={1774} height={887} sizes="(max-width: 700px) 100vw, 800px" preload/>
+          <img className="learning-students" src={heroMedium.src} srcSet={`${heroSmall.src} 640w, ${heroMedium.src} 1200w, ${heroLarge.src} 1600w`} alt="A group of aspirants studying together with books and notes" width={1774} height={887} sizes="(max-width: 700px) 100vw, (max-width: 1200px) 85vw, 1000px" loading="eager" fetchPriority="high" decoding="async"/>
           <div className="learning-note learning-note-focus"><span className="learning-note-icon"><Target size={17} aria-hidden="true"/></span><strong>Give today a purpose.</strong><div className="focus-checks"><span><Check aria-hidden="true"/> Understand a concept</span><span><Check aria-hidden="true"/> Revise what you know</span><span><Check aria-hidden="true"/> Practise a question</span></div></div>
           <Link href="/test-series/" className="learning-note learning-note-mock"><span className="learning-note-label">YOUR NEXT CHALLENGE <ArrowUpRight size={15} aria-hidden="true"/></span><ClipboardCheck size={27} aria-hidden="true"/><strong>Turn preparation<br/>into practice.</strong><span className="learning-note-footer">Explore Mock Test <ArrowUpRight size={14} aria-hidden="true"/></span></Link>
           <Link href="/explore/videos/" className="learning-note learning-note-podcast"><span className="podcast-disc"><Headphones size={21} aria-hidden="true"/></span><span><small>LEARN. LISTEN. KEEP GOING.</small><strong>UPSC Radio Podcast</strong></span><ArrowUpRight size={16} aria-hidden="true"/></Link>
@@ -41,7 +44,7 @@ export default function Home() {
     <section className="wrap social-section" aria-labelledby="social-title">
       <div><p className="eyebrow">UPSC RADIO PODCAST</p><h2 id="social-title">Follow the conversation.</h2></div>
       <div className="social-links">
-        {Object.entries(socials).map(([key,social])=><a key={key} target="_blank" rel="noopener noreferrer" href={social.url}><Image className="social-brand-logo" src={`/brands/${key}.${key==="facebook"?"svg":"png"}`} width={32} height={32} alt=""/><span><strong>{social.name}</strong><small>{social.handle}</small></span><span aria-hidden="true">↗</span></a>)}
+        {Object.entries(socials).map(([key,social])=><a key={key} target="_blank" rel="noopener noreferrer" href={social.url}><Image className="social-brand-logo" unoptimized src={social.icon} width={32} height={32} alt=""/><span><strong>{social.name}</strong><small>{social.handle}</small></span><span aria-hidden="true">↗</span></a>)}
       </div>
     </section>
     <section className="faq-section" aria-labelledby="faq-heading">
