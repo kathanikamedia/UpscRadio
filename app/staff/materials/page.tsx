@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { requireAdmin } from "@/lib/auth";
-import { contents } from "@/lib/db";
-import { currentAffairsDrafts, additionalMaterialDrafts } from "@/lib/study-material-drafts";
-import { StudyMaterialDetail } from "@/components/study-material-detail";
-import { FileLock2 } from "lucide-react";
+import {requireAdmin} from "@/lib/auth";
+import {contents} from "@/lib/db";
+import {MaterialUploadForm} from "@/components/material-upload-form";
+import {StudyMaterialDetail} from "@/components/study-material-detail";
 export const dynamic="force-dynamic";
-export const metadata={title:"Material draft previews",robots:{index:false,follow:false}};
-export default async function MaterialDrafts(){
- await requireAdmin();
- const slugs=new Set<string>([...currentAffairsDrafts,...additionalMaterialDrafts].map(item=>item.slug));
- const drafts=(await contents("resource",false)).filter(item=>slugs.has(item.slug));
- return <section className="staff-materials-page"><div className="staff-page staff-materials-header"><header className="staff-page-header"><div><p className="eyebrow">PRIVATE CATALOGUE</p><h1>Study material drafts</h1><p>Review every title, cover and access rule before a material reaches learners.</p></div><Link className="button secondary" href="/staff/?kind=resource">Catalogue editor ↗</Link></header><div className="staff-guidance"><FileLock2 size={18}/><p><strong>Protected by design.</strong> These PDFs are private in R2 and cannot be downloaded or sold until payment access is activated.</p></div></div>{drafts.map(item=><StudyMaterialDetail key={item.id} item={item} preview/>)}{!drafts.length?<div className="staff-page staff-empty">No matching unpublished drafts found.</div>:null}</section>;
+export const metadata={title:"Manage study materials",robots:{index:false,follow:false}};
+export default async function Materials({searchParams}:{searchParams:Promise<{edit?:string;preview?:string}>}){
+ await requireAdmin();const query=await searchParams,items=await contents("resource",false),edit=items.find(item=>String(item.id)===query.edit),preview=items.find(item=>String(item.id)===query.preview);
+ return <section className="staff-materials-page"><div className="staff-page"><header className="staff-page-header"><div><p className="eyebrow">MATERIAL MANAGEMENT</p><h1>Study materials</h1><p>Upload PDFs, manage descriptions and publish your catalogue.</p></div><Link className="button" href="/staff/materials/#upload">Upload new PDF</Link></header><div className="staff-content-grid">{items.map(item=><article className="staff-content-card" key={item.id}><span className={item.published?"status-live":"status-draft"}>{item.published?"Published":"Draft"}</span><h2>{item.title}</h2><p>{item.category} · {String(item.extra.language||"Language pending")} · ₹{Number(item.extra.price_paise||0)/100}</p><div className="actions"><Link href={"?edit="+item.id+"#upload"}>Edit / replace PDF</Link><Link href={"?preview="+item.id+"#preview"}>Preview</Link>{item.published?<Link href={"/resources/"+item.slug+"/"}>View listing ↗</Link>:null}</div></article>)}</div><section id="upload" style={{scrollMarginTop:110,marginTop:30}}><MaterialUploadForm key={edit?.id||"new"} item={edit}/>{edit?<Link href="/staff/materials/#upload">Create a new material instead</Link>:null}</section></div>{preview?<div id="preview"><StudyMaterialDetail item={preview} preview/></div>:null}</section>;
 }

@@ -1,4 +1,4 @@
-import { GetObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export class StorageConfigurationError extends Error {
@@ -23,6 +23,11 @@ export function validStudyMaterialKey(key: string) {
 function connection() {
   const { bucket, ...config } = storageConfig();
   return { bucket, client: new S3Client({ ...config, region: "auto", forcePathStyle: true, maxAttempts: 2 }) };
+}
+export async function uploadStudyPdf(key:string,body:Uint8Array){
+ if(!validStudyMaterialKey(key)||!body.length||body.length>4_000_000||Buffer.from(body.subarray(0,5)).toString()!=="%PDF-")throw Error("Upload a valid PDF under 4 MB.");
+ const {bucket,client}=connection();
+ try{await client.send(new PutObjectCommand({Bucket:bucket,Key:key,Body:body,ContentType:"application/pdf"}),{abortSignal:AbortSignal.timeout(30000)});}finally{client.destroy();}
 }
 
 export async function checkStudyMaterial(key: string) {
