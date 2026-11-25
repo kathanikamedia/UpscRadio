@@ -14,6 +14,8 @@ try {
  else {
   await initialize();
   for(const {book,data:bank} of data){
+   const feedback=bank.candidates.filter((q:{explanation?:string})=>q.explanation);
+   for(let i=0;i<feedback.length;i+=50)await getDatabase().batch(feedback.slice(i,i+50).map((q:{number:number;explanation:string})=>({sql:"INSERT INTO question_explanations(book_slug,question_number,explanation) VALUES (?,?,?) ON CONFLICT(book_slug,question_number) DO NOTHING",args:[book,q.number,q.explanation]})),"write");
    for(let i=0;i<bank.candidates.length;i+=50){
     await getDatabase().batch(bank.candidates.slice(i,i+50).map((q:{number:number;question:string;options:string[];answer:string})=>({sql:"INSERT INTO question_drafts(book_slug,question_number,question,options,answer,reviewed) VALUES (?,?,?,?,?,0) ON CONFLICT(book_slug,question_number) DO NOTHING",args:[book,q.number,q.question,JSON.stringify(q.options),q.answer]})),"write");
    }

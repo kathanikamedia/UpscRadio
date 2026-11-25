@@ -40,6 +40,14 @@ for slug, (filename, expected) in books.items():
             continue
         candidates.append({"number": number, "question": stem, "options": options})
     key_text = "\n".join(pages[key_page:])
+    clean_feedback = re.sub(r"(?m)^.*@APPSCExamEdge.*$|^Join t\.me/APPSCExamEdge.*$", "", key_text)
+    feedback_matches = list(re.finditer(r"(?m)^(\d{1,3})\.\s*\(([a-d])\)\s+([^\n]+)", clean_feedback))
+    explanations = {}
+    for index, match in enumerate(feedback_matches):
+        text = clean_feedback[match.start(3):feedback_matches[index+1].start() if index+1<len(feedback_matches) else len(clean_feedback)]
+        text = re.split(r"(?m)^\d+\.\s+[A-Z].*\(Q\s*\d", text, maxsplit=1)[0]
+        if not re.search(r"\d+\.\s*\([a-d]\)", text):
+            explanations[int(match.group(1))] = re.sub(r"\s+", " ", text).strip()
     answers = {}
     for number, answer in re.findall(r"\b(\d{1,3})\.\s*\(([a-d])\)", key_text):
         answers.setdefault(int(number), set()).add(answer)
@@ -51,6 +59,7 @@ for slug, (filename, expected) in books.items():
         number = item["number"]
         if number <= expected and counts[number] == 1 and len(answers.get(number, set())) == 1:
             item["answer"] = next(iter(answers[number]))
+            item["explanation"] = explanations.get(number, "")
             verified.append(item)
     missing = [number for number in range(1, expected + 1) if number not in {item["number"] for item in verified}]
     (target / f"{slug}.json").write_text(json.dumps({"source": filename, "review_required": True, "expected": expected, "candidates": verified, "missing": missing}, ensure_ascii=False, indent=2), encoding="utf-8")

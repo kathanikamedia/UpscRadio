@@ -26,7 +26,7 @@ export function initialize() {
 }
 async function ensureSchema(){
  try{
-  const required=["content","enquiries","identities","payments","rate_limits","legacy","saved","audit","source_cache","course_enrolments","lesson_completions","practice_attempts","question_drafts","one_active_payment","content_listing","practice_attempt_owner"];
+  const required=["content","enquiries","identities","payments","rate_limits","legacy","saved","audit","source_cache","course_enrolments","lesson_completions","practice_attempts","question_drafts","question_explanations","one_active_payment","content_listing","practice_attempt_owner"];
   const existing=await getDatabase().execute("SELECT name FROM sqlite_master WHERE type IN ('table','index')");
   const names=new Set(existing.rows.map(row=>String(row.name)));
   if(required.every(name=>names.has(name)))return;
@@ -47,6 +47,7 @@ async function ensureSchema(){
     "CREATE TABLE IF NOT EXISTS practice_attempts (id INTEGER PRIMARY KEY, clerk_id TEXT NOT NULL, practice_slug TEXT NOT NULL, score INTEGER NOT NULL, total INTEGER NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE INDEX IF NOT EXISTS practice_attempt_owner ON practice_attempts(clerk_id,practice_slug,id DESC)",
     "CREATE TABLE IF NOT EXISTS question_drafts (book_slug TEXT NOT NULL, question_number INTEGER NOT NULL, question TEXT NOT NULL, options TEXT NOT NULL, answer TEXT NOT NULL, reviewed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(book_slug,question_number))",
+    "CREATE TABLE IF NOT EXISTS question_explanations (book_slug TEXT NOT NULL, question_number INTEGER NOT NULL, explanation TEXT NOT NULL, PRIMARY KEY(book_slug,question_number))",
   ], "write");
  }catch(error){
     ready = undefined;
