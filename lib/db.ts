@@ -29,9 +29,13 @@ async function ensureSchema(){
   const required=["content","enquiries","identities","payments","rate_limits","legacy","saved","audit","source_cache","course_enrolments","lesson_completions","practice_attempts","question_drafts","question_explanations","one_active_payment","content_listing","practice_attempt_owner","exam_attempts","one_running_exam"];
   const existing=await getDatabase().execute("SELECT name FROM sqlite_master WHERE type IN ('table','index')");
   const names=new Set(existing.rows.map(row=>String(row.name)));
-  required.push("mock_papers");
+  required.push("mock_papers","coupons","coupon_redemptions","cart_orders");
   if(required.every(name=>names.has(name)))return;
   await getDatabase().batch([
+    // Additive tables only: coupons and whole-cart orders. Existing tables are untouched.
+    "CREATE TABLE IF NOT EXISTS coupons (code TEXT PRIMARY KEY, percent_off INTEGER NOT NULL DEFAULT 0, amount_off INTEGER NOT NULL DEFAULT 0, active INTEGER NOT NULL DEFAULT 1, expires TEXT, max_uses INTEGER, used INTEGER NOT NULL DEFAULT 0, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+    "CREATE TABLE IF NOT EXISTS coupon_redemptions (order_id TEXT PRIMARY KEY, code TEXT NOT NULL, clerk_id TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Pending', created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+    "CREATE TABLE IF NOT EXISTS cart_orders (id TEXT PRIMARY KEY, clerk_id TEXT NOT NULL, order_id TEXT UNIQUE, payment_id TEXT UNIQUE, amount INTEGER NOT NULL, subtotal INTEGER NOT NULL, coupon TEXT, items TEXT NOT NULL, status TEXT NOT NULL, created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS mock_papers (book TEXT PRIMARY KEY,content_id INTEGER NOT NULL,title TEXT NOT NULL,storage_key TEXT NOT NULL,questions TEXT NOT NULL,seconds INTEGER NOT NULL,metadata TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'draft',created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS exam_attempts (id TEXT PRIMARY KEY,clerk_id TEXT NOT NULL,book TEXT NOT NULL,title TEXT NOT NULL,questions TEXT NOT NULL,answers TEXT NOT NULL DEFAULT '{}',marked TEXT NOT NULL DEFAULT '[]',started INTEGER NOT NULL,deadline INTEGER NOT NULL,revision INTEGER NOT NULL DEFAULT 0,submitted INTEGER,result TEXT)",
     "CREATE UNIQUE INDEX IF NOT EXISTS one_running_exam ON exam_attempts(clerk_id,book) WHERE submitted IS NULL",

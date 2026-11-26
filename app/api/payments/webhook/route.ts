@@ -1,5 +1,6 @@
 import {validSignature} from "@/lib/signature";
 import {capture,fulfill,refundPayment} from "@/lib/payments";
+import {captureCart,refundCart,cartOrderByGateway} from "@/lib/cart-orders";
 import {execute} from "@/lib/db";
 import {BodyTooLarge,readLimitedBody} from "@/lib/request-body";
 export async function POST(request:Request) {
@@ -12,6 +13,7 @@ export async function POST(request:Request) {
   if(event.event==="payment.captured"){
    const payment=event.payload?.payment?.entity;
    const row=payment?.order_id?(await execute({sql:"SELECT id FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0]:undefined;
+   if(!row&&payment?.order_id&&await cartOrderByGateway(payment.order_id))return await captureCart(payment)?new Response(null,{status:204}):new Response("Unmatched payment",{status:409});
    // Payments for orders this site never created are acknowledged so Razorpay stops retrying them.
    if(!row)return new Response(null,{status:204});
    if(!await capture(payment))return new Response("Unmatched payment",{status:409});
@@ -20,7 +22,7 @@ export async function POST(request:Request) {
   if(event.event==="refund.processed"){
    const refund=event.payload?.refund?.entity,payment=event.payload?.payment?.entity;
    if(!refund||refund.status!=="processed"||!payment||refund.payment_id!==payment.id)return new Response("Invalid refund payload",{status:400});
-   await refundPayment(payment);
+   if(await cartOrderByGateway(payment.order_id))await refundCart(payment);else await refundPayment(payment);
   }
   return new Response(null,{status:204});
  }catch{return new Response("Retry later",{status:503});}

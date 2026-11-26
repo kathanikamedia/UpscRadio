@@ -4,11 +4,12 @@ import {Localized} from "@/components/localized";
 import Link from "next/link";
 import { SiteText } from "./site-language";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ClipboardCheck, Heart, UserRound, LibraryBig, ListChecks, GraduationCap, ArrowUpRight, CircleHelp } from "lucide-react";
+import { LayoutDashboard, ClipboardCheck, Heart, UserRound, LibraryBig, ListChecks, GraduationCap, ArrowUpRight, CircleHelp, BarChart3 } from "lucide-react";
 
 const groups=[
  {label:"Your learning",items:[
   {href:"/student/",label:"Overview",Icon:LayoutDashboard},
+  {href:"/student/results/",label:"My results",Icon:BarChart3},
   {href:"/student/free-test/",label:"Free mock test",Icon:ClipboardCheck},
   {href:"/student/free-course/",label:"Free starter course",Icon:GraduationCap},
   {href:"/student/saved/",label:"Wishlist",Icon:Heart},

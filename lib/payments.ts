@@ -1,6 +1,7 @@
 import { execute } from "./db";
 import { moodle } from "./moodle";
 import {paymentMode} from "./payment-policy";
+import {confirmRedemption} from "./coupons";
 export const paymentsConfigured=Boolean(paymentMode()&&process.env.RAZORPAY_KEY_SECRET&&process.env.RAZORPAY_WEBHOOK_SECRET);
 export async function razorpay<T>(path:string,data?:unknown):Promise<T> {
  if(!paymentsConfigured)throw new Error("Checkout is awaiting activation.");
@@ -14,10 +15,14 @@ export async function razorpay<T>(path:string,data?:unknown):Promise<T> {
 export type GatewayPayment={id:string;order_id:string;amount:number;currency:string;status:string};
 export async function capture(payment:GatewayPayment) {
  const row=(await execute({sql:"SELECT * FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0];
- if(!row||!["Pending","Paid"].includes(String(row.status))||payment.currency!=="INR"||payment.status!=="captured"||Number(row.amount)!==payment.amount)return false;
+ if(!row||!["Pending","Paid","Abandoned"].includes(String(row.status))||payment.currency!=="INR"||payment.status!=="captured"||Number(row.amount)!==payment.amount)return false;
  if(row.status==="Paid"&&row.payment_id!==payment.id)return false;
- const result = await execute({sql:"UPDATE payments SET status='Paid',payment_id=?,captured=COALESCE(captured,CURRENT_TIMESTAMP) WHERE id=? AND status IN ('Pending','Paid') AND (payment_id IS NULL OR payment_id=?)",args:[payment.id,String(row.id),payment.id]});
- return result.rowsAffected === 1;
+ // An order replaced by a coupon re-quote can still be paid from a window left open: honour it.
+ if(row.status==="Abandoned")await execute({sql:"UPDATE payments SET status='Abandoned' WHERE clerk_id=? AND course_id=? AND id!=? AND status IN ('Creating','Pending')",args:[String(row.clerk_id),Number(row.course_id),String(row.id)]});
+ const result = await execute({sql:"UPDATE payments SET status='Paid',payment_id=?,captured=COALESCE(captured,CURRENT_TIMESTAMP) WHERE id=? AND status IN ('Pending','Paid','Abandoned') AND (payment_id IS NULL OR payment_id=?)",args:[payment.id,String(row.id),payment.id]}).catch(()=>({rowsAffected:0}));
+ if(result.rowsAffected!==1)return false;
+ await confirmRedemption(payment.order_id);
+ return true;
 }
 export async function refundPayment(payment:GatewayPayment&{amount_refunded?:number}){
  if(payment.currency!=="INR"||!Number.isSafeInteger(payment.amount_refunded)||Number(payment.amount_refunded)<payment.amount)return false;
