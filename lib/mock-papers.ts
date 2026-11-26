@@ -21,19 +21,24 @@ export async function publishMock(admin:string,book:string,questions:unknown){
  await initialize();const tx=await getDatabase().transaction("write");
  try{
   const old=(await tx.execute({sql:"SELECT extra FROM content WHERE id=?",args:[paper.contentId]})).rows[0];const extra=JSON.parse(String(old.extra));
-  const v=paper.metadata;const metadata={...extra,question_bank:book,question_count:verified.length,exam:v.exam,language:v.language,price_paise:v.price,duration_minutes:v.minutes,paper_mode:v.mode||"practice",download_after_attempt:true,purchase_enabled:false,preparation:false,demo:false,pdf_uploaded:true};
+  const v=paper.metadata;const metadata={...extra,question_bank:book,question_count:verified.length,exam:v.exam,language:v.language,price_paise:v.price,duration_minutes:v.minutes,paper_mode:v.mode||"practice",download_after_attempt:false,purchase_enabled:false,preparation:false,demo:false,pdf_uploaded:true};
   const update=await tx.execute({sql:"UPDATE mock_papers SET questions=?,status='published' WHERE book=? AND status='draft'",args:[JSON.stringify(verified),book]});if(!update.rowsAffected)throw Error("This draft was already published.");
   await tx.execute({sql:"UPDATE content SET title=?,summary=?,body=?,published=1,extra=? WHERE id=?",args:[v.title,v.summary,v.body,JSON.stringify(metadata),paper.contentId]});
   await tx.execute({sql:"INSERT INTO audit(actor,action) VALUES (?,?)",args:[admin,`Published mock PDF and MCQs ${book}`]});await tx.commit();
  }catch(error){await tx.rollback();throw error;}finally{tx.close();}
 }
-export async function completedMockPdf(user:string,id:string){
+export async function attemptMockPdf(user:string,id:string){
  const attempt=(await execute({sql:"SELECT book,title,submitted FROM exam_attempts WHERE id=? AND clerk_id=?",args:[id,user]})).rows[0];
- if(!attempt||attempt.submitted===null)return null;
- const filename=(String(attempt.title).normalize("NFKD").replace(/[^a-zA-Z0-9_-]+/g,"-").replace(/^-|-$/g,"").slice(0,140)||"mock-test")+".pdf";
- const paper=await mockPaper(String(attempt.book));if(paper)return paper.status==="published"?{key:paper.storageKey,book:paper.book,filename}:null;
+ if(!attempt)return null;
+ return mockPdf(String(attempt.book),String(attempt.title));
+}
+export async function mockPdf(book:string,title?:string){
+ const paper=await mockPaper(book);
+ const name=title||paper?.title||book;
+ const filename=(name.normalize("NFKD").replace(/[^a-zA-Z0-9_-]+/g,"-").replace(/^-|-$/g,"").slice(0,140)||"mock-test")+".pdf";
+ if(paper)return paper.status==="published"?{key:paper.storageKey,book:paper.book,filename}:null;
  const legacy:Record<string,string>={"economy-1":"economy-part-1","economy-2":"economy-part-2","economy-3":"economy-part-3","economy-4":"economy-part-4","environment-1":"environment-part-1","environment-2":"environment-part-2","environment-3":"environment-part-3","current-affairs-english":"ap-current-affairs-bit-bank-2026-english"};
- const slug=legacy[String(attempt.book)];if(!slug)return null;
+ const slug=legacy[book];if(!slug)return null;
  const row=(await execute({sql:"SELECT extra FROM content WHERE kind='resource' AND slug=?",args:[slug]})).rows[0];const key=row?JSON.parse(String(row.extra)).storage_key:undefined;
- return typeof key==="string"?{key,book:String(attempt.book),filename}:null;
+ return typeof key==="string"?{key,book,filename}:null;
 }

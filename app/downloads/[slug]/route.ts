@@ -6,9 +6,17 @@ import { requiresPurchase } from "@/lib/study-material-drafts";
 export const runtime = "nodejs";
 export async function GET(_request:Request,{params}:{params:Promise<{slug:string}>}) {
  const {slug}=await params,item=await content("resource",slug);
- if(item&&(item.extra.mock_slug||item.extra.download_after_attempt))return new Response("Open the mock test and submit your attempt to unlock its PDF on the results page.",{status:403,headers:{"Cache-Control":"private, no-store"}});
+ let mockAccess=false;
+ if(item&&(item.extra.mock_slug||item.extra.download_after_attempt)){
+  const mock=typeof item.extra.mock_slug==="string"?await content("course",item.extra.mock_slug):null;
+  const {identity}=await import("@/lib/auth");const user=await identity();
+  if(!user)return new Response("Sign in to download this PDF.",{status:401,headers:{"Cache-Control":"private, no-store"}});
+  const {canPractise}=await import("@/lib/practice-bank");
+  if(!mock?.extra.question_bank||!await canPractise(user,String(mock.extra.question_bank)))return new Response("Test access required.",{status:403,headers:{"Cache-Control":"private, no-store"}});
+  mockAccess=true;
+ }
  const parent=typeof item?.extra.course_slug==="string"?await content("course",item.extra.course_slug):null;
- if(item&&(requiresPurchase(item.extra)||(parent&&Number(parent.extra.price_paise)>0))){
+ if(item&&!mockAccess&&(requiresPurchase(item.extra)||(parent&&Number(parent.extra.price_paise)>0))){
   if(!parent)return new Response("Purchase access required.",{status:403,headers:{"Cache-Control":"private, no-store"}});
   const {identity}=await import("@/lib/auth");const user=await identity();
   const owned=user&&parent&&(await execute({sql:"SELECT 1 FROM payments WHERE clerk_id=? AND course_id=? AND status='Paid' LIMIT 1",args:[user,parent.id]})).rows.length>0;
