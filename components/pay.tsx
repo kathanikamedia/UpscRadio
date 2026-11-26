@@ -8,7 +8,7 @@ declare global {interface Window {Razorpay:new(options:Record<string,unknown>)=>
 export function Pay({order,keyId,amount,receipt}:{order:string;keyId:string;amount:number;receipt:string}) {
  const [ready,setReady]=useState(false),[status,setStatus]=useState(""),[busy,setBusy]=useState(false);
  function pay() {
-  setBusy(true);
+  setBusy(true);setStatus("");
   const widget=new window.Razorpay({key:keyId,order_id:order,amount,currency:"INR",name:"UPSC RADIO",
    modal:{ondismiss:()=>setBusy(false)},handler:async(result:{razorpay_payment_id:string;razorpay_signature:string})=>{
     setStatus("Verifying payment…");
@@ -17,5 +17,5 @@ export function Pay({order,keyId,amount,receipt}:{order:string;keyId:string;amou
    }});
   widget.on("payment.failed",()=>{setBusy(false);setStatus("Payment was unsuccessful. You can try again.");});widget.open();
  }
- return <Localized>{<><Script src="https://checkout.razorpay.com/v1/checkout.js" onReady={()=>setReady(true)} onError={()=>setStatus("Payment provider did not load. Refresh to try again.")}/><p role="status">{status}</p><button className="button" disabled={!ready||busy} onClick={pay}>{busy?"Please wait…":"Pay with Razorpay"}</button></>}</Localized>;
+ return <Localized>{<><Script src="https://checkout.razorpay.com/v1/checkout.js" onReady={()=>setReady(true)} onError={()=>setStatus("Payment provider did not load. Refresh to try again.")}/>{status?<p role="status">{status}</p>:null}<button className="button" disabled={!ready||busy} onClick={pay}>{busy?"Please wait…":"Pay with Razorpay"}</button></>}</Localized>;
 }

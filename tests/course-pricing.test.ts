@@ -7,6 +7,7 @@ const {execute,content,closeDatabase}=await import("../lib/db");
 const {materialAccess,ownsProduct}=await import("../lib/material-access");
 const {checkoutProduct}=await import("../lib/checkout-product");
 const {fulfill}=await import("../lib/payments");
+const {purchaseHref,mockPurchaseHref,downloadAccessResponse}=await import("../lib/purchase-navigation");
 test.after(()=>closeDatabase());
 
 test("bundle comparison uses real material totals and never advertises negative savings",()=>{
@@ -52,4 +53,19 @@ test("refunding a bundle preserves separate material purchases and revokes the o
  assert.equal(access.allowed,true);assert.equal(access.individual,true);assert.equal(access.bundle,false);
  assert.equal((await materialAccess("bundle-owner",second)).allowed,false);
  assert.equal((await materialAccess("one-pdf-owner",first)).allowed,true);
+});
+test("denied browser downloads open the correct purchase page while API requests retain access errors",async()=>{
+ await execute({sql:"INSERT INTO content(id,kind,slug,title,category,published,extra) VALUES (300,'course','economy-purchase','Economy','Test Series',1,?)",args:[JSON.stringify({question_bank:"economy-1"})]});
+ assert.equal(await mockPurchaseHref("economy-1"),"/purchase/economy-purchase/");
+ assert.equal(await mockPurchaseHref("unknown-private-book"),"/test-series/");
+ await execute("INSERT INTO mock_papers(book,content_id,title,storage_key,questions,seconds,metadata,status) VALUES ('previous-version',300,'Earlier paper','study-materials/old.pdf','[]',60,'{}','published')");
+ assert.equal(await mockPurchaseHref("previous-version"),"/purchase/economy-purchase/");
+ const url="https://www.upscradio.com/api/mock-tests/economy-1/pdf/",target=await mockPurchaseHref("economy-1");
+ const browser=downloadAccessResponse(new Request(url,{headers:{accept:"text/html"}}),target,"Test access required.",403);
+ assert.equal(browser.status,307);assert.equal(browser.headers.get("location"),"https://www.upscradio.com/purchase/economy-purchase/");
+ assert.equal(browser.headers.get("cache-control"),"private, no-store");
+ const api=downloadAccessResponse(new Request(url,{headers:{accept:"application/json"}}),target,"Test access required.",403);
+ assert.equal(api.status,403);assert.equal(api.headers.get("location"),null);assert.equal(await api.text(),"Test access required.");
+ const encoded=downloadAccessResponse(new Request(url,{headers:{accept:"text/html"}}),purchaseHref("//example.org"),"Denied",403);
+ assert.equal(new URL(encoded.headers.get("location")!).origin,"https://www.upscradio.com");
 });

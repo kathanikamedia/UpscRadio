@@ -11,9 +11,9 @@ import {checkoutProduct} from "@/lib/checkout-product";
 import {checkoutHref,type ProductKind} from "@/lib/course-pricing";
 import {materialAccess} from "@/lib/material-access";
 export async function beginCheckout(_state:string,data:FormData) {
- const id=await requireUser(),slug=String(data.get("slug"));
+ const slug=String(data.get("slug"));
  const rawKind=String(data.get("kind")||"course");if(!["course","resource"].includes(rawKind))return "Invalid purchase type.";
- const kind=rawKind as ProductKind,course=await checkoutProduct(kind,slug);
+ const kind=rawKind as ProductKind,id=await requireUser(checkoutHref(kind,slug)),course=await checkoutProduct(kind,slug);
  if(kind==="resource"&&course&&(await materialAccess(id,course)).allowed)redirect(`/resources/${slug}/`);
  const test=paymentMode()==="test";
  if(!course||!checkoutReady(course,{configured:paymentsConfigured,testMode:test,moodle:moodleConfigured}))return "This course is awaiting checkout activation.";

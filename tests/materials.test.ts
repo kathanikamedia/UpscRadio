@@ -17,6 +17,8 @@ test("unpublished drafts are hidden and even published paid materials cannot use
  await execute({sql:"UPDATE content SET published=1 WHERE slug=?",args:[slug]});
  const denied=await GET(new Request("https://example.com/downloads/"+slug),{params:Promise.resolve({slug})});
  assert.equal(denied.status,403);assert.equal(denied.headers.get("location"),null);assert.equal(denied.headers.get("cache-control"),"private, no-store");
+ const browser=await GET(new Request("https://example.com/downloads/"+slug,{headers:{accept:"text/html"}}),{params:Promise.resolve({slug})});
+ assert.equal(browser.status,307);assert.equal(browser.headers.get("location"),`https://example.com/purchase/${slug}/?kind=resource`);
  assert.equal(requiresPurchase({}),false);assert.equal(requiresPurchase({price_paise:9900}),true);
 });
 test.after(()=>closeDatabase());
