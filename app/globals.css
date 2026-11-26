@@ -540,3 +540,30 @@ html[lang="te"] h1,html[lang="te"] h2,html[lang="te"] h3,html[lang="te"] .eyebro
 
 
 .mock-card-actions .wishlist-button{font-size:.8rem;padding:9px 12px;min-height:40px}.mock-access-actions .wishlist-button{width:100%;justify-content:center}.wishlist-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:12px}.wishlist-actions form{margin:0}
+
+/* Mock test UI polish */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wishlist-icon{display:inline-grid;place-items:center;width:40px;height:40px;flex-shrink:0;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--ink);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.wishlist-icon:hover{background:var(--tint);border-color:currentColor}.wishlist-icon[aria-pressed="true"]{color:#c2185b;border-color:#f3c3d6;background:#fff0f6}.wishlist-icon:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mock-card{height:100%}.mock-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%}
+.mock-card h2 a{color:inherit;text-decoration:none}.mock-card h2 a:hover{text-decoration:underline}
+.mock-card-footer{margin-top:auto;width:100%;display:grid;gap:12px;padding-top:14px;border-top:1px solid var(--line)}
+.mock-card .test-price{margin:0;font-size:1.5rem;font-weight:700;line-height:1}
+.mock-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0}.mock-card-actions:has(>:only-child){grid-template-columns:1fr}
+.mock-card .mock-card-actions .button{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:44px;font-size:.82rem}
+.mock-back{display:inline-block;margin-bottom:14px;font-size:.85rem;text-decoration:none}.mock-back:hover{text-decoration:underline}
+.mock-test-detail>h1{margin-bottom:24px}
+.mock-detail-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:44px;align-items:start}
+.mock-detail-summary{font-size:1.05rem;line-height:1.7;margin:0 0 8px}
+.mock-detail-aside{position:sticky;top:96px;display:grid;gap:16px}
+.mock-detail-cover{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#faf6f9;padding:12px}.mock-detail-cover img{height:240px!important}
+.mock-test-detail .mock-access-card{display:flex;flex-direction:column;gap:12px;margin:0;padding:22px;border-radius:16px;box-shadow:0 10px 30px #21062f12}
+.mock-access-price{display:grid;gap:4px;padding-bottom:6px}.mock-access-price strong{font-size:2.2rem;line-height:1.1}.mock-access-price span{font-size:.8rem;color:var(--muted)}
+.mock-access-card .button,.mock-access-card form .button,.mock-access-card .wishlist-button{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;font-size:.88rem}
+.mock-access-card form{margin:0}.mock-access-card form .messages{margin:0 0 8px;font-size:.8rem}
+.locked-download{display:grid;gap:8px}.locked-download .button{color:var(--muted)}.locked-download .purchase-alert{margin:0;font-size:.82rem}
+.mock-access-card ul{border-top:1px solid var(--line);padding-top:16px;margin-top:4px}
+.mock-access-card .purchase-small{margin:0}
+.wishlist-card{display:flex;flex-direction:column;align-items:flex-start;gap:10px}.wishlist-card h2{margin:0;font-size:1.2rem}.wishlist-card h2 a{color:inherit;text-decoration:none}.wishlist-card>p{margin:0}.wishlist-card .test-price{font-size:1.3rem;font-weight:700}
+.wishlist-actions{width:100%;display:grid;grid-template-columns:1fr auto;gap:10px;border-top:1px solid var(--line);padding-top:12px}.wishlist-actions .button{width:100%;justify-content:center;min-height:44px}.wishlist-actions .add-cart-control .button{width:100%}
+@media (max-width:860px){.mock-detail-layout{grid-template-columns:1fr;gap:24px}.mock-detail-aside{position:static;order:-1}}
