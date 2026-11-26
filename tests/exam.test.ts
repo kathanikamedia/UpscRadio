@@ -9,6 +9,16 @@ const {startExam,activeExam,saveExam,finishExam,examResult}=await import("../lib
 const {scoreExam,validateExamInput}=await import("../lib/exam-model");
 const {starterExam}=await import("../lib/starter-exam");
 const {examRules}=await import("../lib/exam-rules");
+const {recommendedPracticeMinutes,defaultPracticeSeconds}=await import("../lib/exam-rules");
+test("subject timers use rounded GS or CSAT pacing and preserve starter duration",()=>{
+ assert.equal(recommendedPracticeMinutes(100),120);
+ assert.equal(recommendedPracticeMinutes(80,"csat"),120);
+ assert.equal(recommendedPracticeMinutes(25),30);
+ assert.equal(recommendedPracticeMinutes(25,"csat"),38);
+ assert.equal(defaultPracticeSeconds("environment-1",178),214*60);
+ assert.equal(defaultPracticeSeconds("free-polity",10),900);
+ assert.throws(()=>recommendedPracticeMinutes(0));
+});
 test.after(()=>closeDatabase());
 test("score applies negative marking and leaves unanswered at zero",()=>{
  const result=scoreExam(starterExam,{1:2,2:3});assert.equal(result.correct,1);assert.equal(result.wrong,1);assert.equal(result.unanswered,8);assert.equal(result.marks,1.33);assert.equal(result.maximum,20);
