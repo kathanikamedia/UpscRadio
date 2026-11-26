@@ -646,3 +646,56 @@ html[lang="te"] h1,html[lang="te"] h2,html[lang="te"] h3,html[lang="te"] .eyebro
 .student-subpage .subpage-head h1{font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:-.04em;margin:4px 0 6px;color:#2a0b3b}
 .student-subpage .subpage-head p:not(.eyebrow){color:var(--muted);font-size:.9rem;margin:0}
 .student-subpage .dashboard-section{margin-top:8px;padding-top:0;border-top:0}
+/* Header: compact spacing */
+@media(min-width:1001px){
+.header{gap:18px}
+.header>nav{gap:2px}
+.header>nav>a,.header .shop-menu>summary{padding:8px 11px;border-radius:8px;font-size:.86rem}
+.header>nav>a:hover,.header .shop-menu>summary:hover{background:var(--tint)}
+.header .account{gap:2px}
+.header .account>a:not(.button),.header .account .cart-link{padding:8px 9px;border-radius:8px;font-size:.84rem;gap:5px}
+.header .account>a:not(.button):hover,.header .account .cart-link:hover{background:var(--tint)}
+.header .home-language-switch{margin-right:8px}
+}
+@media(min-width:1001px) and (max-width:1180px){.header .account .cart-link>span:not(.cart-count){display:none}.header>nav>a,.header .shop-menu>summary{padding-inline:8px}}
+/* Phone polish */
+.mock-buybar{display:none}
+@media(max-width:900px){
+.header{min-height:64px;gap:10px}
+.menu{border-radius:10px;min-height:42px;padding:6px 16px}
+.header.open>nav{display:flex;flex-direction:column;align-items:stretch;gap:0;flex:0 0 100%;order:4;padding:6px 0 0;border-top:1px solid var(--line)}
+.header.open>nav>a,.header.open .shop-menu>summary{display:flex;align-items:center;justify-content:space-between;min-height:50px;padding:0 4px;font-size:1rem;border-bottom:1px solid #f1e8ee}
+.header.open .shop-menu{width:100%}
+.header.open>nav>a[aria-current="page"]{text-decoration:none;color:#a93c73}
+.header.open .account{display:flex;flex:0 0 100%;order:5;flex-wrap:wrap;align-items:center;gap:8px;padding:14px 0 16px;margin:0}
+.header.open .account>a:not(.button),.header.open .account .cart-link{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:.88rem}
+.header.open .account .cart-link>span:not(.cart-count){display:inline}
+.header.open .home-language-switch{margin:0 auto 0 0;top:0}
+}
+@media(max-width:760px){
+.mock-card{padding:16px;gap:8px}
+.mock-card .mock-icon{display:none}
+.mock-card h2{font-size:1.05rem}
+.mock-card-footer{grid-template-columns:auto 1fr;align-items:center;gap:12px}
+.mock-card .test-price{font-size:1.3rem}
+.mock-card .mock-card-actions .button{min-height:42px;font-size:.8rem;padding-inline:10px}
+.mock-test-detail h1{font-size:clamp(1.6rem,7vw,2.1rem);line-height:1.2;letter-spacing:-.03em}
+.mock-test-detail{padding-bottom:96px}
+.mock-buybar{display:flex;align-items:center;justify-content:space-between;gap:14px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -8px 24px #3d105314}
+.mock-buybar>div{display:grid;line-height:1.2}
+.mock-buybar strong{font-size:1.2rem}
+.mock-buybar span{font-size:.75rem;color:var(--muted)}
+.mock-buybar form{margin:0}
+.mock-buybar .button{min-height:46px;padding:0 22px;white-space:nowrap}
+.dashboard-shell{gap:18px}.dashboard-shell>*,.student-sidebar,.workspace-navigation,.workspace-group{min-width:0}
+.student-sidebar{padding:12px;border-radius:14px}
+.student-sidebar .workspace-heading,.student-sidebar .workspace-help,.student-sidebar .workspace-group>p{display:none}
+.student-sidebar .workspace-navigation{display:flex;flex-direction:column;gap:0;padding:0}.student-sidebar .workspace-group{padding:0}
+.student-sidebar .workspace-group:not(:first-child){display:none}
+.student-sidebar .workspace-group ul{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0;padding:0;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.student-sidebar .workspace-group ul::-webkit-scrollbar{display:none}
+.student-sidebar .workspace-navigation a{white-space:nowrap;min-height:40px;padding:0 14px;border-radius:999px;font-size:.84rem;border:1px solid var(--line)}
+.student-sidebar .workspace-navigation a svg{width:16px;height:16px}
+.student-overview .section-head{flex-direction:row;flex-wrap:wrap;align-items:center}
+.ck-page h1{font-size:2rem}
+}
