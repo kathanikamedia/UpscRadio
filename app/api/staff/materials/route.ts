@@ -22,10 +22,10 @@ export async function POST(request:Request){
   if(file instanceof File&&file.size){key=`study-materials/${v.exam.toLowerCase()}/uploads/${randomUUID()}.pdf`;await uploadStudyPdf(key,new Uint8Array(await file.arrayBuffer()));}
   if(!key)return Response.json({error:"Choose a PDF for this new material."},{status:400});
   const slug=old?String(old.slug):`${v.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,90)||"material"}-${randomUUID().slice(0,8)}`;
-  const price=Math.round(Number(v.price)*100);const metadata={...extra,course_slug:v.course_slug,exam:v.exam,language:v.language,price_paise:price,access:price>0?"paid":"free",purchase_enabled:false,storage_key:key,cover:v.cover,type:"Practice question bank"};
+  const price=Math.round(Number(v.price)*100);const metadata={...extra,course_slug:v.course_slug,exam:v.exam,language:v.language,price_paise:price,access:price>0?"paid":"free",purchase_enabled:form.get("purchase_enabled")==="on",sale_enabled:form.get("purchase_enabled")==="on",storage_key:key,cover:v.cover,type:"Study material"};
   await execute({sql:"INSERT INTO content(kind,slug,title,summary,body,category,published,extra) VALUES ('resource',?,?,?,?,?,?,?) ON CONFLICT(kind,slug) DO UPDATE SET title=excluded.title,summary=excluded.summary,body=excluded.body,category=excluded.category,published=excluded.published,extra=excluded.extra",args:[slug,v.title,v.summary,v.body,v.category,v.published==="published"?1:0,JSON.stringify(metadata)]});
   await execute({sql:"INSERT INTO audit(actor,action) VALUES (?,?)",args:[admin.id,`Saved material ${slug}`]});
-  revalidateTag(PUBLIC_CATALOGUE_TAG,"max");revalidatePath("/resources/");revalidatePath(`/resources/${slug}/`);revalidatePath("/staff/materials/");
+  revalidateTag(PUBLIC_CATALOGUE_TAG,{expire:0});revalidatePath("/resources/");revalidatePath(`/resources/${slug}/`);revalidatePath(`/courses/${v.course_slug}/`);revalidatePath("/courses/");revalidatePath("/staff/materials/");
   return Response.json({ok:true,slug});
  }catch{return Response.json({error:"Could not save the material. Check storage permissions and try again. The previous file has been preserved."},{status:500});}
 }

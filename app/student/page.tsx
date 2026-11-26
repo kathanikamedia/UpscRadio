@@ -4,7 +4,7 @@ import { UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
 import { StudentName } from "@/components/student-name";
 import { StudentExams } from "@/components/student-exams";
-import { EnrolledCount, LearningCourses } from "@/components/student-learning";
+import { EnrolledCount, LearningCourses,PurchasedMaterials } from "@/components/student-learning";
 import { requireUser } from "@/lib/auth";
 import { execute } from "@/lib/db";
 import { ClipboardCheck, BookOpen, Bookmark, ArrowRight } from "lucide-react";
@@ -33,6 +33,7 @@ export default async function Student(){
   <section className="student-next"><div><span className="access-label free">Free mock test</span><h2>Find your starting point.</h2><p>Try 10 polity questions and make your next revision session more focused.</p></div><Link className="button" href="/student/free-test/">Open free mock <ArrowRight size={16} aria-hidden="true"/></Link></section>
   <section className="dashboard-section"><div className="section-head"><h2>Your learning library</h2><Link href="/courses/">Explore courses ↗</Link></div><Suspense fallback={<p className="learning-pending" role="status">Loading your programmes…</p>}><LearningCourses userId={id}/></Suspense></section>
   <Suspense fallback={<p role="status">Loading exam attempts…</p>}><StudentExams userId={id}/></Suspense>
+  <Suspense fallback={null}><PurchasedMaterials userId={id}/></Suspense>
   <Suspense fallback={<p role="status">Loading payment history…</p>}><PaymentHistory userId={id}/></Suspense>
  </div>}</Localized>;
 }

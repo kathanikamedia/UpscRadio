@@ -25,11 +25,11 @@ export async function refundPayment(payment:GatewayPayment&{amount_refunded?:num
  return result.rowsAffected===1;
 }
 export async function fulfill(id:string) {
- const row=(await execute({sql:"SELECT p.*,c.extra,i.moodle_id FROM payments p JOIN content c ON c.id=p.course_id LEFT JOIN identities i ON i.clerk_id=p.clerk_id WHERE p.id=? AND status='Paid'",args:[id]})).rows[0];
+ const row=(await execute({sql:"SELECT p.*,c.extra,c.kind AS product_kind,i.moodle_id FROM payments p JOIN content c ON c.id=p.course_id LEFT JOIN identities i ON i.clerk_id=p.clerk_id WHERE p.id=? AND status='Paid'",args:[id]})).rows[0];
  if(!row)throw new Error("Payment was not confirmed.");
  if(row.fulfilled)return;
  const extra=JSON.parse(String(row.extra));
- if(extra.question_bank||extra.delivery==="native"){
+ if(extra.question_bank||extra.delivery==="native"||(row.product_kind==="resource"&&extra.storage_key)){
   await execute({sql:"UPDATE payments SET fulfilled=1 WHERE id=? AND status='Paid'",args:[id]});return;
  }
  const courseId=Number(extra.moodle_course_id), userId=Number(row.moodle_id);

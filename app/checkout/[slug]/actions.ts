@@ -1,19 +1,25 @@
 "use server";
 import { randomUUID } from "node:crypto";
 import { requireUser } from "@/lib/auth";
-import { content,execute,rateLimit } from "@/lib/db";
+import { execute,rateLimit } from "@/lib/db";
 import { moodleIdentity } from "@/lib/identity";
 import { razorpay,paymentsConfigured,fulfill } from "@/lib/payments";
 import { moodleConfigured } from "@/lib/moodle";
 import { redirect } from "next/navigation";
 import {checkoutReady,paymentMode} from "@/lib/payment-policy";
+import {checkoutProduct} from "@/lib/checkout-product";
+import {checkoutHref,type ProductKind} from "@/lib/course-pricing";
+import {materialAccess} from "@/lib/material-access";
 export async function beginCheckout(_state:string,data:FormData) {
- const id=await requireUser(),slug=String(data.get("slug")),course=await content("course",slug);
+ const id=await requireUser(),slug=String(data.get("slug"));
+ const rawKind=String(data.get("kind")||"course");if(!["course","resource"].includes(rawKind))return "Invalid purchase type.";
+ const kind=rawKind as ProductKind,course=await checkoutProduct(kind,slug);
+ if(kind==="resource"&&course&&(await materialAccess(id,course)).allowed)redirect(`/resources/${slug}/`);
  const test=paymentMode()==="test";
  if(!course||!checkoutReady(course,{configured:paymentsConfigured,testMode:test,moodle:moodleConfigured}))return "This course is awaiting checkout activation.";
  try {
   await rateLimit("checkout:"+id,8);
-  if(Number(course.extra.moodle_course_id)>0)await moodleIdentity(id,true);
+  if(kind==="course"&&Number(course.extra.moodle_course_id)>0)await moodleIdentity(id,true);
   const receipt=randomUUID(),amount=Number(course.extra.price_paise);
   if(!Number.isSafeInteger(amount)||amount<100)return "Ask admissions about the course fee.";
   const result=await execute({sql:"INSERT OR IGNORE INTO payments(id,clerk_id,course_id,amount,status) VALUES (?,?,?,?,'Creating') RETURNING id",args:[receipt,id,course.id,amount]});
@@ -26,5 +32,5 @@ export async function beginCheckout(_state:string,data:FormData) {
   if(row?.status==="Paid") { await fulfill(String(row.id));return "You are enrolled. Open My learning."; }
   if(row?.status!=="Pending")return "An earlier checkout is awaiting confirmation. Contact admissions before retrying.";
  } catch {return "Checkout could not be completed. Contact admissions if an earlier payment is pending.";}
- redirect("/checkout/"+slug);
+ redirect(checkoutHref(kind,slug));
 }

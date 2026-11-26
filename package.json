@@ -8,7 +8,7 @@
     "build": "next build --webpack",
     "start": "next start --hostname localhost --port 3000",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts tests/performance.test.ts tests/security.test.ts tests/youtube.test.ts tests/resource-topics.test.ts tests/deployment.test.ts tests/storage.test.ts tests/free-course.test.ts tests/materials.test.ts tests/community.test.ts tests/exam.test.ts tests/mock-upload.test.ts tests/localization.test.ts tests/exam-navigation.test.ts",
+    "test": "tsx --test tests/platform.test.ts tests/upsc.test.ts tests/news.test.ts tests/performance.test.ts tests/security.test.ts tests/youtube.test.ts tests/resource-topics.test.ts tests/deployment.test.ts tests/storage.test.ts tests/free-course.test.ts tests/materials.test.ts tests/community.test.ts tests/exam.test.ts tests/mock-upload.test.ts tests/localization.test.ts tests/exam-navigation.test.ts tests/course-pricing.test.ts",
     "check:database": "tsx scripts/check-database.ts",
     "copy:catalogue": "tsx scripts/copy-catalogue.ts",
     "migrate": "tsx scripts/migrate.ts",
