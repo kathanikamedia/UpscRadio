@@ -32,5 +32,6 @@ export async function beginCheckout(_state:string,data:FormData) {
   if(row?.status==="Paid") { await fulfill(String(row.id));return "You are enrolled. Open My learning."; }
   if(row?.status!=="Pending")return "An earlier checkout is awaiting confirmation. Contact admissions before retrying.";
  } catch {return "Checkout could not be completed. Contact admissions if an earlier payment is pending.";}
- redirect(checkoutHref(kind,slug));
+ const next=checkoutHref(kind,slug);
+ redirect(next+(next.includes("?")?"&":"?")+"pay=1");
 }

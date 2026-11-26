@@ -7,6 +7,11 @@ export async function mockPurchaseHref(book:string){
 }
 export function downloadAccessResponse(request:Request,destination:string,message:string,status:number){
  const headers={"Cache-Control":"private, no-store","Referrer-Policy":"no-referrer","X-Robots-Tag":"noindex, nofollow"};
- if(request.headers.get("accept")?.includes("text/html")||request.headers.get("sec-fetch-mode")==="navigate")return new Response(null,{status:307,headers:{...headers,Location:new URL(destination,request.url).href}});
+ if(request.headers.get("accept")?.includes("text/html")||request.headers.get("sec-fetch-mode")==="navigate"){
+  const target=new URL(destination,request.url);
+  // Tell the purchase page why the visitor arrived so it can explain the locked PDF.
+  if((status===401||status===403)&&target.pathname.startsWith("/purchase/"))target.searchParams.set("locked",status===401?"signin":"1");
+  return new Response(null,{status:307,headers:{...headers,Location:target.href}});
+ }
  return new Response(message,{status,headers});
 }
