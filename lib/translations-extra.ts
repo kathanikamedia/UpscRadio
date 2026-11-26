@@ -1,5 +1,6 @@
 // Interface copy only. Original examination questions and uploaded PDFs retain their source language.
 export const additionalTelugu:Record<string,string>={
+ "Search mock tests":"మాక్ పరీక్షలను వెతకండి","Title or topic":"శీర్షిక లేదా అంశం","All prices":"అన్ని ధరలు","Find tests":"పరీక్షలను వెతకండి","No matching mock tests":"మీ ఎంపికకు సరిపోలే మాక్ పరీక్షలు లేవు",
  "Review your items":"మీ ఎంపికలను సమీక్షించండి","Each item has its own payment. Complete checkout for the items you want.":"ప్రతి అంశానికి విడిగా చెల్లించాలి. మీకు కావాల్సిన అంశాల కొనుగోలును పూర్తి చేయండి.","Purchase this item ↗":"ఈ అంశాన్ని కొనండి ↗","No available items selected.":"అందుబాటులో ఉన్న అంశాలను ఎంచుకోలేదు.",
  "Buy now":"ఇప్పుడే కొనండి","Online mock test + PDF · Personal access":"ఆన్‌లైన్ మాక్ టెస్ట్ + పీడీఎఫ్ · వ్యక్తిగత ప్రవేశం",
  "Get this study material":"ఈ అధ్యయన వనరును పొందండి","Get access to this mock test":"ఈ మాక్ టెస్ట్‌కు ప్రవేశం పొందండి","Get the full course bundle":"పూర్తి కోర్సు బండిల్‌ను పొందండి","Start free mock":"ఉచిత మాక్ ప్రారంభించండి",
