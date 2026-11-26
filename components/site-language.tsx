@@ -12,7 +12,7 @@ export function SiteLanguage({children,initialLanguage="en"}:{children:ReactNode
  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 export const useSiteLanguage=()=>useContext(LanguageContext);
-export function LanguageSwitch(){const {language,setLanguage}=useSiteLanguage();return <div className="home-language-switch" role="group" data-no-translate aria-label={language==="te"?"వెబ్‌సైట్ భాష":"Website language"}><button type="button" aria-pressed={language==="en"} onClick={()=>setLanguage("en")}>English</button><button type="button" aria-pressed={language==="te"} onClick={()=>setLanguage("te")}>తెలుగు</button></div>;}
+export function LanguageSwitch({compact=false}:{compact?:boolean}={}){const {language,setLanguage}=useSiteLanguage();return <div className={"home-language-switch"+(compact?" is-compact":"")} role="group" data-no-translate aria-label={language==="te"?"వెబ్‌సైట్ భాష":"Website language"}><button type="button" aria-pressed={language==="en"} onClick={()=>setLanguage("en")} title="English">{compact?"EN":"English"}</button><button type="button" aria-pressed={language==="te"} onClick={()=>setLanguage("te")} title="తెలుగు">{compact?"తె":"తెలుగు"}</button></div>;}
 export function LocalText({en,te}:{en:string;te:string}){return <>{useSiteLanguage().language==="te"?te:en}</>;}
 export function SiteText({children}:{children:string}){return <>{translateText(children,useSiteLanguage().language)}</>;}
 export function useTranslation(){const {language}=useSiteLanguage();return {language,t:(text:string)=>translateText(text,language)};}

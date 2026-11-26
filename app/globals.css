@@ -699,3 +699,21 @@ html[lang="te"] h1,html[lang="te"] h2,html[lang="te"] h3,html[lang="te"] .eyebro
 .student-overview .section-head{flex-direction:row;flex-wrap:wrap;align-items:center}
 .ck-page h1{font-size:2rem}
 }
+/* Header right group: one rhythm */
+.account-divider{display:none}
+@media(min-width:901px){
+.header .account{gap:8px}
+.header .home-language-switch.is-compact{top:0;margin:0;padding:3px;gap:2px;height:36px;align-items:center;border-color:#e6d6e1;background:#fff}
+.header .home-language-switch.is-compact button{min-width:34px;height:28px;padding:0 9px;font:650 .74rem/1 var(--sans);display:grid;place-items:center}
+.header .account-divider{display:block;width:1px;height:22px;background:#eadde6;margin:0 4px}
+.header .account .cart-link{position:relative;justify-content:center;width:40px;height:40px;padding:0;border-radius:50%;gap:0;color:var(--ink)}
+.header .account .cart-link>span:not(.cart-count){display:none}
+.header .account .cart-link .cart-count{position:absolute;top:1px;right:-1px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:#c54e82;color:#fff;font-size:.62rem;font-weight:700;line-height:1;border:2px solid #fff;box-sizing:content-box}
+.header .account .cart-link[data-count="0"] .cart-count{display:none}
+.header .account a.account-pill{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:999px;font-size:.84rem;font-weight:650;border:1px solid #e6d6e1}
+.header .account a.account-pill.is-primary{background:#3d1053;border-color:#3d1053;color:#fff}
+.header .account a.account-pill.is-primary:hover{background:#561a72}
+.header .home-language-switch.is-compact button:last-child{font-size:.9rem;font-weight:600}
+.header .account a.account-pill:not(.is-primary):hover{background:var(--tint)}
+.header .account .cl-userButtonTrigger,.header .account .cl-userButtonBox{display:flex;align-items:center}
+}
