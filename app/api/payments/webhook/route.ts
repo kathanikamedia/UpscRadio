@@ -15,7 +15,11 @@ export async function POST(request:Request) {
    const row=(await execute({sql:"SELECT id FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0];
    await fulfill(String(row.id));
   }
-  if(event.event==="payment.refunded")await refundPayment(event.payload.payment.entity);
+  if(event.event==="refund.processed"){
+   const refund=event.payload?.refund?.entity,payment=event.payload?.payment?.entity;
+   if(!refund||refund.status!=="processed"||!payment||refund.payment_id!==payment.id)return new Response("Invalid refund payload",{status:400});
+   await refundPayment(payment);
+  }
   return new Response(null,{status:204});
  }catch{return new Response("Retry later",{status:503});}
 }

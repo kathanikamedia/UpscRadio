@@ -30,6 +30,23 @@ test("captured native mock purchase fulfils without Moodle and full refund canno
  assert.equal(await refundPayment(refunded),true);assert.equal(await capture(refunded),false);
 });
 const {validSignature}=await import("../lib/signature");
+test("signed refund.processed webhooks revoke full refunds; created events do not",async()=>{
+ const {POST}=await import("../app/api/payments/webhook/route");
+ const previous=process.env.RAZORPAY_WEBHOOK_SECRET;process.env.RAZORPAY_WEBHOOK_SECRET="webhook-test-secret";
+ const receipt=randomUUID();await execute({sql:"INSERT INTO payments(id,clerk_id,course_id,amount,order_id,payment_id,status) VALUES (?,'refund-webhook-owner',50,9900,'order_refund_hook','pay_refund_hook','Paid')",args:[receipt]});
+ const send=async(event:string,status:string)=>{
+  const body=JSON.stringify({event,payload:{refund:{entity:{payment_id:"pay_refund_hook",status}},payment:{entity:{id:"pay_refund_hook",order_id:"order_refund_hook",amount:9900,currency:"INR",status:"refunded",amount_refunded:9900}}}});
+  const signature=createHmac("sha256","webhook-test-secret").update(body).digest("hex");
+  return POST(new Request("https://example.com/api/payments/webhook/",{method:"POST",body,headers:{"x-razorpay-signature":signature}}));
+ };
+ try{
+  assert.equal((await send("refund.created","pending")).status,204);
+  assert.equal((await execute({sql:"SELECT status FROM payments WHERE id=?",args:[receipt]})).rows[0].status,"Paid");
+  assert.equal((await send("refund.processed","pending")).status,400);
+  assert.equal((await send("refund.processed","processed")).status,204);
+  assert.equal((await execute({sql:"SELECT status FROM payments WHERE id=?",args:[receipt]})).rows[0].status,"Refunded");
+ }finally{if(previous===undefined)delete process.env.RAZORPAY_WEBHOOK_SECRET;else process.env.RAZORPAY_WEBHOOK_SECRET=previous;}
+});
 test("webhook signatures reject altered bodies and malformed signatures",()=>{
  const signature=createHmac("sha256","secret").update("original").digest("hex");
  assert.equal(validSignature("secret","original",signature),true);
