@@ -29,7 +29,6 @@ export default function Home() {
           <Link href="/test-series/" className="learning-note learning-note-mock"><span className="learning-note-label">YOUR NEXT CHALLENGE <ArrowUpRight size={15} aria-hidden="true"/></span><ClipboardCheck size={27} aria-hidden="true"/><strong>Turn preparation<br/>into practice.</strong><span className="learning-note-footer">Explore Mock Test <ArrowUpRight size={14} aria-hidden="true"/></span></Link>
           <Link href="/explore/videos/" className="learning-note learning-note-podcast"><span className="podcast-disc"><Headphones size={21} aria-hidden="true"/></span><span><small>LEARN. LISTEN. KEEP GOING.</small><strong>UPSC Radio Podcast</strong></span><ArrowUpRight size={16} aria-hidden="true"/></Link>
         </div>
-        <div className="learning-hero-footnote"><span aria-hidden="true"/> For the days you feel ready. And the days you keep going anyway.</div>
       </div>
     <Suspense fallback={<CommunityStats initial={reportedCommunity}/>}><HomeCommunity/></Suspense>
 
