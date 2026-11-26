@@ -10,9 +10,11 @@ export async function POST(request:Request) {
  try {
   const event=JSON.parse(body);
   if(event.event==="payment.captured"){
-   const payment=event.payload.payment.entity;
+   const payment=event.payload?.payment?.entity;
+   const row=payment?.order_id?(await execute({sql:"SELECT id FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0]:undefined;
+   // Payments for orders this site never created are acknowledged so Razorpay stops retrying them.
+   if(!row)return new Response(null,{status:204});
    if(!await capture(payment))return new Response("Unmatched payment",{status:409});
-   const row=(await execute({sql:"SELECT id FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0];
    await fulfill(String(row.id));
   }
   if(event.event==="refund.processed"){

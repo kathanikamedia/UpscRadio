@@ -62,7 +62,7 @@ test("denied browser downloads open the correct purchase page while API requests
  assert.equal(await mockPurchaseHref("previous-version"),"/purchase/economy-purchase/");
  const url="https://www.upscradio.com/api/mock-tests/economy-1/pdf/",target=await mockPurchaseHref("economy-1");
  const browser=downloadAccessResponse(new Request(url,{headers:{accept:"text/html"}}),target,"Test access required.",403);
- assert.equal(browser.status,307);assert.equal(browser.headers.get("location"),"https://www.upscradio.com/purchase/economy-purchase/");
+ assert.equal(browser.status,307);assert.equal(browser.headers.get("location"),"https://www.upscradio.com/purchase/economy-purchase/?locked=1");
  assert.equal(browser.headers.get("cache-control"),"private, no-store");
  const api=downloadAccessResponse(new Request(url,{headers:{accept:"application/json"}}),target,"Test access required.",403);
  assert.equal(api.status,403);assert.equal(api.headers.get("location"),null);assert.equal(await api.text(),"Test access required.");

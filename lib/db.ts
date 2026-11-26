@@ -76,14 +76,14 @@ export async function content(kind: string, slug: string) {
   return row ? { ...row, extra: JSON.parse(String(row.extra)) } as unknown as Content : undefined;
 }
 export async function catalogueListing(kind:string):Promise<Content[]>{
-  const result=await execute({sql:"SELECT id,kind,slug,title,summary,category,published,extra FROM content WHERE kind=? AND published=1 ORDER BY id DESC",args:[kind]});
+  const result=await execute({sql:"SELECT id,kind,slug,title,summary,category,published,extra FROM content WHERE kind=? AND published=1 AND NOT (kind='course' AND category!='Test Series' AND COALESCE(json_extract(extra,'$.demo'),0) IN (1,'true')) ORDER BY id DESC",args:[kind]});
   return result.rows.map(row=>({...row,body:"",extra:JSON.parse(String(row.extra))}) as unknown as Content);
 }
 // Homepage previews need neither full article bodies nor the entire catalogue.
 export async function homePreviews(kind: "course" | "profile", limit: number): Promise<Content[]> {
   const category = kind === "course" ? "category != 'Test Series'" : "category IN ('Testimonial','Result')";
   const result = await execute({
-    sql: `SELECT id,kind,slug,title,summary,category,published,extra FROM content WHERE kind=? AND published=1 AND ${category} ORDER BY id DESC LIMIT ?`,
+    sql: `SELECT id,kind,slug,title,summary,category,published,extra FROM content WHERE kind=? AND published=1 AND ${category} AND NOT (kind='course' AND category!='Test Series' AND COALESCE(json_extract(extra,'$.demo'),0) IN (1,'true')) ORDER BY id DESC LIMIT ?`,
     args: [kind, limit],
   });
   return result.rows.map(row => ({ ...row, body: "", extra: JSON.parse(String(row.extra)) }) as unknown as Content);
