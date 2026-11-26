@@ -6,12 +6,16 @@ import { moodleIdentity } from "@/lib/identity";
 import { razorpay,paymentsConfigured,fulfill } from "@/lib/payments";
 import { moodleConfigured } from "@/lib/moodle";
 import { redirect } from "next/navigation";
+import {currentUser} from "@clerk/nextjs/server";
+import {checkoutReady,paymentMode} from "@/lib/payment-policy";
 export async function beginCheckout(_state:string,data:FormData) {
  const id=await requireUser(),slug=String(data.get("slug")),course=await content("course",slug);
- if(!course||course.extra.demo||!paymentsConfigured||!moodleConfigured||!Number(course.extra.moodle_course_id))return "This course is awaiting checkout activation.";
+ const test=paymentMode()==="test",admin=(await currentUser())?.publicMetadata.role==="admin";
+ if(test&&!admin)return "Test checkout is available to administrators only.";
+ if(!course||!checkoutReady(course,{configured:paymentsConfigured,testAdmin:test&&admin,moodle:moodleConfigured}))return "This course is awaiting checkout activation.";
  try {
   await rateLimit("checkout:"+id,8);
-  await moodleIdentity(id,true);
+  if(Number(course.extra.moodle_course_id)>0)await moodleIdentity(id,true);
   const receipt=randomUUID(),amount=Number(course.extra.price_paise);
   if(!Number.isSafeInteger(amount)||amount<100)return "Ask admissions about the course fee.";
   const result=await execute({sql:"INSERT OR IGNORE INTO payments(id,clerk_id,course_id,amount,status) VALUES (?,?,?,?,'Creating') RETURNING id",args:[receipt,id,course.id,amount]});

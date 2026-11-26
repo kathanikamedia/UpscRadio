@@ -1,5 +1,5 @@
 import {validSignature} from "@/lib/signature";
-import {capture,fulfill} from "@/lib/payments";
+import {capture,fulfill,refundPayment} from "@/lib/payments";
 import {execute} from "@/lib/db";
 import {BodyTooLarge,readLimitedBody} from "@/lib/request-body";
 export async function POST(request:Request) {
@@ -15,6 +15,7 @@ export async function POST(request:Request) {
    const row=(await execute({sql:"SELECT id FROM payments WHERE order_id=?",args:[payment.order_id]})).rows[0];
    await fulfill(String(row.id));
   }
+  if(event.event==="payment.refunded")await refundPayment(event.payload.payment.entity);
   return new Response(null,{status:204});
  }catch{return new Response("Retry later",{status:503});}
 }

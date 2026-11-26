@@ -3,7 +3,32 @@ import assert from "node:assert/strict";
 import { createHmac, randomUUID } from "node:crypto";
 process.env.DATABASE_URL="file::memory:";
 const {execute,closeDatabase,rateLimit}=await import("../lib/db");
-const {capture,fulfill}=await import("../lib/payments");
+const {capture,fulfill,refundPayment}=await import("../lib/payments");
+const {checkoutReady,paymentMode}=await import("../lib/payment-policy");
+test("checkout stays closed for drafts, demos and provisional prices; test access requires explicit admin bypass",()=>{
+ const item={published:true,category:"Test Series",extra:{price_paise:9900,question_bank:"mock-ready",purchase_enabled:false}};
+ assert.equal(checkoutReady(item,{configured:true}),false);
+ assert.equal(checkoutReady(item,{configured:true,testAdmin:true}),true);
+ assert.equal(checkoutReady({...item,published:false},{configured:true,testAdmin:true}),false);
+ assert.equal(checkoutReady({...item,extra:{...item.extra,demo:true}},{configured:true,testAdmin:true}),false);
+ assert.equal(checkoutReady({...item,extra:{...item.extra,purchase_enabled:true}},{configured:true}),true);
+ assert.equal(paymentMode("rzp_test_example"),"test");assert.equal(paymentMode("rzp_live_example"),"live");assert.equal(paymentMode("invalid"),null);
+});
+test("captured native mock purchase fulfils without Moodle and full refund cannot be replayed as paid",async()=>{
+ const receipt=randomUUID();
+ await execute({sql:"INSERT INTO content(id,kind,slug,title,published,extra) VALUES (50,'course','native-mock','Mock',1,?)",args:[JSON.stringify({question_bank:"mock-ready"})]});
+ await execute({sql:"INSERT INTO payments(id,clerk_id,course_id,amount,order_id,status) VALUES (?,'native-owner',50,9900,'order_native','Pending')",args:[receipt]});
+ const payment={id:"pay_native",order_id:"order_native",amount:9900,currency:"INR",status:"captured"};
+ assert.equal(await capture(payment),true);await fulfill(receipt);await fulfill(receipt);
+ assert.equal((await execute({sql:"SELECT fulfilled FROM payments WHERE id=?",args:[receipt]})).rows[0].fulfilled,1);
+ assert.equal(await refundPayment({...payment,amount_refunded:100}),false);
+ assert.equal(await refundPayment({...payment,amount_refunded:9900}),true);
+ assert.equal(await capture(payment),false);
+ assert.equal((await execute({sql:"SELECT status FROM payments WHERE id=?",args:[receipt]})).rows[0].status,"Refunded");
+ const late=randomUUID();await execute({sql:"INSERT INTO payments(id,clerk_id,course_id,amount,order_id,status) VALUES (?,'late-refund',50,9900,'order_late_refund','Pending')",args:[late]});
+ const refunded={...payment,id:"pay_late_refund",order_id:"order_late_refund",amount_refunded:9900};
+ assert.equal(await refundPayment(refunded),true);assert.equal(await capture(refunded),false);
+});
 const {validSignature}=await import("../lib/signature");
 test("webhook signatures reject altered bodies and malformed signatures",()=>{
  const signature=createHmac("sha256","secret").update("original").digest("hex");
@@ -35,8 +60,8 @@ test("shared rate limits enforce the configured maximum",async()=>{
 });
 test("failed Moodle fulfilment preserves paid state for retry",async()=>{
  await execute({sql:"INSERT INTO content(id,kind,slug,title,extra) VALUES (1,'course','polity','Polity',?)",args:[JSON.stringify({moodle_course_id:3})]});
- await assert.rejects(fulfill((await execute("SELECT id FROM payments LIMIT 1")).rows[0].id as string),/pending/);
- const result=await execute("SELECT status,fulfilled FROM payments LIMIT 1");
+ await assert.rejects(fulfill((await execute("SELECT id FROM payments WHERE order_id='order_one'")).rows[0].id as string),/pending/);
+ const result=await execute("SELECT status,fulfilled FROM payments WHERE order_id='order_one'");
  assert.equal(result.rows[0].status,"Paid");
  assert.equal(result.rows[0].fulfilled,0);
 });

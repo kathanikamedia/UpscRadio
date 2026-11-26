@@ -17,5 +17,5 @@ export function Pay({order,keyId,amount,receipt}:{order:string;keyId:string;amou
    }});
   widget.on("payment.failed",()=>{setBusy(false);setStatus("Payment was unsuccessful. You can try again.");});widget.open();
  }
- return <Localized>{<><Script src="https://checkout.razorpay.com/v1/checkout.js" onLoad={()=>setReady(true)} onError={()=>setStatus("Payment provider did not load. Refresh to try again.")}/><p role="status">{status}</p><button className="button" disabled={!ready||busy} onClick={pay}>{busy?"Please wait…":"Pay with Razorpay"}</button></>}</Localized>;
+ return <Localized>{<><Script src="https://checkout.razorpay.com/v1/checkout.js" onReady={()=>setReady(true)} onError={()=>setStatus("Payment provider did not load. Refresh to try again.")}/><p role="status">{status}</p><button className="button" disabled={!ready||busy} onClick={pay}>{busy?"Please wait…":"Pay with Razorpay"}</button></>}</Localized>;
 }

@@ -1,4 +1,4 @@
-import { content } from "@/lib/db";
+import { content,execute } from "@/lib/db";
 import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { studyMaterialDownload } from "@/lib/r2";
@@ -7,9 +7,13 @@ export const runtime = "nodejs";
 export async function GET(_request:Request,{params}:{params:Promise<{slug:string}>}) {
  const {slug}=await params,item=await content("resource",slug);
  if(item&&(item.extra.mock_slug||item.extra.download_after_attempt))return new Response("Open the mock test and submit your attempt to unlock its PDF on the results page.",{status:403,headers:{"Cache-Control":"private, no-store"}});
- // Paid PDFs must never pass through the public/free download path.
- // A verified purchase-entitlement flow will replace this explicit block before sales open.
- if(item&&requiresPurchase(item.extra))return new Response("Purchase access is not available yet.",{status:403,headers:{"Cache-Control":"private, no-store"}});
+ const parent=typeof item?.extra.course_slug==="string"?await content("course",item.extra.course_slug):null;
+ if(item&&(requiresPurchase(item.extra)||(parent&&Number(parent.extra.price_paise)>0))){
+  if(!parent)return new Response("Purchase access required.",{status:403,headers:{"Cache-Control":"private, no-store"}});
+  const {identity}=await import("@/lib/auth");const user=await identity();
+  const owned=user&&parent&&(await execute({sql:"SELECT 1 FROM payments WHERE clerk_id=? AND course_id=? AND status='Paid' LIMIT 1",args:[user,parent.id]})).rows.length>0;
+  if(!owned)return new Response("Purchase access required.",{status:user?403:401,headers:{"Cache-Control":"private, no-store"}});
+ }
  if(item && typeof item.extra.storage_key === "string" && item.extra.storage_key) {
   try {
    return new Response(null,{status:307,headers:{Location:await studyMaterialDownload(item.extra.storage_key),"Cache-Control":"private, no-store","Referrer-Policy":"no-referrer"}});
