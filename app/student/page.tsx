@@ -1,3 +1,5 @@
+
+import {Localized} from "@/components/localized";
 import { UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
 import { StudentName } from "@/components/student-name";
@@ -17,7 +19,7 @@ export default async function Student(){
   execute({sql:"SELECT p.*,c.title FROM payments p JOIN content c ON c.id=p.course_id WHERE clerk_id=? ORDER BY p.rowid DESC",args:[id]}),
   execute({sql:"SELECT COUNT(*) AS count FROM saved s JOIN content c ON c.id=s.content_id WHERE s.clerk_id=? AND c.published=1",args:[id]}),
  ]);
- return <div className="student-overview">
+ return <Localized>{<div className="student-overview">
   <header className="student-welcome"><div><p className="eyebrow">YOUR STUDY SPACE</p><h1>Welcome, <StudentName/>.</h1><p>Small steps, taken consistently, bring your goal closer.</p></div><UserButton/></header>
   <div className="student-stats">
    <article><BookOpen aria-hidden="true"/><Suspense fallback={<strong aria-label="Loading programme count">—</strong>}><EnrolledCount userId={id}/></Suspense><span>Enrolled programmes</span></article>
@@ -28,5 +30,5 @@ export default async function Student(){
   <section className="dashboard-section"><div className="section-head"><h2>Your learning library</h2><Link href="/courses/">Explore courses ↗</Link></div><Suspense fallback={<p className="learning-pending" role="status">Loading your programmes…</p>}><LearningCourses userId={id}/></Suspense></section>
   <Suspense fallback={<p role="status">Loading exam attempts…</p>}><StudentExams userId={id}/></Suspense>
   <section className="dashboard-section"><h2>Payment history</h2>{payments.rows.length?payments.rows.map(payment=><article className="payment-row" key={String(payment.id)}><div><strong>{String(payment.title)}</strong><small>{String(payment.status)}{payment.status==="Paid"&&!payment.fulfilled?" · Course activation pending":""}</small></div><span>₹{(Number(payment.amount)/100).toLocaleString("en-IN")}</span>{payment.status==="Paid"?<Link href={"/student/receipt/"+payment.id}>Receipt ↗</Link>:null}</article>):<p className="muted">Your payment receipts will appear here after enrolment.</p>}</section>
- </div>;
+ </div>}</Localized>;
 }

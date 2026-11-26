@@ -1,10 +1,12 @@
+
+import {Localized} from "@/components/localized";
 import Link from "next/link";
 import { SiteText } from "./site-language";
 import Image from "next/image";
 import { socials } from "@/lib/socials";
 
 export function Footer() {
-  return <footer className="site-footer">
+  return <Localized>{<footer className="site-footer">
     <div className="wrap">
       <div className="footer-invitation"><div><p className="footer-kicker"><SiteText>ONE DAY. ONE CHAPTER. ONE STEP CLOSER.</SiteText></p><h2><SiteText>Your ambition deserves</SiteText><br/><SiteText>a place to grow.</SiteText></h2></div><Link className="button footer-cta" href="/test-series/">Explore mock tests <span aria-hidden="true">↗</span></Link></div>
       <div className="footer-grid">
@@ -15,5 +17,5 @@ export function Footer() {
       </div>
       <div className="footer-bottom"><small>© {new Date().getFullYear()} UPSC Radio. All rights reserved.</small><span><SiteText>Keep learning. Keep moving forward.</SiteText></span><Link href="/explore/privacy/"><SiteText>Privacy policy</SiteText></Link></div>
     </div>
-  </footer>;
+  </footer>}</Localized>;
 }

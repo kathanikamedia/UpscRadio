@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import {cookies} from "next/headers";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Header } from "@/components/header";
 import { clerkConfigured } from "@/lib/auth";
@@ -16,15 +17,16 @@ export const metadata: Metadata = {
   ...(process.env.SITE_URL ? { metadataBase: new URL(process.env.SITE_URL) } : {}),
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const content = <SiteLanguage>
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const initialLanguage=(await cookies()).get("upsc-radio-language")?.value==="te"?"te":"en";
+  const content = <SiteLanguage initialLanguage={initialLanguage}>
     <a className="skip" href="#main">Skip to content</a>
     <Header configured={clerkConfigured} />
     <main id="main">{children}</main>
     <Footer />
   </SiteLanguage>;
 
-  return <html lang="en-IN" className={`${manrope.variable} ${editorial.variable}`}><body>
+  return <html lang={initialLanguage==="te"?"te":"en-IN"} className={`${manrope.variable} ${editorial.variable}`}><body>
     {clerkConfigured
       ? <ClerkProvider appearance={{ variables: { colorPrimary: "#3d1053", borderRadius: "0.75rem" } }}><AccountState configured>{content}</AccountState></ClerkProvider>
       : <AccountState configured={false}>{content}</AccountState>}

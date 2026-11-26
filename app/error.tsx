@@ -1,4 +1,6 @@
 "use client";
+import {Localized} from "@/components/localized";
+
 export default function ErrorPage({ reset }: { reset: () => void }) {
-  return <section className="wrap section"><h1>Something went wrong</h1><p>Please try again.</p><button className="button" onClick={reset}>Try again</button></section>;
+  return <Localized>{<section className="wrap section"><h1>Something went wrong</h1><p>Please try again.</p><button className="button" onClick={reset}>Try again</button></section>}</Localized>;
 }

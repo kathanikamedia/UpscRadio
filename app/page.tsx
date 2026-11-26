@@ -1,3 +1,5 @@
+
+import {Localized} from "@/components/localized";
 import { Suspense } from "react";
 import heroSmall from "@/public/hero-study-640.webp";
 import heroMedium from "@/public/hero-study-1200.webp";
@@ -16,7 +18,7 @@ import { HomeWatch } from "@/components/home-watch";
 import { HomeLanguageIntro } from "@/components/home-language-intro";
 export const dynamic = "force-dynamic";
 export default function Home() {
-  return <div className="home-redesign">
+  return <Localized>{<div className="home-redesign">
     <section className="learning-hero" aria-labelledby="learning-hero-title">
       <div className="wrap">
         <HomeLanguageIntro/>
@@ -65,5 +67,5 @@ export default function Home() {
         </div>
       </div>
     </section>
-  </div>;
+  </div>}</Localized>;
 }
