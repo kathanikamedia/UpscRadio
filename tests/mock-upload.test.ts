@@ -26,6 +26,7 @@ Answer Key
 2. (a) The first option is correct.`;
 test("PDF parser separates numbered statements, options, answer keys and explanations",()=>{
  const parsed=parseMockText(sample,2);assert.equal(parsed.questions.length,2);assert.deepEqual(parsed.issues,[]);assert.equal(parsed.questions[0].answer,2);assert.match(parsed.questions[0].question,/2\. Statement two/);assert.deepEqual(parsed.questions[0].options,["One","Two","Both","Neither"]);assert.equal(parsed.questions[1].explanation,"The first option is correct.");assert.equal(validateMockQuestions(parsed.questions,2).length,2);
+ assert.ok(parseMockText(sample,1).issues.some(issue=>issue.startsWith("The PDF contains additional questions.")));
 });
 test("inline answers are extracted and conflicting or incomplete sources cannot be published",()=>{
  const inline=`1. What is first?\nA. One\nB. Two\nC. Three\nD. Four\nAnswer: A\nExplanation: One is the first number.`;
@@ -54,4 +55,8 @@ test("upload drafts stay unpublished, entitlements are enforced and PDFs unlock 
 test("published free uploads are available without a payment, drafts are not",async()=>{
  const questions=parseMockText(sample,2).questions;const book=await stageMock("admin","free-upload",{title:"Free paper",summary:"A two question free test.",body:"",exam:"APPSC",language:"English",price:0,minutes:3,expected:2},"study-materials/appsc/tests/free.pdf",questions);
  assert.equal(await mockEntitled("reader",book),false);await publishMock("admin",book,questions);assert.equal(await mockEntitled("reader",book),true);
+});
+test("publishing cannot bypass the full UPSC paper requirements",async()=>{
+ const questions=parseMockText(sample,2).questions;const book=await stageMock("admin","bad-csat",{title:"CSAT pattern",summary:"A test requiring the full CSAT format.",body:"",exam:"UPSC",language:"English",price:0,minutes:120,expected:2,mode:"upsc-csat"},"study-materials/upsc/tests/csat.pdf",questions);
+ await assert.rejects(()=>publishMock("admin",book,questions),/80 questions/);assert.equal((await mockPaper(book))?.published,false);
 });

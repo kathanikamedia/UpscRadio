@@ -7,9 +7,10 @@ import {randomUUID} from "node:crypto";
 import {z} from "zod";
 import {revalidatePath,revalidateTag} from "next/cache";
 import {PUBLIC_CATALOGUE_TAG} from "@/lib/public-catalogue";
+import {examRules,examModes} from "@/lib/exam-rules";
 export const runtime="nodejs";
 export const maxDuration=60;
-const metadataSchema=z.object({slug:z.string().regex(/^[a-z0-9-]+$/).max(150),title:z.string().trim().min(2).max(180),summary:z.string().trim().min(10).max(250),body:z.string().max(50000),exam:z.enum(["UPSC","APPSC","TSPSC"]),language:z.enum(["English","Telugu","Bilingual"]),price:z.string().regex(/^\d{1,6}(\.\d{1,2})?$/),minutes:z.coerce.number().int().min(1).max(840),expected:z.coerce.number().int().min(1).max(700)});
+const metadataSchema=z.object({mode:z.enum(examModes).default("practice"),slug:z.string().regex(/^[a-z0-9-]+$/).max(150),title:z.string().trim().min(2).max(180),summary:z.string().trim().min(10).max(250),body:z.string().max(50000),exam:z.enum(["UPSC","APPSC","TSPSC"]),language:z.enum(["English","Telugu","Bilingual"]),price:z.string().regex(/^\d{1,6}(\.\d{1,2})?$/),minutes:z.coerce.number().int().min(1).max(840),expected:z.coerce.number().int().min(1).max(700)});
 export async function POST(request:Request){
  const headers={"Cache-Control":"private, no-store"};
  if(request.headers.get("origin")!==new URL(request.url).origin)return Response.json({error:"Invalid request origin."},{status:403,headers});
@@ -32,11 +33,13 @@ export async function POST(request:Request){
   }
   const result=metadataSchema.safeParse(Object.fromEntries(form));if(!result.success)throw Error("Check the URL name, title, short description, price, duration and expected question count.");const v=result.data;
   if(v.slug==="free-polity-starter")throw Error("That URL name is reserved for the built-in free starter test. Choose a different URL name.");
+  examRules(v.mode,v.expected,v.minutes*60);if(v.mode!=="practice"&&v.exam!=="UPSC")throw Error("Choose UPSC for a full-paper UPSC preset.");
   const file=form.get("pdf");if(!(file instanceof File)||!file.size)throw Error("Choose the test PDF.");
   const existing=(await execute({sql:"SELECT category FROM content WHERE kind='course' AND slug=?",args:[v.slug]})).rows[0];if(existing&&existing.category!=="Test Series")throw Error("That URL name is already used by a course.");
   const bytes=new Uint8Array(await file.arrayBuffer());const extracted=await extractMockPdf(bytes.slice(),v.expected);
+  if(extracted.issues.some(issue=>issue.startsWith("The PDF contains additional questions.")))throw Error("The PDF has more questions than the count entered. Enter its complete count, or split the PDF to match the selected full-paper preset.");
   const key=`study-materials/${v.exam.toLowerCase()}/tests/${randomUUID()}.pdf`;await uploadStudyPdf(key,bytes);
-  const metadata:MockMetadata={title:v.title,summary:v.summary,body:v.body,exam:v.exam,language:v.language,price:Math.round(Number(v.price)*100),minutes:v.minutes,expected:v.expected};
+  const metadata:MockMetadata={title:v.title,summary:v.summary,body:v.body,exam:v.exam,language:v.language,price:Math.round(Number(v.price)*100),minutes:v.minutes,expected:v.expected,mode:v.mode};
   const book=await stageMock(admin.id,v.slug,metadata,key,extracted.questions);
   revalidatePath("/staff/mock-tests/");
   return Response.json({ok:true,book,questions:extracted.questions,issues:extracted.issues,pages:extracted.pages,expected:v.expected},{headers});
