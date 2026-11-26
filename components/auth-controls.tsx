@@ -19,7 +19,7 @@ export function AuthControls({ configured }: { configured: boolean }) {
     </Show>
     <Show when="signed-in">
       <AdminLink/>
-      <Link href="/student/"><SiteText>My learning</SiteText></Link>
+      <Link href="/student/" prefetch={true}><SiteText>My learning</SiteText></Link>
       <UserButton />
     </Show>
   </>}</Localized>;

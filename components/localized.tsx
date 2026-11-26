@@ -1,5 +1,5 @@
 "use client";
-import {Children,cloneElement,isValidElement,type ReactNode,type ReactElement} from "react";
+import {cloneElement,isValidElement,type ReactNode,type ReactElement} from "react";
 import {useSiteLanguage} from "./site-language";
 import {translateText,type SiteLanguageCode} from "@/lib/translations";
 // Translate rendered copy, not DOM nodes or form values. React retains event handlers,
@@ -7,7 +7,10 @@ import {translateText,type SiteLanguageCode} from "@/lib/translations";
 export function localizeTree(node:ReactNode,language:SiteLanguageCode):ReactNode{
  if(language!=="te")return node;
  if(typeof node==="string")return translateText(node,language);
- if(Array.isArray(node))return Children.map(node,child=>localizeTree(child,language));
+ // Children.map unwraps pending RSC thenables. That suspends this entire wrapper
+ // above the nested Suspense boundaries and holds the page until every section
+ // finishes. Walk plain arrays without reading deferred server children.
+ if(Array.isArray(node))return node.map((child,index)=>{const translated=localizeTree(child,language);return isValidElement(translated)&&translated.key===null?cloneElement(translated,{key:index}):translated;});
  if(!isValidElement(node))return node;
  const element=node as ReactElement<Record<string,unknown>>,props=element.props;
  if(props.translate==="no"||props["data-no-translate"]||["script","style","code","pre","textarea"].includes(String(element.type)))return node;

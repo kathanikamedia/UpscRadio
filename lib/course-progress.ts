@@ -5,12 +5,9 @@ export async function enrolStarter(userId: string) {
   await execute({sql:"INSERT OR IGNORE INTO course_enrolments(clerk_id,course_slug) VALUES (?,?)",args:[userId,FREE_COURSE_SLUG]});
 }
 export async function starterProgress(userId: string) {
-  const [enrolment, completed] = await Promise.all([
-    execute({sql:"SELECT 1 FROM course_enrolments WHERE clerk_id=? AND course_slug=?",args:[userId,FREE_COURSE_SLUG]}),
-    execute({sql:"SELECT lesson_slug FROM lesson_completions WHERE clerk_id=? AND course_slug=?",args:[userId,FREE_COURSE_SLUG]}),
-  ]);
+  const progress=await execute({sql:"SELECT 'enrolled' AS kind,'' AS lesson_slug FROM course_enrolments WHERE clerk_id=? AND course_slug=? UNION ALL SELECT 'lesson' AS kind,lesson_slug FROM lesson_completions WHERE clerk_id=? AND course_slug=?",args:[userId,FREE_COURSE_SLUG,userId,FREE_COURSE_SLUG]});
   const valid = new Set(starterLessons.map(lesson=>lesson.slug));
-  return {enrolled:enrolment.rows.length>0, completed:new Set(completed.rows.map(row=>String(row.lesson_slug)).filter(slug=>valid.has(slug)))};
+  return {enrolled:progress.rows.some(row=>row.kind==="enrolled"), completed:new Set(progress.rows.filter(row=>row.kind==="lesson").map(row=>String(row.lesson_slug)).filter(slug=>valid.has(slug)))};
 }
 export async function completeStarterLesson(userId: string, slug: string) {
   if(!starterLessons.some(lesson=>lesson.slug===slug)) throw new Error("Unknown lesson");
