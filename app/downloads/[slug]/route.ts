@@ -20,8 +20,8 @@ export async function GET(request:Request,{params}:{params:Promise<{slug:string}
   const mock=typeof item.extra.mock_slug==="string"?await content("course",item.extra.mock_slug):null;
   const user=await downloadUser();
   if(!user)return downloadAccessResponse(request,purchaseHref(slug,"resource"),"Sign in to download this PDF.",401);
-  const {canPractise}=await import("@/lib/practice-bank");
-  if(!mock?.extra.question_bank||!await canPractise(user,String(mock.extra.question_bank)))return downloadAccessResponse(request,purchaseHref(slug,"resource"),"Test access required.",403);
+  const {canDownloadMock}=await import("@/lib/practice-bank");
+  if(!mock?.extra.question_bank||!await canDownloadMock(user,String(mock.extra.question_bank)))return downloadAccessResponse(request,purchaseHref(slug,"resource"),"Test access required.",403);
   mockAccess=true;
  }
  if(!purchased&&!mockAccess&&requiresPurchase(item.extra))return downloadAccessResponse(request,purchaseHref(slug,"resource"),"Purchase access required.",403);
