@@ -569,19 +569,43 @@ html[lang="te"] h1,html[lang="te"] h2,html[lang="te"] h3,html[lang="te"] .eyebro
 @media (max-width:860px){.mock-detail-layout{grid-template-columns:1fr;gap:24px}.mock-detail-aside{position:static;order:-1}}
 
 /* Checkout, coupons */
-.cart-checkout h1{margin-bottom:18px}.cart-checkout-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;align-items:start;margin-top:18px}
-.cart-checkout-items,.cart-checkout-summary{border:1px solid var(--line);border-radius:16px;padding:22px;background:#fff}
-.cart-checkout-items h2{font-size:1.2rem;margin:0 0 12px}.cart-checkout-items ul{list-style:none;margin:0;padding:0}.cart-checkout-items li{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line)}.cart-checkout-items li a:not(.button){font-weight:600;text-decoration:none}.cart-checkout-items li span{font-weight:700;white-space:nowrap}
-.cart-checkout-summary{position:sticky;top:96px;display:grid;gap:14px;box-shadow:0 10px 30px #21062f12}.cart-checkout-summary dl{margin:0;display:grid;gap:8px}.cart-checkout-summary dl div{display:flex;justify-content:space-between;font-size:.9rem}.cart-checkout-summary dd{margin:0;font-weight:600}.cart-total{border-top:1px solid var(--line);padding-top:10px;font-size:1.15rem!important}.cart-total dd{font-weight:800!important}.coupon-line dd{color:#28754d}
-.cart-checkout-summary form .button,.cart-checkout-summary>.button{width:100%;justify-content:center;min-height:48px}
-.coupon-form label{display:grid;gap:6px;font-size:.78rem;font-weight:600}.coupon-form label>span{display:flex;gap:8px}.coupon-form input{flex:1;min-height:42px;margin:0}.coupon-form .button{min-height:42px;padding:0 16px}
-.coupon-error{color:#a3361f;font-size:.8rem;margin:6px 0 0}.coupon-ok{color:#28754d;font-size:.8rem;font-weight:600;margin:6px 0 0}
-.coupon-field{font-size:.8rem;margin-top:8px}.coupon-field summary{cursor:pointer;color:var(--muted);text-decoration:underline;width:max-content}.coupon-field input{margin-top:8px;width:100%;min-height:42px}
+.ck-page h1{margin:4px 0 16px}
+.ck-test{margin:0 0 20px;padding:10px 14px;border:1px solid #f0d3ac;border-radius:10px;background:#fff8ee;color:#8d6031;font-size:.85rem}
+.ck-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
+.ck-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px}
+.ck-card h2{font-size:1.15rem;margin:0 0 16px}
+.ck-items ul{list-style:none;margin:0;padding:0}
+.ck-items li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+.ck-thumb{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:var(--tint);color:var(--ink)}
+.ck-item-text{display:grid;gap:3px;min-width:0}.ck-type{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ck-item-text a{font-weight:600;line-height:1.4;text-decoration:none;color:var(--ink)}.ck-item-text a:hover{text-decoration:underline}
+.ck-price{font-size:1rem;white-space:nowrap}.ck-open{min-height:38px;padding:8px 16px;font-size:.8rem}
+.ck-note{font-size:.82rem;color:var(--muted);margin:12px 4px 0}
+.ck-summary{position:sticky;top:96px;display:grid;gap:18px;box-shadow:0 12px 32px #21062f14}.ck-summary h2{margin:0}
+.ck-coupon{margin:0;display:grid;gap:8px}.ck-label{font-size:.78rem;font-weight:700}
+.ck-coupon-row{display:flex;border:1px solid #d9c4d6;border-radius:10px;overflow:hidden;background:#fff}
+.ck-coupon-row:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px #3d0f5222}
+.ck-coupon-row input{flex:1;min-width:0;border:0!important;border-radius:0;margin:0!important;min-height:46px;padding:0 14px;text-transform:uppercase;letter-spacing:.04em;outline:none;box-shadow:none}
+.ck-coupon-row button{border:0;border-left:1px solid #d9c4d6;background:var(--tint);color:var(--ink);font-weight:700;font-size:.85rem;padding:0 20px;cursor:pointer}
+.ck-coupon-row button:hover{background:#efe0ef}
+.ck-coupon-msg{margin:0;font-size:.8rem;font-weight:600}.ck-coupon-msg.is-error{color:#a3361f}.ck-coupon-msg.is-ok{color:#28754d}
+.ck-rows{display:grid;gap:10px;padding-top:16px;border-top:1px solid var(--line)}
+.ck-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.92rem}.ck-row span:last-child{font-weight:600;font-variant-numeric:tabular-nums}
+.ck-discount span:last-child{color:#28754d}
+.ck-total{margin-top:4px;padding-top:12px;border-top:1px dashed var(--line);font-size:1.25rem}.ck-total span{font-weight:800!important}
+.ck-pay form{margin:0}.ck-pay .button,.ck-pay form .button{display:flex;width:100%;justify-content:center;align-items:center;min-height:52px;font-size:1rem;margin:0}
+.ck-pay [role=status]{font-size:.82rem;margin:0 0 8px}
+.ck-secure{display:flex;align-items:center;justify-content:center;gap:6px;margin:-6px 0 0;font-size:.75rem;color:var(--muted)}
+.ck-success{display:flex;align-items:center;gap:8px;margin:0;font-weight:700;color:#28754d}
+.ck-empty{display:grid;justify-items:start;gap:12px}
+.coupon-field{font-size:.8rem;margin-top:10px}.coupon-field summary{cursor:pointer;color:var(--muted);text-decoration:underline;width:max-content}.coupon-field input{margin-top:8px;width:100%;min-height:42px;text-transform:uppercase}
 .coupon-inline{display:grid;gap:6px;font-size:.78rem;font-weight:600;margin-bottom:8px}
-.coupon-admin-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:14px}.coupon-admin-fields label{display:grid;gap:6px;font-size:.78rem;font-weight:600}
-.coupon-table{width:100%;border-collapse:collapse;font-size:.88rem}.coupon-table th,.coupon-table td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}.coupon-table form{margin:0}.coupon-table .button{min-height:36px;padding:6px 14px;font-size:.78rem}
-@media (max-width:860px){.cart-checkout-layout{grid-template-columns:1fr}.cart-checkout-summary{position:static}}
-
+.coupon-ok{color:#28754d;font-size:.8rem;font-weight:600;margin:6px 0 0}
+.coupon-admin-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:16px}.coupon-admin-fields label{display:grid;gap:6px;font-size:.78rem;font-weight:700}.coupon-admin-fields input,.coupon-admin-fields select{margin:0}
+.coupon-admin{border:1px solid var(--line);border-radius:16px;padding:24px;background:#fff}
+.coupon-table{width:100%;border-collapse:collapse;font-size:.88rem;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.coupon-table th{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:12px;background:#fbf6fa}.coupon-table td{padding:12px;border-top:1px solid var(--line)}.coupon-table form{margin:0}.coupon-table .button{min-height:34px;padding:6px 14px;font-size:.78rem}
+@media (max-width:900px){.ck-layout{grid-template-columns:1fr}.ck-summary{position:static}}
+@media (max-width:520px){.ck-card{padding:18px}.ck-items li{grid-template-columns:36px minmax(0,1fr);}.ck-thumb{width:36px;height:36px}.ck-price,.ck-open{grid-column:2;justify-self:start}}
 /* Results dashboard */
 .results-page{display:grid;gap:22px}.results-page header h1{margin:4px 0 6px}.results-page header p:not(.eyebrow){color:var(--muted);font-size:.9rem;margin:0}
 .results-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}.results-tiles article{border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:4px;background:#fff}.results-tiles svg{color:var(--ink);opacity:.7}.results-tiles strong{font-size:1.9rem;line-height:1.1}.results-tiles span{font-size:.8rem;color:var(--muted)}
@@ -589,3 +613,36 @@ html[lang="te"] h1,html[lang="te"] h2,html[lang="te"] h3,html[lang="te"] .eyebro
 .results-table-wrap{overflow-x:auto}.results-table{width:100%;border-collapse:collapse;font-size:.88rem}.results-table th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:10px;border-bottom:1px solid var(--line)}.results-table td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
 .results-trend{display:flex;align-items:flex-end;gap:3px;height:36px;width:120px;border-bottom:1px solid var(--line)}.results-bar{flex:1;max-width:12px;background:var(--ink);border-radius:4px 4px 0 0;opacity:.85;cursor:default}.results-bar:hover{opacity:1}
 .section-links{display:flex;gap:16px;flex-wrap:wrap}.results-empty{text-align:center;display:grid;justify-items:center;gap:12px}
+/* Student dashboard hierarchy */
+.student-overview .dashboard-section{margin-top:44px;padding-top:30px;border-top:1px solid #ece2ea}
+.student-overview .dashboard-section>h2,.student-overview .dashboard-section>.section-head h2{display:flex;align-items:center;gap:12px;font-size:clamp(1.5rem,2.4vw,1.9rem);font-weight:750;letter-spacing:-.035em;line-height:1.2;color:#2a0b3b;margin:0 0 22px}
+.student-overview .dashboard-section>h2::before,.student-overview .dashboard-section>.section-head h2::before{content:"";width:5px;height:1.05em;border-radius:3px;background:linear-gradient(#c54e82,#7a2d63);flex:none}
+.student-overview .dashboard-section>.section-head{align-items:center;margin-bottom:22px}
+.student-overview .dashboard-section>.section-head h2{margin:0}
+.student-overview .section-head>a,.student-overview .section-links a{font-size:.84rem;font-weight:650;color:#8e275f;text-decoration:none;padding:7px 12px;border:1px solid #ecd9e5;border-radius:999px;white-space:nowrap}
+.student-overview .section-head>a:hover,.student-overview .section-links a:hover{background:#faedf5}
+.student-overview .section-links{gap:8px}
+.student-overview .library-section-title{margin:6px 0 14px}
+.student-overview .library-section-title h2{font-size:.82rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#8a6a80}
+.student-overview .library-section-title>span{font-size:.8rem}
+.student-overview .library-count{font-size:.72rem;letter-spacing:0}
+.student-overview .library-status button{font-size:.8rem;font-weight:550}
+.student-overview .library-search input,.student-overview .library-select select{font-size:.8rem}
+.student-overview .library-result{font-size:.78rem}
+.student-overview .library-type,.student-overview .library-status-label{font-size:.76rem}
+.student-overview .library-free,.student-overview .library-demo{font-size:.7rem}
+.student-overview .library-course-meta{font-size:.76rem}
+.student-overview .library-progress>div{font-size:.74rem}
+.student-overview .continue-course-note{font-size:.76rem}
+.student-overview .payment-row{padding-block:15px}
+.student-overview .payment-row strong{display:block;font-size:.95rem;font-weight:600;line-height:1.4;color:#2a0b3b}
+.student-overview .payment-row small{font-size:.8rem;margin-top:4px}
+.student-overview .payment-row>a,.student-overview .payment-row>span{font-size:.86rem;font-weight:650;white-space:nowrap}
+.pay-status{display:inline-block;font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 8px;margin-right:6px;background:#f1ecf0;color:#6c5466}
+.pay-status.is-paid{background:#e8f5ec;color:#276944}.pay-status.is-pending{background:#fff4e5;color:#8a5a12}.pay-status.is-refunded{background:#eef0f7;color:#3d4b7a}
+.payment-row-end{display:flex;align-items:center;gap:14px;flex:none}.payment-row-end>a,.payment-row-end>span{font-size:.86rem;font-weight:650;white-space:nowrap}@media(max-width:600px){.payment-row-end{flex-direction:column;align-items:flex-end;gap:4px}}
+@media(max-width:600px){.student-overview .dashboard-section{margin-top:32px;padding-top:24px}.student-overview .dashboard-section>.section-head{align-items:flex-start}}
+.student-subpage .subpage-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;padding-bottom:22px;border-bottom:1px solid #ece2ea}
+.student-subpage .subpage-head h1{font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:-.04em;margin:4px 0 6px;color:#2a0b3b}
+.student-subpage .subpage-head p:not(.eyebrow){color:var(--muted);font-size:.9rem;margin:0}
+.student-subpage .dashboard-section{margin-top:8px;padding-top:0;border-top:0}
