@@ -5,12 +5,13 @@ process.env.DATABASE_URL="file::memory:";
 const {execute,closeDatabase,rateLimit}=await import("../lib/db");
 const {capture,fulfill,refundPayment}=await import("../lib/payments");
 const {checkoutReady,paymentMode}=await import("../lib/payment-policy");
-test("checkout stays closed for drafts, demos and provisional prices; test access requires explicit admin bypass",()=>{
+test("test checkout is available without an admin role while drafts and demos stay unavailable",()=>{
  const item={published:true,category:"Test Series",extra:{price_paise:9900,question_bank:"mock-ready",purchase_enabled:false}};
  assert.equal(checkoutReady(item,{configured:true}),false);
- assert.equal(checkoutReady(item,{configured:true,testAdmin:true}),true);
- assert.equal(checkoutReady({...item,published:false},{configured:true,testAdmin:true}),false);
- assert.equal(checkoutReady({...item,extra:{...item.extra,demo:true}},{configured:true,testAdmin:true}),false);
+ assert.equal(checkoutReady(item,{configured:true,testMode:true}),true);
+ assert.equal(checkoutReady({...item,published:false},{configured:true,testMode:true}),false);
+ assert.equal(checkoutReady({...item,extra:{...item.extra,demo:true}},{configured:true,testMode:true}),false);
+ assert.equal(checkoutReady({...item,extra:{...item.extra,price_paise:100}},{configured:true,testMode:true}),true);
  assert.equal(checkoutReady({...item,extra:{...item.extra,purchase_enabled:true}},{configured:true}),true);
  assert.equal(paymentMode("rzp_test_example"),"test");assert.equal(paymentMode("rzp_live_example"),"live");assert.equal(paymentMode("invalid"),null);
 });

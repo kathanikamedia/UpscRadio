@@ -14,7 +14,7 @@ import { FreeCourseCard } from "@/components/free-course-card";
 import { CourseMaterials } from "@/components/course-materials";
 import { CourseDetail } from "@/components/course-detail";
 import { StudyMaterialDetail } from "@/components/study-material-detail";
-import {currentUser} from "@clerk/nextjs/server";
+
 import {checkoutReady,paymentMode} from "@/lib/payment-policy";
 import {paymentsConfigured} from "@/lib/payments";
 import {moodleConfigured} from "@/lib/moodle";
@@ -44,8 +44,8 @@ export default async function PublicPage({params,searchParams}:Props) {
   if(path[1]) {
     const [item,viewer]=await Promise.all([publishedContent(kind,path[1]),identity()]);if(!item) notFound();
     const price=Number(item.extra.price_paise || 0);
-    const test=paymentMode()==="test",admin=test&&viewer?(await currentUser())?.publicMetadata.role==="admin":false;
-    const canBuy=kind==="course"&&(!test||admin)&&checkoutReady(item,{configured:paymentsConfigured,testAdmin:test&&admin,moodle:moodleConfigured});
+    const test=paymentMode()==="test";
+    const canBuy=kind==="course"&&checkoutReady(item,{configured:paymentsConfigured,testMode:test,moodle:moodleConfigured});
 
     const wished=viewer?Boolean((await execute({sql:"SELECT 1 FROM saved WHERE clerk_id=? AND content_id=?",args:[viewer,item.id]})).rows.length):false;
     if(kind==="course"&&item.category==="Test Series"&&item.extra.question_bank)return <Localized>{<section className="wrap section mock-test-detail"><Link href="/test-series/">← Mock Tests</Link><p className="eyebrow">{String(item.extra.exam||"APPSC")} · {String(item.extra.language||"English")}</p><h1>{item.title}</h1>{typeof item.extra.source_material_slug==="string"?<MaterialCover eager slug={item.extra.source_material_slug} title={item.title}/>:null}<p>{item.summary}</p>{item.body&&item.body!==item.summary?<section className="prose"><h2>About this mock test</h2>{item.body.split(/\n\s*\n/).filter(Boolean).map((paragraph,index)=><p key={index}>{paragraph}</p>)}</section>:null}{["syllabus","inclusions"].map(key=>item.extra[key]?<section className="prose" key={key}><h2>{key==="syllabus"?"Topics covered":"What’s included"}</h2><p className="preserve">{String(item.extra[key])}</p></section>:null)}<div className="card"><h2>Test details</h2><p>{Number(item.extra.question_count)} questions · ₹{price/100} provisional price</p><p>Timed attempts include saved answers, question navigation, review flags and an answer review after submission. Only reviewed questions are available.</p><p>Students with test access can download the PDF before or after attempting. Telugu Current Affairs remains PDF-only where supplied separately.</p>{canBuy?<Link className="button" href={`/checkout/${item.slug}/`}>{test?"Test checkout":"Buy mock test"}</Link>:null}{viewer?<a className="button secondary" href={`/api/mock-tests/${item.extra.question_bank}/pdf/`} target="_blank" rel="noopener noreferrer">Download test PDF</a>:null}{viewer?<Link className="button secondary" href={"/student/exam/"+String(item.extra.question_bank)+"/"}>Open exam room ↗</Link>:<Link className="button" href="/account/login/">Sign in</Link>}</div></section>}</Localized>;
