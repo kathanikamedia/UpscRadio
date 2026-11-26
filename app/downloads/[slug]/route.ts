@@ -6,6 +6,7 @@ import { requiresPurchase } from "@/lib/study-material-drafts";
 export const runtime = "nodejs";
 export async function GET(_request:Request,{params}:{params:Promise<{slug:string}>}) {
  const {slug}=await params,item=await content("resource",slug);
+ if(item&&(item.extra.mock_slug||item.extra.download_after_attempt))return new Response("Open the mock test and submit your attempt to unlock its PDF on the results page.",{status:403,headers:{"Cache-Control":"private, no-store"}});
  // Paid PDFs must never pass through the public/free download path.
  // A verified purchase-entitlement flow will replace this explicit block before sales open.
  if(item&&requiresPurchase(item.extra))return new Response("Purchase access is not available yet.",{status:403,headers:{"Cache-Control":"private, no-store"}});

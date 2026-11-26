@@ -29,8 +29,10 @@ async function ensureSchema(){
   const required=["content","enquiries","identities","payments","rate_limits","legacy","saved","audit","source_cache","course_enrolments","lesson_completions","practice_attempts","question_drafts","question_explanations","one_active_payment","content_listing","practice_attempt_owner","exam_attempts","one_running_exam"];
   const existing=await getDatabase().execute("SELECT name FROM sqlite_master WHERE type IN ('table','index')");
   const names=new Set(existing.rows.map(row=>String(row.name)));
+  required.push("mock_papers");
   if(required.every(name=>names.has(name)))return;
   await getDatabase().batch([
+    "CREATE TABLE IF NOT EXISTS mock_papers (book TEXT PRIMARY KEY,content_id INTEGER NOT NULL,title TEXT NOT NULL,storage_key TEXT NOT NULL,questions TEXT NOT NULL,seconds INTEGER NOT NULL,metadata TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'draft',created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS exam_attempts (id TEXT PRIMARY KEY,clerk_id TEXT NOT NULL,book TEXT NOT NULL,title TEXT NOT NULL,questions TEXT NOT NULL,answers TEXT NOT NULL DEFAULT '{}',marked TEXT NOT NULL DEFAULT '[]',started INTEGER NOT NULL,deadline INTEGER NOT NULL,revision INTEGER NOT NULL DEFAULT 0,submitted INTEGER,result TEXT)",
     "CREATE UNIQUE INDEX IF NOT EXISTS one_running_exam ON exam_attempts(clerk_id,book) WHERE submitted IS NULL",
     "CREATE TABLE IF NOT EXISTS content (id INTEGER PRIMARY KEY, kind TEXT NOT NULL, slug TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', body TEXT NOT NULL DEFAULT '', category TEXT NOT NULL DEFAULT '', published INTEGER NOT NULL DEFAULT 0, extra TEXT NOT NULL DEFAULT '{}', UNIQUE(kind,slug))",

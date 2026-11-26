@@ -14,8 +14,7 @@ export function storageConfig(env: Record<string, string | undefined> = process.
   return { bucket, endpoint: `https://${account}.r2.cloudflarestorage.com`, credentials: { accessKeyId, secretAccessKey } };
 }
 
-// Only public, published study PDFs are served by this integration.
-// Paid course assets belong behind Moodle's enrolment checks.
+// Callers enforce the relevant course entitlement or completed-attempt check.
 export function validStudyMaterialKey(key: string) {
   return key.length <= 512 && /^study-materials\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_() -]+\.pdf$/.test(key);
 }
@@ -39,14 +38,15 @@ export async function checkStudyMaterial(key: string) {
   } finally { client.destroy(); }
 }
 
-export async function studyMaterialDownload(key: string) {
+export async function studyMaterialDownload(key: string,filename?:string) {
   if (!validStudyMaterialKey(key)) throw Error("Invalid study-material object key.");
+  if(filename&&!/^[a-zA-Z0-9_() -]{1,160}\.pdf$/.test(filename))throw Error("Invalid download filename.");
   const { bucket, client } = connection();
   try {
     return await getSignedUrl(client, new GetObjectCommand({
       Bucket: bucket, Key: key,
       ResponseContentType: "application/pdf",
-      ResponseContentDisposition: `attachment; filename="${key.split("/").at(-1)}"`,
+      ResponseContentDisposition: `attachment; filename="${filename||key.split("/").at(-1)}"`,
     }), { expiresIn: 60 });
   } finally { client.destroy(); }
 }
